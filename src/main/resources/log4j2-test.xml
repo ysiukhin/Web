@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <Properties>
+        <Property name="filename">logs/MysqlDemo.log</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%p] --> %msg%n"/>
+            <!--            <PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>-->
+        </Console>
+        <File name="MyFile" fileName="${filename}" immediateFlush="true" append="false">
+            <!--            <PatternLayout pattern="%msg%n"/>-->
+            <PatternLayout pattern="%d %p %C{1.} [%t] %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="MysqlDemo" level="trace" includeLocation="true">
+            <AppenderRef ref="MyFile"/>
+        </Logger>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console" level="info"></AppenderRef>
+            <AppenderRef ref="MyFile" level="error"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,66 @@
+plugins {
+    id 'idea'
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
+    id 'java'
+    id 'war'
+}
+
+group 'org.example'
+//version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+compileJava.options.encoding = 'utf8'
+compileTestJava.options.encoding = 'utf8'
+javadoc.options.encoding = 'utf8'
+
+repositories {
+    gradlePluginPortal()
+
+}
+
+dependencies {
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.10.RELEASE")
+            }
+
+        }
+    }
+    implementation 'org.apache.logging.log4j:log4j-core'
+    implementation 'org.apache.logging.log4j:log4j-api'
+    implementation 'mysql:mysql-connector-java'
+
+//    implementation 'javax.servlet.jsp.jstl:jstl-api'
+//    providedCompile 'jakarta.servlet:jakarta.servlet-api'
+//    compileOnly 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+
+
+//    providedCompile "org.apache.tomcat:tomcat-catalina-ha:${Versions.tomcat}"
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+//    https://mvnrepository.com/artifact/javax.servlet.jsp/jsp-api
+    compileOnly group: 'javax.servlet.jsp', name: 'jsp-api', version: '2.2'
+    implementation 'org.apache.tomcat:tomcat-jsp-api'
+    implementation 'javax.servlet:jstl'
+
+    compile 'org.thymeleaf:thymeleaf:3.0.0.ALPHA03'
+
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+}
+
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+    task hello {
+        println 'Hello Servlet!'
+        println System.getenv('JAVA_HOME')
+    }
+}

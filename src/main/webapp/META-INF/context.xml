@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource
+            name="jdbc/timecounterdb"
+            global="jdbc/timecounterdb"
+            username="web"
+            password="password"
+            type="javax.sql.DataSource"
+            auth="Container"
+            driverClassName="com.mysql.cj.jdbc.Driver"
+            url="jdbc:mysql://127.0.0.1:3306/timecounterdb?autoReconnect=true&amp;allowMultiQueries=true&amp;useSSL=false"
+            maxActive="20"
+            maxIdle="20"
+            minIdle="5"
+            maxWait="10000"
+            defaultAutoCommit="false"
+            defaultTransactionIsolation="READ_COMMITTED"
+            validationQuery="SELECT 1">
+    </Resource>
+</Context>
