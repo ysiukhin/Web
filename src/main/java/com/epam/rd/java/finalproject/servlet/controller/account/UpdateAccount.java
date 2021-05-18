@@ -8,13 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/createAccount")
-public class createAccount extends AbstractController {
-
+@WebServlet("/updateAccount")
+public class UpdateAccount extends AbstractController {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        forwardToPage("CREATE ACCOUNT", "account.jsp", req, resp);
+        forwardToPage("UPDATE ACCOUNT", "account.jsp", req, resp);
     }
 }
 

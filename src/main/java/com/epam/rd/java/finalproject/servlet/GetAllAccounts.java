@@ -12,7 +12,9 @@ import com.epam.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Resource;
 import javax.naming.Context;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -32,16 +34,13 @@ public class GetAllAccounts extends HttpServlet {
     private final static String index = "/WEB-INF/view/index.jsp";
     private List<Account> accounts;
     private static final Logger logger = LogManager.getLogger("GetAllAccounts");
-    private DataSource dataSource;
+
+    @Resource(name = "jdbc/timecounterdb")
+    DataSource dataSource;
 
     @Override
     public void init() {
-        Context ctx = null;
         try {
-            ctx = new InitialContext();
-            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/timecounterdb");
-            MysqlDemo.createTable(dataSource, getServletContext().getRealPath("/"));
-
             SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
             DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>();
             AccountDao accountDao = new AccountDaoJdbc(sessionManagerJdbc, dbExecutor);
@@ -51,14 +50,8 @@ public class GetAllAccounts extends HttpServlet {
             DbServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
             accounts = new CopyOnWriteArrayList<>(dbServiceAccount.getAllAccounts().get());
 
-        } catch (IOException | SQLException | NoSuchAlgorithmException | NamingException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                ctx.close();
-            } catch (NamingException e) {
-                logger.error(e.getMessage(), e);
-            }
         }
     }
 

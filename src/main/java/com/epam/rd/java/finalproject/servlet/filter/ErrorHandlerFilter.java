@@ -17,7 +17,7 @@ public class ErrorHandlerFilter extends AbstractFilter {
             String requestUrl = req.getRequestURI();
             logger.error("Request: {} processing error", requestUrl, throwable);
             if (!requestUrl.startsWith("/error")) {
-                resp.sendRedirect("/error");
+                resp.sendRedirect("error");
             } else {
                 throw new ServletException(throwable);
             }

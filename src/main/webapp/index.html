@@ -1,26 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="${sessionScope.lang}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign in page</title>
-    <link href="/web/static/bootstrap-5.0.1/css/bootstrap.css" rel="stylesheet">
+    <!--    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.3.1/css/flag-icon.min.css" rel="stylesheet"/>
+    <link href="static/bootstrap-5.0.1/css/bootstrap.css" rel="stylesheet">
 </head>
 
 <body class="w-100 text-center" style="background-color: #e3e3e3;">
 <main>
     <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
-        <form action="testdata" method="GET" role="form">
+        <label class=""><a href="testdata?sessionLocale=en" class="link-secondary"><span
+                class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
+        <label class=""><a href="testdata?sessionLocale=ru" class="link-secondary"><span
+                class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
+        <form action="testdata" method="POST" role="form">
             <!--            <img class="mb-4" src="https://img11.postila.ru/resize?w=480&src=%2Fdata%2F85%2F48%2Ffa%2Fde%2F8548fade2feb6f6cdc3af9217920d07214477bfc6537292fca71555058108a39.gif" alt="" width="72" height="57">-->
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <h1 class="h3 mb-3 fw-normal">
+                <fmt:message key="label.welcome"/>
+            </h1>
             <div class="form-floating">
                 <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
+                <label for="floatingInput">
+                    <fmt:message key="label.login"/>
+                </label>
             </div>
             <div class="form-floating">
                 <input name="password" type="password" class="form-control" id="floatingPassword"
                        placeholder="Password">
-                <label for="floatingPassword">Password</label>
+                <label for="floatingPassword">
+                    <fmt:message key="label.password"/>
+                </label>
             </div>
             <div class="checkbox mb-3">
                 <input name="remember_me" type="checkbox" value="remember-me"> Remember me

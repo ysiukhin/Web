@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
+
+    <!-- setting context.xml to monitor the changes made to the web.xml of the application being deployed.
+        Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <!-- Disable session persistence across Tomcat restarts -->
+    <Manager pathname=""/>
+
     <Resource
             name="jdbc/timecounterdb"
-            global="jdbc/timecounterdb"
             username="web"
             password="password"
             type="javax.sql.DataSource"
             auth="Container"
             driverClassName="com.mysql.cj.jdbc.Driver"
-            url="jdbc:mysql://127.0.0.1:3306/timecounterdb?autoReconnect=true&amp;allowMultiQueries=true&amp;useSSL=false"
-            maxActive="20"
+            url="jdbc:mysql://127.0.0.1:3306/timecounterdb?autoReconnect=true&amp;allowMultiQueries=true&amp;useSSL=false&amp;useUnicode=yes&amp;characterEncoding=UTF-8"
             maxIdle="20"
-            minIdle="5"
-            maxWait="10000"
+            minIdle="30"
             defaultAutoCommit="false"
             defaultTransactionIsolation="READ_COMMITTED"
             validationQuery="SELECT 1">

@@ -15,6 +15,8 @@ public abstract class AbstractController extends HttpServlet {
     public final void forwardToPage(String title, String jspPage, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("currentPage", "page/" + jspPage);
         req.setAttribute("title", title);
+//        logger.info("req.getLocale(): {} req.getSession.getAttribute(): {}",req.getLocale(), req.getSession().getAttribute("lang"));
+//        req.getRequestDispatcher("/WEB-INF/JSP/"+req.getAttribute("currentPage")).forward(req, resp);
         req.getRequestDispatcher("/WEB-INF/JSP/page-template.jsp").forward(req, resp);
     }
 
