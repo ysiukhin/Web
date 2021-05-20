@@ -1,6 +1,7 @@
 package com.epam.rd.java.finalproject.core.service;
 
-import com.epam.rd.java.finalproject.core.dao.ProjectDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.dao.ProjectSql;
 import com.epam.rd.java.finalproject.core.model.Project;
 import com.epam.rd.java.finalproject.core.sessionmanager.SessionManager;
 import org.apache.logging.log4j.LogManager;
@@ -12,9 +13,9 @@ import java.util.Optional;
 public class DbServiceProjectImpl implements DbServiceProject {
     private static final Logger LOGGER = LogManager.getLogger(DbServiceAccountImpl.class);
 
-    private final ProjectDao projectDao;
+    private final AbstractDao<Project> projectDao;
 
-    public DbServiceProjectImpl(ProjectDao projectDao) {
+    public DbServiceProjectImpl(AbstractDao<Project> projectDao) {
         this.projectDao = projectDao;
     }
 

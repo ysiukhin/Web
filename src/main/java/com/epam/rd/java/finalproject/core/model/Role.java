@@ -1,10 +1,15 @@
 package com.epam.rd.java.finalproject.core.model;
 
+import com.epam.rd.java.finalproject.core.annotation.TableField;
+
 import java.io.Serializable;
 
 public class Role implements Serializable {
+    @TableField(value = "id", select = 1, insertPosition = 0, updatePosition = 3)
     private int id;
+    @TableField(value = "role_ru", insertPosition = 1, updatePosition = 1)
     private String roleRu;
+    @TableField(value = "role_en", insertPosition = 2, updatePosition = 2)
     private String roleEn;
 
     public int getId() {

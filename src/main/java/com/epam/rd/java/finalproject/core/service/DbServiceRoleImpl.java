@@ -1,6 +1,6 @@
 package com.epam.rd.java.finalproject.core.service;
 
-import com.epam.rd.java.finalproject.core.dao.RoleDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
 import com.epam.rd.java.finalproject.core.model.Role;
 import com.epam.rd.java.finalproject.core.sessionmanager.SessionManager;
 import org.apache.logging.log4j.LogManager;
@@ -12,9 +12,11 @@ import java.util.Optional;
 public class DbServiceRoleImpl implements DbServiceRole {
     private static final Logger logger = LogManager.getLogger(DbServiceAccountImpl.class);
 
-    private final RoleDao roleDao;
+    //    private final RoleDao roleDao;
+    private final AbstractDao<Role> roleDao;
 
-    public DbServiceRoleImpl(RoleDao roleDao) {
+    //    public DbServiceRoleImpl(RoleDao roleDao) {
+    public DbServiceRoleImpl(AbstractDao<Role> roleDao) {
         this.roleDao = roleDao;
     }
 

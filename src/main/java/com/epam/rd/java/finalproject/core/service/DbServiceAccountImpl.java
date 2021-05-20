@@ -1,8 +1,9 @@
 package com.epam.rd.java.finalproject.core.service;
 
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
 import com.epam.rd.java.finalproject.core.model.Account;
 import com.epam.rd.java.finalproject.core.sessionmanager.SessionManager;
-import com.epam.rd.java.finalproject.core.dao.AccountDao;
+import com.epam.rd.java.finalproject.core.dao.AccountSql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,9 +14,9 @@ public class DbServiceAccountImpl implements DbServiceAccount {
 
     private static final Logger logger = LogManager.getLogger(DbServiceAccountImpl.class);
 
-    private final AccountDao accountDao;
+    private final AbstractDao<Account> accountDao;
 
-    public DbServiceAccountImpl(AccountDao accountDao) {
+    public DbServiceAccountImpl(AbstractDao<Account> accountDao) {
         this.accountDao = accountDao;
     }
 

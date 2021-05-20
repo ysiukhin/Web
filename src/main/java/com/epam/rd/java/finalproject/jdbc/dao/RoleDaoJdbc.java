@@ -1,7 +1,8 @@
 package com.epam.rd.java.finalproject.jdbc.dao;
 
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractSql;
 import com.epam.rd.java.finalproject.core.dao.DaoException;
-import com.epam.rd.java.finalproject.core.dao.RoleDao;
 import com.epam.rd.java.finalproject.core.model.Role;
 import com.epam.rd.java.finalproject.core.sessionmanager.SessionManager;
 import com.epam.rd.java.finalproject.jdbc.DbExecutor;
@@ -11,25 +12,27 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 import java.util.*;
 
-public class RoleDaoJdbc extends RoleDao {
+class RoleDaoJdbc extends AbstractDao<Role> {
 
     private static final Logger LOGGER = LogManager.getLogger(RoleDaoJdbc.class);
 
     private final DbExecutor<Role> dbExecutor;
+    private final AbstractSql sql;
 
-    public RoleDaoJdbc(SessionManager sessionManager, DbExecutor<Role> dbExecutor) {
+    public RoleDaoJdbc(SessionManager sessionManager, DbExecutor<Role> dbExecutor, AbstractSql sql) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
+        this.sql = sql;
     }
 
     @Override
     public Optional<Role> selectByField(Object field) {
-        return selectQuery(field, SELECT_BY_ID).map(roleList -> roleList.get(0));
+        return selectQuery(field, sql.selectById()).map(roleList -> roleList.get(0));
     }
 
     @Override
     public Optional<List<Role>> select() {
-        return selectQuery(null, SELECT_ALL);
+        return selectQuery(null, sql.selectAll());
     }
 
     private Optional<List<Role>> selectQuery(Object field, String sql) {
@@ -61,7 +64,7 @@ public class RoleDaoJdbc extends RoleDao {
     @Override
     public int insert(Role data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), INSERT,
+            return dbExecutor.executeInsert(getConnection(), sql.insert(),
                     Collections.unmodifiableList(Arrays.asList(
                             data.getRoleRu(),
                             data.getRoleEn())
@@ -77,10 +80,11 @@ public class RoleDaoJdbc extends RoleDao {
     @Override
     public int update(Role data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), UPDATE,
+            return dbExecutor.executeInsert(getConnection(), sql.update(),
                     Collections.unmodifiableList(Arrays.asList(
                             data.getRoleRu(),
-                            data.getRoleEn())
+                            data.getRoleEn(),
+                            data.getId())
                     )
             );
         } catch (Exception e) {

@@ -1,14 +1,16 @@
 package com.epam.rd.java.finalproject;
 
-import com.epam.rd.java.finalproject.core.dao.ProjectDao;
-import com.epam.rd.java.finalproject.core.dao.RoleDao;
-import com.epam.rd.java.finalproject.jdbc.dao.AccountDaoJdbc;
-import com.epam.rd.java.finalproject.core.dao.AccountDao;
-import com.epam.rd.java.finalproject.core.service.DbServiceAccount;
-import com.epam.rd.java.finalproject.core.service.DbServiceAccountImpl;
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.dao.AccountSql;
+import com.epam.rd.java.finalproject.core.dao.ProjectSql;
+import com.epam.rd.java.finalproject.core.dao.RoleSql;
+import com.epam.rd.java.finalproject.core.model.Account;
+import com.epam.rd.java.finalproject.core.model.Project;
+import com.epam.rd.java.finalproject.core.model.Role;
+import com.epam.rd.java.finalproject.core.service.DbServiceRole;
+import com.epam.rd.java.finalproject.core.service.DbServiceRoleImpl;
+import com.epam.rd.java.finalproject.jdbc.dao.AbstractDaoJdbc;
 import com.epam.rd.java.finalproject.jdbc.DbExecutorImpl;
-import com.epam.rd.java.finalproject.jdbc.dao.ProjectDaoJdbc;
-import com.epam.rd.java.finalproject.jdbc.dao.RoleDaoJdbc;
 import com.epam.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import com.epam.rd.java.finalproject.mysql.DataSourceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -33,9 +35,16 @@ public class MysqlDemo {
 
 //        DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>();
 
-        RoleDao roleDao = new RoleDaoJdbc(sessionManagerJdbc, new DbExecutorImpl<>());
-        AccountDao accountDao = new AccountDaoJdbc(sessionManagerJdbc, new DbExecutorImpl<>());
-        ProjectDao projectDao = new ProjectDaoJdbc(sessionManagerJdbc, new DbExecutorImpl<>());
+//        AbstractDao<Role> roleDao = new AbstractDaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Role.class), new RoleSql(){});
+        AbstractDao<Role> roleDao = new AbstractDaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Role.class), new RoleSql() {
+        });
+//        RoleDao roleDao = new RoleDaoJdbc(sessionManagerJdbc, new DbExecutorImpl<>(Role.class));
+//        AbstractDao<Account> accountDao = new AccountDaoJdbc(sessionManagerJdbc, new DbExecutorImpl<>(Account.class), new AccountSql(){});
+        AbstractDao<Account> accountDao = new AbstractDaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Account.class), new AccountSql() {
+        });
+//        AbstractDao<Project> projectDao = new ProjectDaoJdbc(sessionManagerJdbc, new DbExecutorImpl<>(Project.class), new ProjectSql(){});
+        AbstractDao<Project> projectDao = new AbstractDaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Project.class), new ProjectSql() {
+        });
 
         SampleData.insertTestRoles(roleDao); // Only 3 Roles can be
 
@@ -48,9 +57,8 @@ public class MysqlDemo {
 
         SampleData.insertTestProjects(projectDao, 5, System.getProperty("user.dir"));
 
-
-//        DbServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
-//        LOGGER.info(dbServiceAccount.getAllAccounts());
+        DbServiceRole dbService = new DbServiceRoleImpl(roleDao);
+        LOGGER.info(dbService.getAllRoles());
     }
 
 }

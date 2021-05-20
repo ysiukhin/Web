@@ -1,11 +1,7 @@
 package com.epam.rd.java.finalproject;
 
-import com.epam.rd.java.finalproject.core.dao.AccountDao;
-import com.epam.rd.java.finalproject.core.dao.ProjectDao;
-import com.epam.rd.java.finalproject.core.dao.RoleDao;
-import com.epam.rd.java.finalproject.core.model.AccountBuilder;
-import com.epam.rd.java.finalproject.core.model.ProjectBuilder;
-import com.epam.rd.java.finalproject.core.model.Role;
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.model.*;
 import com.epam.rd.java.finalproject.core.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +28,7 @@ public class SampleData {
     private static final Logger LOGGER = LogManager.getLogger("MysqlDemo");
     private static final SecureRandom secureRandom = new SecureRandom();
 
-    public static void insertTestProjects(ProjectDao projectDao, int projectsQuantity, String path) throws IOException {
+    public static void insertTestProjects(AbstractDao<Project> projectDao, int projectsQuantity, String path) throws IOException {
         List<String> project_names =
                 Files.lines(Paths.get(path + File.separator + "text" + File.separator + "project_names_65_en.txt"),
                         StandardCharsets.UTF_8).collect(Collectors.toList());
@@ -78,7 +74,8 @@ public class SampleData {
     }
 
 
-    static void insertTestRoles(RoleDao roleDao) {
+    //    static void insertTestRoles(RoleDao roleDao) {
+    static void insertTestRoles(AbstractDao<Role> roleDao) {
         DbServiceRole dbServiceRole = new DbServiceRoleImpl(roleDao);
         Role role = new Role();
         role.setRoleRu("Исполнительный Директор");
@@ -114,7 +111,7 @@ public class SampleData {
         return null;
     }
 
-    public static void insertTestAccounts(AccountDao accountDao, int accountQuantity, String path, int roleId)
+    public static void insertTestAccounts(AbstractDao<Account> accountDao, int accountQuantity, String path, int roleId)
             throws IOException, NoSuchAlgorithmException {
 //
 //        SecureRandom secureRandom = new SecureRandom();

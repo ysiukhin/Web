@@ -1,16 +1,27 @@
 package com.epam.rd.java.finalproject.core.model;
 
+import com.epam.rd.java.finalproject.core.annotation.TableField;
+
 import java.io.Serializable;
 
 public class Account implements Serializable {
+    @TableField(value = "id", select = 1, updatePosition = 9)
     private int id;
+    @TableField(value = "first_name", insertPosition = 1, updatePosition = 1)
     private String firstName;
+    @TableField(value = "last_name", insertPosition = 2, updatePosition = 2)
     private String lastName;
+    @TableField(value = "middle_name", insertPosition = 3, updatePosition = 3)
     private String middleName;
+    @TableField(value = "email", insertPosition = 4, updatePosition = 4)
     private String email;
+    @TableField(value = "login", insertPosition = 5, updatePosition = 5)
     private String login;
+    @TableField(value = "password", insertPosition = 6, updatePosition = 6)
     private String md5;
+    @TableField(value = "status", insertPosition = 7, updatePosition = 7)
     private boolean status;
+    @TableField(value = "roleId", insertPosition = 8, updatePosition = 8)
     private int roleId;
     private Role role;
 

@@ -1,23 +1,20 @@
 package com.epam.rd.java.finalproject.servlet;
 
-import com.epam.rd.java.finalproject.MysqlDemo;
 import com.epam.rd.java.finalproject.SampleData;
-import com.epam.rd.java.finalproject.core.dao.AccountDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.dao.AccountSql;
 import com.epam.rd.java.finalproject.core.model.Account;
 import com.epam.rd.java.finalproject.core.model.AccountBuilder;
 import com.epam.rd.java.finalproject.core.service.DbServiceAccount;
 import com.epam.rd.java.finalproject.core.service.DbServiceAccountImpl;
 import com.epam.rd.java.finalproject.jdbc.DbExecutorImpl;
-import com.epam.rd.java.finalproject.jdbc.dao.AccountDaoJdbc;
+import com.epam.rd.java.finalproject.jdbc.dao.AbstractDaoJdbc;
 import com.epam.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Resource;
-import javax.naming.Context;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +23,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -43,11 +39,11 @@ public class GetAllAccounts extends HttpServlet {
     public void init() {
         try {
             SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
-            DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>();
-            AccountDao accountDao = new AccountDaoJdbc(sessionManagerJdbc, dbExecutor);
+            DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
+            AbstractDao<Account> accountDao = new AbstractDaoJdbc<>(sessionManagerJdbc, dbExecutor, new AccountSql());
 
 
-            SampleData.insertTestAccounts(accountDao, 5, getServletContext().getRealPath("/"));
+            SampleData.insertTestAccounts(accountDao, 5, getServletContext().getRealPath("/"), 3);
             DbServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
             accounts = new CopyOnWriteArrayList<>(dbServiceAccount.getAllAccounts().get());
 
@@ -74,8 +70,8 @@ public class GetAllAccounts extends HttpServlet {
         }
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
-        DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>();
-        AccountDao accountDao = new AccountDaoJdbc(sessionManagerJdbc, dbExecutor);
+        DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
+        AbstractDao<Account> accountDao = new AbstractDaoJdbc<>(sessionManagerJdbc, dbExecutor, new AccountSql());
 
         DbServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
 

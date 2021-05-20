@@ -1,6 +1,7 @@
 package com.epam.rd.java.finalproject.jdbc.dao;
 
-import com.epam.rd.java.finalproject.core.dao.AccountDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractSql;
 import com.epam.rd.java.finalproject.core.dao.DaoException;
 import com.epam.rd.java.finalproject.core.model.Account;
 import com.epam.rd.java.finalproject.core.model.AccountBuilder;
@@ -14,24 +15,27 @@ import java.sql.SQLException;
 
 import java.util.*;
 
-public class AccountDaoJdbc extends AccountDao {
+class AccountDaoJdbc extends AbstractDao<Account> {
     private static final Logger LOGGER = LogManager.getLogger(AccountDaoJdbc.class);
+
+    private final AbstractSql sql;
 
     private final DbExecutor<Account> dbExecutor;
 
-    public AccountDaoJdbc(SessionManager sessionManager, DbExecutor<Account> dbExecutor) {
+    public AccountDaoJdbc(SessionManager sessionManager, DbExecutor<Account> dbExecutor, AbstractSql sql) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
+        this.sql = sql;
     }
 
     @Override
     public Optional<Account> selectByField(Object field) {
-        return Optional.ofNullable(selectQuery(field, SELECT_BY_ID).get().get(0));
+        return Optional.ofNullable(selectQuery(field, sql.selectById()).get().get(0));
     }
 
     @Override
     public Optional<List<Account>> select() {
-        return selectQuery(null, SELECT_ALL);
+        return selectQuery(null, sql.selectAll());
     }
 
     private Optional<List<Account>> selectQuery(Object field, String sql) {
@@ -70,7 +74,7 @@ public class AccountDaoJdbc extends AccountDao {
     @Override
     public int insert(Account data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), INSERT,
+            return dbExecutor.executeInsert(getConnection(), sql.insert(),
                     Collections.unmodifiableList(Arrays.asList(
                             data.getFirstName(),
                             data.getLastName(),
@@ -91,7 +95,7 @@ public class AccountDaoJdbc extends AccountDao {
     @Override
     public int update(Account data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), UPDATE,
+            return dbExecutor.executeInsert(getConnection(), sql.update(),
                     Collections.unmodifiableList(Arrays.asList(
                             data.getFirstName(),
                             data.getLastName(),

@@ -1,7 +1,8 @@
 package com.epam.rd.java.finalproject.jdbc.dao;
 
+import com.epam.rd.java.finalproject.core.dao.AbstractDao;
+import com.epam.rd.java.finalproject.core.dao.AbstractSql;
 import com.epam.rd.java.finalproject.core.dao.DaoException;
-import com.epam.rd.java.finalproject.core.dao.ProjectDao;
 import com.epam.rd.java.finalproject.core.model.Project;
 import com.epam.rd.java.finalproject.core.model.ProjectBuilder;
 import com.epam.rd.java.finalproject.core.sessionmanager.SessionManager;
@@ -12,24 +13,26 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ProjectDaoJdbc extends ProjectDao {
+class ProjectDaoJdbc extends AbstractDao<Project> {
     private static final Logger LOGGER = LogManager.getLogger(ProjectDaoJdbc.class);
 
     private final DbExecutor<Project> dbExecutor;
+    private final AbstractSql sql;
 
-    public ProjectDaoJdbc(SessionManager sessionManager, DbExecutor<Project> dbExecutor) {
+    public ProjectDaoJdbc(SessionManager sessionManager, DbExecutor<Project> dbExecutor, AbstractSql sql) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
+        this.sql = sql;
     }
 
     @Override
     public Optional<Project> selectByField(Object field) {
-        return Optional.ofNullable(selectQuery(field, SELECT_BY_ID).get().get(0));
+        return Optional.ofNullable(selectQuery(field, sql.selectById()).get().get(0));
     }
 
     @Override
     public Optional<List<Project>> select() {
-        return selectQuery(null, SELECT_ALL);
+        return selectQuery(null, sql.selectAll());
     }
 
     private Optional<List<Project>> selectQuery(Object field, String sql) {
@@ -63,10 +66,12 @@ public class ProjectDaoJdbc extends ProjectDao {
     @Override
     public int insert(Project data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), INSERT,
+            return dbExecutor.executeInsert(getConnection(), sql.insert(),
                     Collections.unmodifiableList(Arrays.asList(
                             data.getProjectName(),
-                            data.getProjectDesc())
+                            data.getProjectDesc(),
+                            data.getStatus())
+
                     )
             );
         } catch (Exception e) {
@@ -78,10 +83,12 @@ public class ProjectDaoJdbc extends ProjectDao {
     @Override
     public int update(Project data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), UPDATE,
+            return dbExecutor.executeInsert(getConnection(), sql.update(),
                     Collections.unmodifiableList(Arrays.asList(
                             data.getProjectName(),
-                            data.getProjectDesc())
+                            data.getProjectDesc(),
+                            data.getStatus(),
+                            data.getId())
                     )
             );
         } catch (Exception e) {
