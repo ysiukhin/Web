@@ -9,11 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
-/**
- * @author sergey
- * created on 03.02.19.
- */
 public class DataSourceImpl implements DataSource {
 
     private static final Logger logger = LogManager.getLogger("DataSourceH2");

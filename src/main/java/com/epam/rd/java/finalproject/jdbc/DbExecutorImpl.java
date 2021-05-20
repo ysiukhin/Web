@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * @author sergey
@@ -26,7 +25,7 @@ public class DbExecutorImpl<T> implements DbExecutor<T> {
 
 
     @Override
-    public int executeInsertBi(Connection connection, String sql, Map<Integer, Object> params) throws SQLException {
+    public int executeInsert(Connection connection, String sql, Map<Integer, Object> params) throws SQLException {
         Savepoint savePoint = connection.setSavepoint("savePointName");
         try (PreparedStatement prepStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             for (Map.Entry<Integer, Object> entry : params.entrySet()) {
@@ -47,37 +46,37 @@ public class DbExecutorImpl<T> implements DbExecutor<T> {
     }
 
     @Override
-    public int executeUpdateBi(Connection connection, String sql, Map<Integer, Object> params) throws SQLException {
-        return executeInsertBi(connection, sql, params);
-    }
-
-    @Override
-    public int executeInsert(Connection connection, String sql, List<Object> params) throws SQLException {
-        Savepoint savePoint = connection.setSavepoint("savePointName");
-        try (PreparedStatement prepStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            for (int index = 0; index < params.size(); index++) {
-                prepStatement.setObject(index + 1, params.get(index));
-            }
-            prepStatement.executeUpdate();
-            try (ResultSet rs = prepStatement.getGeneratedKeys()) {
-                rs.next();
-                return rs.getInt(1);
-            }
-        } catch (SQLException ex) {
-            connection.rollback(savePoint);
-            logger.error(ex.getMessage(), ex);
-            throw ex;
-        }
-    }
-
-    @Override
-    public int executeUpdate(Connection connection, String sql, List<Object> params) throws SQLException {
+    public int executeUpdate(Connection connection, String sql, Map<Integer, Object> params) throws SQLException {
         return executeInsert(connection, sql, params);
     }
 
+    //    @Override
+//    public int executeInsert(Connection connection, String sql, List<Object> params) throws SQLException {
+//        Savepoint savePoint = connection.setSavepoint("savePointName");
+//        try (PreparedStatement prepStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+//            for (int index = 0; index < params.size(); index++) {
+//                prepStatement.setObject(index + 1, params.get(index));
+//            }
+//            prepStatement.executeUpdate();
+//            try (ResultSet rs = prepStatement.getGeneratedKeys()) {
+//                rs.next();
+//                return rs.getInt(1);
+//            }
+//        } catch (SQLException ex) {
+//            connection.rollback(savePoint);
+//            logger.error(ex.getMessage(), ex);
+//            throw ex;
+//        }
+//    }
+//
+//    @Override
+//    public int executeUpdate(Connection connection, String sql, List<Object> params) throws SQLException {
+//        return executeInsert(connection, sql, params);
+//    }
+//
     @Override
-    public Optional<List<T>> executeSelectBi(Connection connection, String sql, Object field,
-                                             BiFunction<ResultSet, Class<T>, List<T>> rsHandler) throws SQLException {
+    public Optional<List<T>> executeSelect(Connection connection, String sql, Object field,
+                                           BiFunction<ResultSet, Class<T>, List<T>> rsHandler) throws SQLException {
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             if (field != null) {
                 pst.setObject(1, field);
@@ -88,27 +87,27 @@ public class DbExecutorImpl<T> implements DbExecutor<T> {
         }
     }
 
+////    @Override
+////    public Optional<T> executeSelect(Connection connection, String sql, Object field,
+////                                     Function<ResultSet, T> rsHandler) throws SQLException {
+////        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+////            pst.setObject(1, field);
+////            try (ResultSet rs = pst.executeQuery()) {
+////                return Optional.ofNullable(rsHandler.apply(rs));
+////            }
+////        }
+////    }
+//
 //    @Override
-//    public Optional<T> executeSelect(Connection connection, String sql, Object field,
-//                                     Function<ResultSet, T> rsHandler) throws SQLException {
+//    public Optional<List<T>> executeSelect(Connection connection, String sql, Object field,
+//                                           Function<ResultSet, List<T>> rsHandler) throws SQLException {
 //        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-//            pst.setObject(1, field);
-//            try (ResultSet rs = pst.executeQuery()) {
-//                return Optional.ofNullable(rsHandler.apply(rs));
+//            if (field != null) {
+//                pst.setObject(1, field);
+//            }
+//            try (ResultSet result = pst.executeQuery()) {
+//                return Optional.ofNullable(rsHandler.apply(result));
 //            }
 //        }
 //    }
-
-    @Override
-    public Optional<List<T>> executeSelect(Connection connection, String sql, Object field,
-                                           Function<ResultSet, List<T>> rsHandler) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            if (field != null) {
-                pst.setObject(1, field);
-            }
-            try (ResultSet result = pst.executeQuery()) {
-                return Optional.ofNullable(rsHandler.apply(result));
-            }
-        }
-    }
 }

@@ -64,7 +64,7 @@ public class AbstractDaoJdbc<T> extends AbstractDao<T> {
 //    }
     private Optional<List<T>> selectQuery(Object field, String sql) {
         try {
-            return dbExecutor.executeSelectBi(getConnection(), sql, field,
+            return dbExecutor.executeSelect(getConnection(), sql, field,
                     (rs, clazz) -> {
                         try {
                             List<T> resultList = new ArrayList<>();
@@ -74,7 +74,7 @@ public class AbstractDaoJdbc<T> extends AbstractDao<T> {
                                     beanField.setAccessible(true);
                                     if (beanField.isAnnotationPresent(TableField.class)) {
                                         TableField tableField = beanField.getAnnotation(TableField.class);
-                                        beanField.set(bean, rs.getObject(tableField.value()));
+                                        beanField.set(bean, rs.getObject(tableField.dbFieldName()));
                                     }
                                     beanField.setAccessible(false);
                                 }
@@ -105,7 +105,7 @@ public class AbstractDaoJdbc<T> extends AbstractDao<T> {
                 }
                 beanField.setAccessible(false);
             }
-            return dbExecutor.executeInsertBi(getConnection(), sql.insert(), params);
+            return dbExecutor.executeInsert(getConnection(), sql.insert(), params);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new DaoException(e);
@@ -125,7 +125,7 @@ public class AbstractDaoJdbc<T> extends AbstractDao<T> {
                 }
                 beanField.setAccessible(false);
             }
-            return dbExecutor.executeUpdateBi(getConnection(), sql.update(), params);
+            return dbExecutor.executeUpdate(getConnection(), sql.update(), params);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new DaoException(e);
