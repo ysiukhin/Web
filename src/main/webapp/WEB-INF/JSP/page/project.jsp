@@ -5,14 +5,6 @@
 <%@ page session="true" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
-
-<%--<html lang="${sessionScope.lang}">--%>
-<%--<head>--%>
-<%--    <meta charset="utf-8">--%>
-<%--    <meta name="viewport" content="width=device-width, initial-scale=1">--%>
-<%--    <title>${title}</title>--%>
-<%--    <link href="${pageContext.request.contextPath}/static/bootstrap-5.0.1/css/bootstrap.css" rel="stylesheet">--%>
-<%--</head>--%>
 <body class="w-100 text-center" style="background-color: #e3e3e3;">
 <main>
     <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">

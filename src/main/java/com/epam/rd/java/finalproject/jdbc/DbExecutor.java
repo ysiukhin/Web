@@ -8,11 +8,16 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public interface DbExecutor<T> {
+
     int executeInsert(Connection connection, String sql, List<Object> params) throws SQLException;
 
     int executeUpdate(Connection connection, String sql, List<Object> params) throws SQLException;
 
-    Optional<T> executeSelect(Connection connection, String sql, Object id, Function<ResultSet, T> rsHandler) throws SQLException;
+    Optional<List<T>> executeSelect(Connection connection, String sql, Object id,
+                                    Function<ResultSet, List<T>> rsHandler) throws SQLException;
 
-    Optional<List<T>> executeSelectAll(Connection connection, String sql, Object id, Function<ResultSet, List<T>> rsHandler) throws SQLException;
+//    Optional<T> executeSelect(Connection connection, String sql, Object id, Function<ResultSet, T> rsHandler) throws SQLException;
+//    Optional<List<T>> executeSelectAll(Connection connection, String sql, Object id, Function<ResultSet, List<T>> rsHandler) throws SQLException;
+
+
 }

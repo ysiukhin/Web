@@ -41,23 +41,24 @@ public class DbExecutorImpl<T> implements DbExecutor<T> {
         return executeInsert(connection, sql, params);
     }
 
-    @Override
-    public Optional<T> executeSelect(Connection connection, String sql, Object field,
-                                     Function<ResultSet, T> rsHandler) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setObject(1, field);
-            try (ResultSet rs = pst.executeQuery()) {
-                return Optional.ofNullable(rsHandler.apply(rs));
-            }
-        }
-    }
+//    @Override
+//    public Optional<T> executeSelect(Connection connection, String sql, Object field,
+//                                     Function<ResultSet, T> rsHandler) throws SQLException {
+//        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+//            pst.setObject(1, field);
+//            try (ResultSet rs = pst.executeQuery()) {
+//                return Optional.ofNullable(rsHandler.apply(rs));
+//            }
+//        }
+//    }
 
     @Override
-    public Optional<List<T>> executeSelectAll(Connection connection, String sql, Object field,
-                                              Function<ResultSet, List<T>> rsHandler) throws SQLException {
+    public Optional<List<T>> executeSelect(Connection connection, String sql, Object field,
+                                           Function<ResultSet, List<T>> rsHandler) throws SQLException {
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
-//            pst.setObject(1, field);
-//            List<Account> accounts = new ArrayList<>();
+            if (field != null) {
+                pst.setObject(1, field);
+            }
             try (ResultSet result = pst.executeQuery()) {
                 return Optional.ofNullable(rsHandler.apply(result));
             }

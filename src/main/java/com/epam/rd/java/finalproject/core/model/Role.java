@@ -5,9 +5,18 @@ import java.io.Serializable;
 public class Role implements Serializable {
     private int id;
     private String roleRu;
+    private String roleEn;
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                " roleRu='" + roleRu + '\'' +
+                ", roleEn='" + roleEn + '\'' +
+                '}';
     }
 
     public void setId(int id) {
@@ -30,5 +39,4 @@ public class Role implements Serializable {
         this.roleEn = roleEn;
     }
 
-    private String roleEn;
 }

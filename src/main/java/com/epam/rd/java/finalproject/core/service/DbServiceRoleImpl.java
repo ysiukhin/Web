@@ -1,32 +1,31 @@
 package com.epam.rd.java.finalproject.core.service;
 
-import com.epam.rd.java.finalproject.core.model.Account;
+import com.epam.rd.java.finalproject.core.dao.RoleDao;
+import com.epam.rd.java.finalproject.core.model.Role;
 import com.epam.rd.java.finalproject.core.sessionmanager.SessionManager;
-import com.epam.rd.java.finalproject.core.dao.AccountDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
-public class DbServiceAccountImpl implements DbServiceAccount {
-
+public class DbServiceRoleImpl implements DbServiceRole {
     private static final Logger logger = LogManager.getLogger(DbServiceAccountImpl.class);
 
-    private final AccountDao accountDao;
+    private final RoleDao roleDao;
 
-    public DbServiceAccountImpl(AccountDao accountDao) {
-        this.accountDao = accountDao;
+    public DbServiceRoleImpl(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
 
     @Override
-    public Optional<List<Account>> getAllAccounts() {
-        try (SessionManager sessionManager = accountDao.getSessionManager()) {
+    public Optional<List<Role>> getAllRoles() {
+        try (SessionManager sessionManager = roleDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                Optional<List<Account>> allAccounts = accountDao.select();
-                logger.debug("Account: {}", allAccounts.orElse(null));
-                return allAccounts;
+                Optional<List<Role>> allRoles = roleDao.select();
+                logger.info("Roles: {}", allRoles.orElse(null));
+                return allRoles;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 sessionManager.rollbackSession();
@@ -36,27 +35,28 @@ public class DbServiceAccountImpl implements DbServiceAccount {
     }
 
     @Override
-    public Optional<Account> getAccount(int id) {
-        try (SessionManager sessionManager = accountDao.getSessionManager()) {
+    public Optional<Role> getRole(int id) {
+        try (SessionManager sessionManager = roleDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                Optional<Account> account = accountDao.selectByField(id);
-                logger.debug("Account: {}", account.orElse(null));
-                return account;
+                Optional<Role> accountOptional = roleDao.selectByField(id);
+                logger.info("Role: {}", accountOptional.orElse(null));
+                return accountOptional;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 sessionManager.rollbackSession();
             }
             return Optional.empty();
         }
+
     }
 
     @Override
-    public int saveAccount(Account account) {
-        try (SessionManager sessionManager = accountDao.getSessionManager()) {
+    public int saveRole(Role role) {
+        try (SessionManager sessionManager = roleDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                int accountId = accountDao.insert(account);
+                int accountId = roleDao.insert(role);
                 sessionManager.commitSession();
                 logger.debug("created account: {}", accountId);
                 return accountId;
@@ -69,11 +69,11 @@ public class DbServiceAccountImpl implements DbServiceAccount {
     }
 
     @Override
-    public int updateAccount(Account account) {
-        try (SessionManager sessionManager = accountDao.getSessionManager()) {
+    public int updateRole(Role role) {
+        try (SessionManager sessionManager = roleDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                int accountId = accountDao.update(account);
+                int accountId = roleDao.update(role);
                 sessionManager.commitSession();
                 logger.debug("updated account: {}", accountId);
                 return accountId;

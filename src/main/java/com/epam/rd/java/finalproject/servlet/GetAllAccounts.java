@@ -1,6 +1,7 @@
 package com.epam.rd.java.finalproject.servlet;
 
 import com.epam.rd.java.finalproject.MysqlDemo;
+import com.epam.rd.java.finalproject.SampleData;
 import com.epam.rd.java.finalproject.core.dao.AccountDao;
 import com.epam.rd.java.finalproject.core.model.Account;
 import com.epam.rd.java.finalproject.core.model.AccountBuilder;
@@ -46,7 +47,7 @@ public class GetAllAccounts extends HttpServlet {
             AccountDao accountDao = new AccountDaoJdbc(sessionManagerJdbc, dbExecutor);
 
 
-            MysqlDemo.insertTestAccounts(accountDao, 5, getServletContext().getRealPath("/"));
+            SampleData.insertTestAccounts(accountDao, 5, getServletContext().getRealPath("/"));
             DbServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
             accounts = new CopyOnWriteArrayList<>(dbServiceAccount.getAllAccounts().get());
 
@@ -84,7 +85,7 @@ public class GetAllAccounts extends HttpServlet {
                 .addMiddleName(req.getParameter("middleName"))
                 .addEmail(req.getParameter("email"))
                 .addLogin(req.getParameter("login"))
-                .addMd5(MysqlDemo.getMd5(req.getParameter("login")))
+                .addMd5(SampleData.getMd5(req.getParameter("login")))
                 .addStatus(Integer.parseInt(req.getParameter("status")) == 1)
                 .addRoleId(Integer.parseInt(req.getParameter("status")))
                 .build();

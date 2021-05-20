@@ -1,6 +1,5 @@
 package com.epam.rd.java.finalproject.jdbc.dao;
 
-
 import com.epam.rd.java.finalproject.core.dao.AccountDao;
 import com.epam.rd.java.finalproject.core.dao.DaoException;
 import com.epam.rd.java.finalproject.core.model.Account;
@@ -15,10 +14,8 @@ import java.sql.SQLException;
 
 import java.util.*;
 
-import static com.epam.rd.java.finalproject.jdbc.dao.AccountDaoSql.*;
-
 public class AccountDaoJdbc extends AccountDao {
-    private static final Logger logger = LogManager.getLogger(AccountDaoJdbc.class);
+    private static final Logger LOGGER = LogManager.getLogger(AccountDaoJdbc.class);
 
     private final DbExecutor<Account> dbExecutor;
 
@@ -27,40 +24,19 @@ public class AccountDaoJdbc extends AccountDao {
         this.dbExecutor = dbExecutor;
     }
 
-
     @Override
     public Optional<Account> selectByField(Object field) {
-        try {
-            return dbExecutor.executeSelect(getConnection(), selectById,
-                    field, rs -> {
-                        try {
-                            if (rs.next()) {
-                                return new AccountBuilder()
-                                        .addId(rs.getInt("id"))
-                                        .addFirstName(rs.getString("first_name"))
-                                        .addLastName(rs.getString("last_name"))
-                                        .addMiddleName(rs.getString("middle_name"))
-                                        .addEmail(rs.getString("email"))
-                                        .addLogin(rs.getString("login"))
-                                        .addMd5(rs.getString("md5"))
-                                        .addStatus(rs.getInt("status") == 1)
-                                        .build();
-                            }
-                        } catch (SQLException e) {
-                            logger.error(e.getMessage(), e);
-                        }
-                        return null;
-                    });
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(selectQuery(field, SELECT_BY_ID).get().get(0));
     }
 
     @Override
-    public Optional<List<Account>> selectAll(Object field) {
+    public Optional<List<Account>> select() {
+        return selectQuery(null, SELECT_ALL);
+    }
+
+    private Optional<List<Account>> selectQuery(Object field, String sql) {
         try {
-            return dbExecutor.executeSelectAll(getConnection(), selectAllAccounts, field,
+            return dbExecutor.executeSelect(getConnection(), sql, field,
                     rs -> {
                         try {
                             List<Account> accounts = new ArrayList<>();
@@ -78,23 +54,23 @@ public class AccountDaoJdbc extends AccountDao {
                                                 .build()
                                 );
                             }
-                            return accounts;
+                            return Collections.unmodifiableList(accounts);
                         } catch (SQLException e) {
-                            logger.error(e.getMessage(), e);
+                            LOGGER.error("AccountDaoJdbc selectQuery error sql: {}", sql);
+                            throw new DaoException(e.getMessage(), e);
                         }
-                        return null;
                     }
             );
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
         }
-        return Optional.empty();
     }
 
     @Override
     public int insert(Account data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), insertNewAccount,
+            return dbExecutor.executeInsert(getConnection(), INSERT,
                     Collections.unmodifiableList(Arrays.asList(
                             data.getFirstName(),
                             data.getLastName(),
@@ -107,7 +83,7 @@ public class AccountDaoJdbc extends AccountDao {
                     )
             );
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }
@@ -115,7 +91,7 @@ public class AccountDaoJdbc extends AccountDao {
     @Override
     public int update(Account data) {
         try {
-            return dbExecutor.executeInsert(getConnection(), updateAccount,
+            return dbExecutor.executeInsert(getConnection(), UPDATE,
                     Collections.unmodifiableList(Arrays.asList(
                             data.getFirstName(),
                             data.getLastName(),
@@ -128,7 +104,7 @@ public class AccountDaoJdbc extends AccountDao {
                     )
             );
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }
