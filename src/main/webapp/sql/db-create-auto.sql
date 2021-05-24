@@ -20,34 +20,6 @@ USE
 `timecounterdb` ;
 
 -- -----------------------------------------------------
--- Table `role`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `role`;
-
-CREATE TABLE IF NOT EXISTS `role`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `role_ru`
-    VARCHAR
-(
-    60
-) NOT NULL,
-    `role_en` VARCHAR
-(
-    60
-) NOT NULL,
-    PRIMARY KEY
-(
-    `id`
-))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `account`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `account`;
@@ -76,58 +48,10 @@ CREATE TABLE IF NOT EXISTS `account`
 (
     50
 ) NOT NULL,
-    `login` VARCHAR
-(
-    45
-) NOT NULL,
     `md5` VARCHAR
 (
     32
 ) NOT NULL,
-    `status` TINYINT NOT NULL DEFAULT 1,
-    `role_id` INT NOT NULL,
-    PRIMARY KEY
-(
-    `id`,
-    `role_id`
-),
-    INDEX `fk_account_role_idx`
-(
-    `role_id` ASC
-) VISIBLE,
-    CONSTRAINT `fk_account_role`
-    FOREIGN KEY
-(
-    `role_id`
-)
-    REFERENCES `role`
-(
-    `id`
-)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `project`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `project`;
-
-CREATE TABLE IF NOT EXISTS `project`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `project_name`
-    VARCHAR
-(
-    50
-) NOT NULL,
-    `project_desc` TEXT NOT NULL,
     `status` TINYINT NOT NULL DEFAULT 1,
     PRIMARY KEY
 (
@@ -138,11 +62,86 @@ CREATE TABLE IF NOT EXISTS `project`
 
 
 -- -----------------------------------------------------
--- Table `project_executor`
+-- Table `kind`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `project_executor`;
+DROP TABLE IF EXISTS `kind`;
 
-CREATE TABLE IF NOT EXISTS `project_executor`
+CREATE TABLE IF NOT EXISTS `kind`
+(
+    `id`
+    INT
+    NOT
+    NULL
+    AUTO_INCREMENT,
+    `kind_en`
+    VARCHAR
+(
+    60
+) NOT NULL,
+    `kind_ru` VARCHAR
+(
+    60
+) NOT NULL,
+    PRIMARY KEY
+(
+    `id`
+))
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `activity`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `activity`;
+
+CREATE TABLE IF NOT EXISTS `activity`
+(
+    `id`
+    INT
+    NOT
+    NULL
+    AUTO_INCREMENT,
+    `activity_en`
+    VARCHAR
+(
+    50
+) NOT NULL,
+    `activity_ru` VARCHAR
+(
+    50
+) NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `kind_id` INT NOT NULL,
+    PRIMARY KEY
+(
+    `id`,
+    `kind_id`
+),
+    INDEX `fk_activity_kind_idx`
+(
+    `kind_id` ASC
+) VISIBLE,
+    CONSTRAINT `fk_activity_kind`
+    FOREIGN KEY
+(
+    `kind_id`
+)
+    REFERENCES `kind`
+(
+    `id`
+)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `account_activity`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `account_activity`;
+
+CREATE TABLE IF NOT EXISTS `account_activity`
 (
     `id`
     INT
@@ -157,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `project_executor`
     INT
     NOT
     NULL,
-    `project_id`
+    `activity_id`
     INT
     NOT
     NULL,
@@ -166,17 +165,17 @@ CREATE TABLE IF NOT EXISTS `project_executor`
 (
     `id`,
     `account_id`,
-    `project_id`
+    `activity_id`
 ),
-    INDEX `fk_project_executor_account_idx`
+    INDEX `fk_account_activity_activity_idx`
+(
+    `activity_id` ASC
+) INVISIBLE,
+    INDEX `fk_account_activity_account_idx`
 (
     `account_id` ASC
 ) VISIBLE,
-    INDEX `fk_project_executor_project_idx`
-(
-    `project_id` ASC
-) INVISIBLE,
-    CONSTRAINT `fk_project_executor_account`
+    CONSTRAINT `fk_account_activity_account`
     FOREIGN KEY
 (
     `account_id`
@@ -187,73 +186,12 @@ CREATE TABLE IF NOT EXISTS `project_executor`
 )
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-    CONSTRAINT `fk_project_executor_project`
+    CONSTRAINT `fk_account_activity_activity`
     FOREIGN KEY
 (
-    `project_id`
+    `activity_id`
 )
-    REFERENCES `project`
-(
-    `id`
-)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `task`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `task`;
-
-CREATE TABLE IF NOT EXISTS `task`
-(
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `desc_short`
-    VARCHAR
-(
-    100
-) NOT NULL,
-    `desc_full` TEXT NOT NULL,
-    `status` TINYINT NOT NULL DEFAULT 1,
-    `project_id` INT NOT NULL,
-    `project_executor_id` INT NOT NULL,
-    PRIMARY KEY
-(
-    `id`,
-    `project_id`,
-    `project_executor_id`
-),
-    INDEX `fk_task_project_executor_idx`
-(
-    `project_executor_id` ASC
-) VISIBLE,
-    INDEX `fk_task_project_idx`
-(
-    `project_id` ASC
-) VISIBLE,
-    CONSTRAINT `fk_task_project_executor1`
-    FOREIGN KEY
-(
-    `project_executor_id`
-)
-    REFERENCES `project_executor`
-(
-    `id`
-)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-    CONSTRAINT `fk_task_project1`
-    FOREIGN KEY
-(
-    `project_id`
-)
-    REFERENCES `project`
+    REFERENCES `activity`
 (
     `id`
 )
@@ -275,14 +213,6 @@ CREATE TABLE IF NOT EXISTS `record`
     NOT
     NULL
     AUTO_INCREMENT,
-    `project_executor_id`
-    INT
-    NOT
-    NULL,
-    `task_id`
-    INT
-    NOT
-    NULL,
     `start`
     TIMESTAMP
     NOT
@@ -291,38 +221,26 @@ CREATE TABLE IF NOT EXISTS `record`
     TIMESTAMP
     NOT
     NULL,
+    `account_activity_id`
+    INT
+    NOT
+    NULL,
     PRIMARY
     KEY
 (
     `id`,
-    `project_executor_id`,
-    `task_id`
+    `account_activity_id`
 ),
-    INDEX `fk_record_project_executor_idx`
+    INDEX `fk_record_account_activity_idx`
 (
-    `project_executor_id` ASC
-) VISIBLE,
-    INDEX `fk_record_task_idx`
-(
-    `task_id` ASC
-) VISIBLE,
-    CONSTRAINT `fk_record_project_executor`
+    `account_activity_id` ASC
+) INVISIBLE,
+    CONSTRAINT `fk_record_account_activity1`
     FOREIGN KEY
 (
-    `project_executor_id`
+    `account_activity_id`
 )
-    REFERENCES `project_executor`
-(
-    `id`
-)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-    CONSTRAINT `fk_record_task`
-    FOREIGN KEY
-(
-    `task_id`
-)
-    REFERENCES `task`
+    REFERENCES `account_activity`
 (
     `id`
 )
@@ -332,79 +250,62 @@ CREATE TABLE IF NOT EXISTS `record`
 
 
 -- -----------------------------------------------------
--- Table `permission`
+-- Table `request`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `permission`;
+DROP TABLE IF EXISTS `request`;
 
-CREATE TABLE IF NOT EXISTS `permission`
+CREATE TABLE IF NOT EXISTS `request`
 (
     `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `permission_ru`
-    VARCHAR
-(
-    90
-) NOT NULL,
-    `permission_en` VARCHAR
-(
-    90
-) NOT NULL,
-    PRIMARY KEY
-(
-    `id`
-))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `role_permission`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `role_permission`;
-
-CREATE TABLE IF NOT EXISTS `role_permission`
-(
-    `role_id`
     INT
     NOT
     NULL,
-    `permission_id`
+    `request`
+    TINYINT
+    NOT
+    NULL
+    DEFAULT
+    0,
+    `account_id`
+    INT
+    NOT
+    NULL,
+    `activity_id`
     INT
     NOT
     NULL,
     PRIMARY
     KEY
 (
-    `role_id`,
-    `permission_id`
+    `id`,
+    `account_id`,
+    `activity_id`
 ),
-    INDEX `fk_role_permission_permission_idx`
+    INDEX `fk_request_account_idx`
 (
-    `permission_id` ASC
+    `account_id` ASC
 ) VISIBLE,
-    INDEX `fk_role_permission_role_idx`
+    INDEX `fk_request_activity_idx`
 (
-    `role_id` ASC
-) VISIBLE,
-    CONSTRAINT `fk_role_has_permission_role1`
+    `activity_id` ASC
+) INVISIBLE,
+    CONSTRAINT `fk_request_account1`
     FOREIGN KEY
 (
-    `role_id`
+    `account_id`
 )
-    REFERENCES `role`
+    REFERENCES `account`
 (
     `id`
 )
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-    CONSTRAINT `fk_role_has_permission_permission1`
+    CONSTRAINT `fk_request_activity1`
     FOREIGN KEY
 (
-    `permission_id`
+    `activity_id`
 )
-    REFERENCES `permission`
+    REFERENCES `activity`
 (
     `id`
 )

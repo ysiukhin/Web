@@ -9,7 +9,7 @@
 <main>
     <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
         <form action="testdata" method="GET" role="form">
-            <h1 class="h3 mb-3 fw-normal"><fmt:message key="label.project"/>&nbsp;<fmt:message key="label.page"/></h1>
+            <h1 class="h3 mb-3 fw-normal"><fmt:message key="label.activity"/>&nbsp;<fmt:message key="label.page"/></h1>
             <p class="mt-3 mb-3 text-muted"><fmt:message key="label.author"/></p>
         </form>
     </div>

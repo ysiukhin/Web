@@ -19,11 +19,11 @@
     </error-page>
     <servlet>
         <servlet-name>GetAllAccounts</servlet-name>
-        <servlet-class>com.epam.rd.java.finalproject.servlet.GetAllAccounts</servlet-class>
+        <servlet-class>ua.traning.rd.java.finalproject.servlet.GetAllAccounts</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>XMLConfigServlet</servlet-name>
-        <servlet-class>com.epam.rd.java.finalproject.servlet.XMLConfigServlet</servlet-class>
+        <servlet-class>ua.traning.rd.java.finalproject.servlet.XMLConfigServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>XMLConfigServlet</servlet-name>
