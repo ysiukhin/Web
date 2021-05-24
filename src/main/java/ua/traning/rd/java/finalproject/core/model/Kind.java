@@ -2,7 +2,7 @@ package ua.traning.rd.java.finalproject.core.model;
 
 import ua.traning.rd.java.finalproject.core.annotation.Linked;
 import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
-import ua.traning.rd.java.finalproject.core.annotation.TableField;
+import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 import ua.traning.rd.java.finalproject.core.annotation.TableName;
 
 import java.io.Serializable;
@@ -11,11 +11,11 @@ import java.util.List;
 @TableName(dbTable = "kind")
 public class Kind implements Serializable {
     @PrimaryKey
-    @TableField(dbFieldName = "id", select = 1, updatePosition = 3)
+    @TableColumn("id")
     private int id;
-    @TableField(dbFieldName = "kind_ru", insertPosition = 1, updatePosition = 1)
+    @TableColumn("kind_ru")
     private String kindRu;
-    @TableField(dbFieldName = "kind_en", insertPosition = 2, updatePosition = 2)
+    @TableColumn("kind_en")
     private String kindEn;
     @Linked("kind_id")
     private List<Activity> activities;

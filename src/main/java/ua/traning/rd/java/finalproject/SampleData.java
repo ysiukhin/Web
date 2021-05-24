@@ -5,7 +5,7 @@ import ua.traning.rd.java.finalproject.core.dao.DbService;
 import ua.traning.rd.java.finalproject.core.dao.DbServiceImpl;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.jdbc.dao.*;
-import ua.traning.rd.java.finalproject.jdbc.DbExecutorImpl;
+
 import ua.traning.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,9 +37,13 @@ public class SampleData {
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
 
         Dao<Kind> kindDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Kind.class), new KindSql(), Kind.class);
+                new DaoJdbc<>(sessionManagerJdbc, Kind.class);
         Dao<Account> accountDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Account.class), new AccountSql(), Account.class);
+                new DaoJdbc<>(sessionManagerJdbc, Account.class);
+//        Dao<Kind> kindDao =
+//                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Kind.class), new KindSql(), Kind.class);
+//        Dao<Account> accountDao =
+//                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Account.class), new AccountSql(), Account.class);
 
     }
 
@@ -134,11 +138,11 @@ public class SampleData {
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
 
         Dao<Account> accountDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Account.class), new AccountSql(), Account.class);
+                new DaoJdbc<>(sessionManagerJdbc, Account.class);
         Dao<Activity> activityDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Activity.class), new ActivitySql(), Activity.class);
+                new DaoJdbc<>(sessionManagerJdbc, Activity.class);
         Dao<AccountActivity> accountActivityDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(AccountActivity.class), new AccountActivitySql(), AccountActivity.class);
+                new DaoJdbc<>(sessionManagerJdbc, AccountActivity.class);
 
         DbService<Account> dbServiceAccount = new DbServiceImpl<>(accountDao);
         DbService<Activity> dbServiceActivity = new DbServiceImpl<>(activityDao);
@@ -154,16 +158,16 @@ public class SampleData {
 
             List<Integer> usedActivities = new ArrayList<>(activitiesPerAccount);
             for (int i = 0; i < activitiesPerAccount; i++) {
-
                 int randomActivity = SECURE_RANDOM.nextInt(activities.size());
-
                 if (randomActivity > 0 && !usedActivities.contains(randomActivity)) {
                     AccountActivity accountActivity = new AccountActivity();
                     accountActivity.setAccountId(accounts.get(j).getId());
                     accountActivity.setActivityId(randomActivity);
                     accountActivity.setStatus(true);
                     usedActivities.add(randomActivity);
+                    LOGGER.info("Before: {}", accountActivity);
                     DbServiceAccountActivity.saveBean(accountActivity);
+                    LOGGER.info("After: {}", accountActivity);
                 }
             }
         }
@@ -173,11 +177,11 @@ public class SampleData {
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
 
         Dao<Account> accountDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Account.class), new AccountSql(), Account.class);
+                new DaoJdbc<>(sessionManagerJdbc, Account.class);
         Dao<Activity> activityDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(Activity.class), new ActivitySql(), Activity.class);
+                new DaoJdbc<>(sessionManagerJdbc, Activity.class);
         Dao<AccountActivity> accountActivityDao =
-                new DaoJdbc<>(sessionManagerJdbc, new DbExecutorImpl<>(AccountActivity.class), new AccountActivitySql(), AccountActivity.class);
+                new DaoJdbc<>(sessionManagerJdbc, AccountActivity.class);
 
         DbService<Account> dbServiceAccount = new DbServiceImpl<>(accountDao);
         DbService<Activity> dbServiceActivity = new DbServiceImpl<>(activityDao);

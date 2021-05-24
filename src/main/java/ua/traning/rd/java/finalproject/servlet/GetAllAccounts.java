@@ -3,11 +3,11 @@ package ua.traning.rd.java.finalproject.servlet;
 import ua.traning.rd.java.finalproject.SampleData;
 import ua.traning.rd.java.finalproject.core.dao.Dao;
 import ua.traning.rd.java.finalproject.core.dao.DbServiceImpl;
-import ua.traning.rd.java.finalproject.jdbc.dao.AccountSql;
+
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.AccountBuilder;
 import ua.traning.rd.java.finalproject.core.dao.DbService;
-import ua.traning.rd.java.finalproject.jdbc.DbExecutorImpl;
+
 import ua.traning.rd.java.finalproject.jdbc.dao.DaoJdbc;
 import ua.traning.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import org.apache.logging.log4j.LogManager;
@@ -40,8 +40,9 @@ public class GetAllAccounts extends HttpServlet {
     public void init() {
         try {
             SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
-            DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
-            Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, dbExecutor, new AccountSql(), Account.class);
+//            DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
+            Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, Account.class);
+//            Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, dbExecutor, new AccountSql(), Account.class);
 
             SampleData.init(dataSource);
             DbService<Account> dbService = new DbServiceImpl<>(accountDao);
@@ -70,8 +71,8 @@ public class GetAllAccounts extends HttpServlet {
         }
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
-        DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
-        Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, dbExecutor, new AccountSql(), Account.class);
+//        DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
+        Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, Account.class);
 
         DbService<Account> dbService = new DbServiceImpl<>(accountDao);
 

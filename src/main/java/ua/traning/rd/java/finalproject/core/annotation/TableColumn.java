@@ -7,12 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface TableField {
-    String dbFieldName();
-
-    int insertPosition() default 0;
-
-    int updatePosition() default 0;
-
-    int select() default 0;
+public @interface TableColumn {
+    String value();
 }

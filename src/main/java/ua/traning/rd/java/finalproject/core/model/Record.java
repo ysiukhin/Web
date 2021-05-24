@@ -1,7 +1,7 @@
 package ua.traning.rd.java.finalproject.core.model;
 
 import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
-import ua.traning.rd.java.finalproject.core.annotation.TableField;
+import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 import ua.traning.rd.java.finalproject.core.annotation.TableName;
 
 import java.io.Serializable;
@@ -10,13 +10,13 @@ import java.time.Instant;
 @TableName(dbTable = "record")
 public class Record implements Serializable {
     @PrimaryKey
-    @TableField(dbFieldName = "id", select = 1, updatePosition = 4)
+    @TableColumn("id")
     private int id;
-    @TableField(dbFieldName = "start", insertPosition = 1, updatePosition = 1)
+    @TableColumn("start")
     private Instant start;
-    @TableField(dbFieldName = "end", insertPosition = 2, updatePosition = 2)
+    @TableColumn("end")
     private Instant end;
-    @TableField(dbFieldName = "account_activity_id", insertPosition = 3, updatePosition = 3)
+    @TableColumn("account_activity_id")
     private int accountActivityId;
 
     public int getId() {

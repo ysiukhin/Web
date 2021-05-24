@@ -32,11 +32,11 @@ public class DbServiceImpl<T> implements DbService<T> {
         return doService(() -> dao.update(bean));
     }
 
-    protected <U> U doService(Supplier<U> job) {
+    protected <U> U doService(Supplier<U> service) {
         try (SessionManager sessionManager = dao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                U result = job.get();
+                U result = service.get();
                 sessionManager.commitSession();
 //                logger.debug("Account: {}", allAccounts);
                 return result;

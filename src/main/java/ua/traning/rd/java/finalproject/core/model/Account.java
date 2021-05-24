@@ -2,7 +2,7 @@ package ua.traning.rd.java.finalproject.core.model;
 
 import ua.traning.rd.java.finalproject.core.annotation.Linked;
 import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
-import ua.traning.rd.java.finalproject.core.annotation.TableField;
+import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 import ua.traning.rd.java.finalproject.core.annotation.TableName;
 
 import java.io.Serializable;
@@ -12,19 +12,19 @@ import java.util.StringJoiner;
 @TableName(dbTable = "account")
 public class Account implements Serializable {
     @PrimaryKey
-    @TableField(dbFieldName = "id", select = 1, updatePosition = 7)
+    @TableColumn("id")
     private int id;
-    @TableField(dbFieldName = "first_name", insertPosition = 1, updatePosition = 1)
+    @TableColumn("first_name")
     private String firstName;
-    @TableField(dbFieldName = "last_name", insertPosition = 2, updatePosition = 2)
+    @TableColumn("last_name")
     private String lastName;
-    @TableField(dbFieldName = "middle_name", insertPosition = 3, updatePosition = 3)
+    @TableColumn("middle_name")
     private String middleName;
-    @TableField(dbFieldName = "email", insertPosition = 4, updatePosition = 4)
+    @TableColumn("email")
     private String email;
-    @TableField(dbFieldName = "md5", insertPosition = 5, updatePosition = 5)
+    @TableColumn("md5")
     private String md5;
-    @TableField(dbFieldName = "status", insertPosition = 6, updatePosition = 6)
+    @TableColumn("status")
     private int status;
     @Linked("account_id")
     private List<AccountActivity> accountActivities;
