@@ -69,7 +69,6 @@ public class DaoJdbc<T> extends Dao<T> {
                 beanField.setAccessible(true);
                 if (beanField.isAnnotationPresent(TableColumn.class)) {
                     TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
-//                                LOGGER.info("tableField.dbFieldName(): {}",tableField.dbFieldName());
                     beanField.set(bean, resultSet.getObject(tableColumn.value()));
                     if (beanField.isAnnotationPresent(PrimaryKey.class)) {
                         primaryKeyValue = beanField.getInt(bean);
@@ -82,7 +81,6 @@ public class DaoJdbc<T> extends Dao<T> {
                     Dao<?> linkedDao = new DaoJdbc<>(getSessionManager(), linked);
                     List<?> list = linkedDao.selectBy(foreignKeyColumn.value(), primaryKeyValue);
                     beanField.set(bean, list);
-//                    LOGGER.info("tableField.dbFieldName(): {}", bean);
                 }
                 beanField.setAccessible(false);
             }

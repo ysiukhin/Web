@@ -45,14 +45,14 @@ public class MysqlDemo {
 //        SampleData.insertTestAccountActivities(dataSource, 2);
         DbService<AccountActivity> dbServiceAccountActivities = new DbServiceImpl<>(accountActivityDao);
         DbService<Activity> dbServiceActivity = new DbServiceImpl<>(activityDao);
-        Activity testActivity = dbServiceActivity.getBeansById(5);
+        Activity testActivity = dbServiceActivity.getBeansById(5).get();
         testActivity.setActivityEn("test");
         testActivity.setActivityRu("тест");
 
         dbServiceActivity.updateBean(testActivity);
 
 //        List<AccountActivity> accountActivityList = dbServiceAccountActivities.getAllBeans();
-        List<Activity> activityList = dbServiceActivity.getAllBeans();
+        List<Activity> activityList = dbServiceActivity.getAllBeans().get();
 //        DbService<Kind> dbServiceAccountActivities = new DbServiceImpl<>(kindDao);
 //        List<Kind> accountActivityList = dbServiceAccountActivities.getAllBeans();
 

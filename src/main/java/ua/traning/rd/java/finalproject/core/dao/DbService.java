@@ -1,13 +1,14 @@
 package ua.traning.rd.java.finalproject.core.dao;
 
-import ua.traning.rd.java.finalproject.core.model.Account;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface DbService<T> {
-    List<T> getAllBeans();
+    Optional<List<T>> getAllBeans();
 
-    T getBeansById(int id);
+    Optional<T> getBeansById(int id);
+
+    Optional<List<T>> getBeansBy(String columnName, Object value);
 
     int saveBean(T account);
 

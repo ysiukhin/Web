@@ -17,16 +17,10 @@ public class SessionLocaleFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
-
-//        HttpSession session = req.getSession();
-//        String sessionId = req.getSession().getId();
-//        String sessionLocale = req.getSession().getAttribute("sessionLocale").toString();
-//        String sessionLocale = req.getSession().getAttribute("sessionLocale").toString();
-
-        logger.info("BEFORE: -->  Request.getLocale(): {}", req.getLocale().toString());
-        logger.info("BEFORE: -->  sessionId: {}", req.getSession().getId());
-        logger.info("BEFORE: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
-        logger.info("BEFORE: -->  session.lang {}", req.getSession().getAttribute("lang"));
+//        logger.info("BEFORE: -->  Request.getLocale(): {}", req.getLocale().toString());
+//        logger.info("BEFORE: -->  sessionId: {}", req.getSession().getId());
+//        logger.info("BEFORE: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
+//        logger.info("BEFORE: -->  session.lang {}", req.getSession().getAttribute("lang"));
 
         if (req.getSession().getAttribute("lang") == null) {
             req.getSession().setAttribute("lang", "en");
@@ -37,9 +31,9 @@ public class SessionLocaleFilter implements Filter {
 //        else {
 //            req.getSession().setAttribute("lang", req.getParameter("sessionLocale"));
 //        }
-        logger.info("AFTER: -->  sessionId: {}", req.getSession().getId());
-        logger.info("AFTER: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
-        logger.info("AFTER: -->  session.lang {}", req.getSession().getAttribute("lang"));
+//        logger.info("AFTER: -->  sessionId: {}", req.getSession().getId());
+//        logger.info("AFTER: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
+//        logger.info("AFTER: -->  session.lang {}", req.getSession().getAttribute("lang"));
 
         chain.doFilter(request, response);
     }

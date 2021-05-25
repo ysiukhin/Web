@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.util.HashSet;
 
 @WebListener
 public class ApplicationListener implements ServletContextListener {
@@ -14,6 +15,7 @@ public class ApplicationListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOGGER.info("Application started.");
+        sce.getServletContext().setAttribute("loggedAccounts", new HashSet<String>());
     }
 
     @Override

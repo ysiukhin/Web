@@ -18,21 +18,32 @@
         <location>/error</location>
     </error-page>
     <servlet>
-        <servlet-name>GetAllAccounts</servlet-name>
-        <servlet-class>ua.traning.rd.java.finalproject.servlet.GetAllAccounts</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>XMLConfigServlet</servlet-name>
-        <servlet-class>ua.traning.rd.java.finalproject.servlet.XMLConfigServlet</servlet-class>
+        <servlet-name>Servl</servlet-name>
+        <servlet-class>ua.traning.rd.java.finalproject.servlet.controller.Servlet</servlet-class>
+        <!--<load-on-startup>1</load-on-startup>-->
     </servlet>
     <servlet-mapping>
-        <servlet-name>XMLConfigServlet</servlet-name>
-        <url-pattern>/xml</url-pattern>
+        <servlet-name>Servl</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GetAllAccounts</servlet-name>
-        <url-pattern>/accounts</url-pattern>
-    </servlet-mapping>
+
+
+    <!--    <servlet>-->
+    <!--        <servlet-name>GetAllAccounts</servlet-name>-->
+    <!--        <servlet-class>ua.traning.rd.java.finalproject.servlet.GetAllAccounts</servlet-class>-->
+    <!--    </servlet>-->
+    <!--    <servlet>-->
+    <!--        <servlet-name>XMLConfigServlet</servlet-name>-->
+    <!--        <servlet-class>ua.traning.rd.java.finalproject.servlet.XMLConfigServlet</servlet-class>-->
+    <!--    </servlet>-->
+    <!--    <servlet-mapping>-->
+    <!--        <servlet-name>XMLConfigServlet</servlet-name>-->
+    <!--        <url-pattern>/xml</url-pattern>-->
+    <!--    </servlet-mapping>-->
+    <!--    <servlet-mapping>-->
+    <!--        <servlet-name>GetAllAccounts</servlet-name>-->
+    <!--        <url-pattern>/accounts</url-pattern>-->
+    <!--    </servlet-mapping>-->
     <session-config>
         <tracking-mode>COOKIE</tracking-mode>
     </session-config>

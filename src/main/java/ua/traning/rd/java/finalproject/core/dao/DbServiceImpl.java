@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.sessionmanager.SessionManager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DbServiceImpl<T> implements DbService<T> {
@@ -16,12 +17,16 @@ public class DbServiceImpl<T> implements DbService<T> {
         this.dao = dao;
     }
 
-    public List<T> getAllBeans() {
-        return doService(dao::select);
+    public Optional<List<T>> getAllBeans() {
+        return Optional.ofNullable(doService(dao::select));
     }
 
-    public T getBeansById(int id) {
-        return doService(() -> dao.selectBy("id", id).get(0));
+    public Optional<T> getBeansById(int id) {
+        return Optional.ofNullable(doService(() -> dao.selectBy("id", id).get(0)));
+    }
+
+    public Optional<List<T>> getBeansBy(String columnName, Object value) {
+        return Optional.ofNullable(doService(() -> dao.selectBy(columnName, value)));
     }
 
     public int saveBean(T bean) {

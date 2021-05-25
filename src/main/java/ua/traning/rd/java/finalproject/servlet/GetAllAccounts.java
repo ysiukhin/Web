@@ -40,13 +40,11 @@ public class GetAllAccounts extends HttpServlet {
     public void init() {
         try {
             SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
-//            DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
             Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, Account.class);
-//            Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, dbExecutor, new AccountSql(), Account.class);
 
             SampleData.init(dataSource);
             DbService<Account> dbService = new DbServiceImpl<>(accountDao);
-            accounts = new CopyOnWriteArrayList<>(dbService.getAllBeans());
+            accounts = new CopyOnWriteArrayList<>(dbService.getAllBeans().get());
 
         } catch (IOException | NoSuchAlgorithmException | SQLException e) {
             logger.error(e.getMessage(), e);
@@ -71,7 +69,6 @@ public class GetAllAccounts extends HttpServlet {
         }
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
-//        DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>(Account.class);
         Dao<Account> accountDao = new DaoJdbc<>(sessionManagerJdbc, Account.class);
 
         DbService<Account> dbService = new DbServiceImpl<>(accountDao);

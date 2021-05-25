@@ -28,8 +28,6 @@ public class Account implements Serializable {
     private int status;
     @Linked("account_id")
     private List<AccountActivity> accountActivities;
-//    @Linked(className = "Requests")
-//    private List<Requests> requests;
 
 
     public int getId() {
