@@ -10,6 +10,8 @@ public interface DbService<T> {
 
     Optional<List<T>> getBeansBy(String columnName, Object value);
 
+    Optional<List<T>> getBeansInRange(String columnName, List<Object> fields);
+
     int saveBean(T account);
 
     int updateBean(T account);

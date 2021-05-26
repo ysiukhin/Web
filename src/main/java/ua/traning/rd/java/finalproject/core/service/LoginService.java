@@ -14,11 +14,11 @@ import ua.traning.rd.java.finalproject.servlet.controller.command.LoginCommand;
 import java.util.Optional;
 
 
-public class CheckLoginService extends Service {
+public class LoginService extends Service {
     public final static Logger LOGGER = LogManager.getLogger(LoginCommand.class);
 
     public Account checkAccount(String email, String password) {
-        LOGGER.info("IN CheckLoginService --> email:{}, password: {}", email, password);
+        LOGGER.info("IN LoginService --> email:{}, password: {}", email, password);
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
         Dao<Account> accountDao =
@@ -37,7 +37,7 @@ public class CheckLoginService extends Service {
             throw new ExceptionService(String
                     .format("Wrong password -> saved: [%s] and provided: [%s]", savedPassword, providedPassword));
         }
-        LOGGER.info("OUT CheckLoginService --> return: {}", account.get());
+        LOGGER.info("OUT LoginService --> return: {}", account.get());
         return account.get();
     }
 }

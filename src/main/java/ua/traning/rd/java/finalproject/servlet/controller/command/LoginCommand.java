@@ -3,12 +3,12 @@ package ua.traning.rd.java.finalproject.servlet.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.Account;
-import ua.traning.rd.java.finalproject.core.service.CheckLoginService;
+import ua.traning.rd.java.finalproject.core.service.LoginService;
 import ua.traning.rd.java.finalproject.core.service.ExceptionService;
 
 import ua.traning.rd.java.finalproject.servlet.LoggedAccount;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.LoginPasswordException;
+import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,10 +43,10 @@ public class LoginCommand implements Command {
 
         Account account;
         try {
-            account = new CheckLoginService().checkAccount(email, password);
+            account = new LoginService().checkAccount(email, password);
         } catch (ExceptionService e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LoginPasswordException(errorMessages.getString("message.authorization.failed"));
+            throw new CommandException(errorMessages.getString("message.authorization.failed"));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString("message.application.failed"));

@@ -24,32 +24,20 @@ public class DaoJdbc<T> extends Dao<T> {
     }
 
     @Override
-    public List<T> selectBy(String column, Object field) {
+    public List<T> selectBy(String column, List<Object> fields) {
         try {
-            StringBuilder sqlQuery = new StringBuilder("SELECT ");
-            StringJoiner columnList = new StringJoiner(",");
-            for (Field beanField : getDaoEntity().getDeclaredFields()) {
-                beanField.setAccessible(true);
-                if (beanField.isAnnotationPresent(TableColumn.class)) {
-                    TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
-                    columnList.add(tableColumn.value());
-                }
-                beanField.setAccessible(false);
-            }
-            sqlQuery.append(columnList).append(" FROM ").append(getDaoEntity().getAnnotation(TableName.class).dbTable());
-            if (!column.isEmpty()) {
-                sqlQuery.append(" WHERE ").append(column).append("=?");
-            }
-            try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery.toString())) {
-                if (field != null) {
-                    pst.setObject(1, field);
+            String sqlQuery = buildSelect() + (fields.size() > 1 ?
+                    " WHERE between ? and ?" : " WHERE =?");
+            try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery)) {
+                pst.setObject(1, fields.get(0));
+                if (fields.size() > 1) {
+                    pst.setObject(2, fields.get(1));
                 }
                 try (ResultSet resultSet = pst.executeQuery()) {
-                    return resultSetProcess(resultSet);
+                    return selectResultSetProcess(resultSet);
                 }
             }
         } catch (InstantiationException | IllegalAccessException | SQLException e) {
-//            LOGGER.error("DaoJdbc<{}> SELECT construction error", getDaoEntity().getSimpleName());
             LOGGER.error(e.getMessage(), e);
             throw new DaoException(e.getMessage(), e);
         }
@@ -57,10 +45,35 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public List<T> select() {
-        return selectBy("", null);
+        String sqlQuery = buildSelect();
+        try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
+             ResultSet resultSet = pst.executeQuery()) {
+            return selectResultSetProcess(resultSet);
+        } catch (InstantiationException | IllegalAccessException |
+                SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
+        }
     }
 
-    private List<T> resultSetProcess(ResultSet resultSet) throws SQLException, IllegalAccessException, InstantiationException {
+    private String buildSelect() {
+        StringBuilder sqlQuery = new StringBuilder("SELECT ");
+        StringJoiner columnList = new StringJoiner(",");
+        for (Field beanField : getDaoEntity().getDeclaredFields()) {
+            beanField.setAccessible(true);
+            if (beanField.isAnnotationPresent(TableColumn.class)) {
+                TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
+                columnList.add(tableColumn.value());
+            }
+            beanField.setAccessible(false);
+        }
+        sqlQuery.append(columnList);
+        return sqlQuery.append(" FROM ").append(getDaoEntity()
+                .getAnnotation(TableName.class).dbTable()).toString();
+    }
+
+    private List<T> selectResultSetProcess(ResultSet resultSet)
+            throws SQLException, IllegalAccessException, InstantiationException {
         List<T> resultList = new ArrayList<>();
         while (resultSet.next()) {
             T bean = getDaoEntity().newInstance();
@@ -79,7 +92,8 @@ public class DaoJdbc<T> extends Dao<T> {
                     ParameterizedType genericList = (ParameterizedType) beanField.getGenericType();
                     Class<?> linked = (Class<?>) genericList.getActualTypeArguments()[0];
                     Dao<?> linkedDao = new DaoJdbc<>(getSessionManager(), linked);
-                    List<?> list = linkedDao.selectBy(foreignKeyColumn.value(), primaryKeyValue);
+                    List<?> list = linkedDao.selectBy(foreignKeyColumn.value(),
+                            Collections.singletonList(primaryKeyValue));
                     beanField.set(bean, list);
                 }
                 beanField.setAccessible(false);
@@ -89,30 +103,39 @@ public class DaoJdbc<T> extends Dao<T> {
         return resultList;
     }
 
-    @Override
-    public int insert(T data) {
-        try {
-            StringBuilder sqlQuery = new StringBuilder("INSERT INTO ");
-            sqlQuery.append(getDaoEntity().getAnnotation(TableName.class).dbTable());
-            StringJoiner columnList = new StringJoiner(",");
-            StringJoiner parameterList = new StringJoiner(",");
-            List<Object> params = new ArrayList<>();
-            for (Field beanField : getDaoEntity().getDeclaredFields()) {
-                beanField.setAccessible(true);
-                if (beanField.isAnnotationPresent(TableColumn.class)) {
-                    TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
-                    if (!beanField.isAnnotationPresent(PrimaryKey.class)) {
-                        columnList.add(tableColumn.value());
-                        parameterList.add("?");
-                        params.add(beanField.get(data));
-                    }
+    private Map<String, List<Object>> buildInsert(T entity)
+            throws IllegalAccessException {
+        StringBuilder sqlQuery = new StringBuilder("INSERT INTO ");
+        sqlQuery.append(getDaoEntity().getAnnotation(TableName.class).dbTable());
+        StringJoiner columnList = new StringJoiner(",");
+        StringJoiner parameterList = new StringJoiner(",");
+        List<Object> params = new ArrayList<>();
+        for (Field beanField : getDaoEntity().getDeclaredFields()) {
+            beanField.setAccessible(true);
+            if (beanField.isAnnotationPresent(TableColumn.class)) {
+                TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
+                if (!beanField.isAnnotationPresent(PrimaryKey.class)) {
+                    columnList.add(tableColumn.value());
+                    parameterList.add("?");
+                    params.add(beanField.get(entity));
                 }
-                beanField.setAccessible(false);
             }
-            sqlQuery.append(" (").append(columnList).append(") VALUES (").append(parameterList).append(")");
+            beanField.setAccessible(false);
+        }
+        sqlQuery.append(" (").append(columnList)
+                .append(") VALUES (").append(parameterList).append(")");
+        return Collections.singletonMap(sqlQuery.toString(), params);
+    }
+
+    @Override
+    public int insert(T entity) {
+        try {
+            Map<String, List<Object>> insertParameters = buildInsert(entity);
+            List<Object> params = Arrays.asList(insertParameters.values().toArray());
+            String sqlQuery = insertParameters.keySet().toArray(new String[0])[0];
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
-                         getConnection().prepareStatement(sqlQuery.toString(), Statement.RETURN_GENERATED_KEYS)) {
+                         getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
                 }
@@ -122,7 +145,7 @@ public class DaoJdbc<T> extends Dao<T> {
                     int generatedKey = rs.getInt(1);
                     Field primaryKey = getDaoEntity().getDeclaredField("id");
                     primaryKey.setAccessible(true);
-                    primaryKey.set(data, generatedKey);
+                    primaryKey.set(entity, generatedKey);
                     primaryKey.setAccessible(false);
                     return generatedKey;
                 }
@@ -137,34 +160,42 @@ public class DaoJdbc<T> extends Dao<T> {
         }
     }
 
-    @Override
-    public int update(T data) {
-        try {
-            StringBuilder sqlQuery = new StringBuilder("UPDATE ");
-            sqlQuery.append(getDaoEntity().getAnnotation(TableName.class).dbTable());
-            sqlQuery.append(" SET ");
-            StringJoiner columnList = new StringJoiner(",");
-            StringBuilder whereClause = new StringBuilder(" WHERE ");
-            List<Object> params = new ArrayList<>();
-            Object where = null;
-            for (Field beanField : getDaoEntity().getDeclaredFields()) {
-                beanField.setAccessible(true);
-                if (beanField.isAnnotationPresent(TableColumn.class)) {
-                    TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
-                    if (beanField.isAnnotationPresent(PrimaryKey.class)) {
-                        whereClause.append(tableColumn.value()).append("=").append("?");
-                        where = beanField.get(data);
-                    } else {
-                        StringBuilder oneColumnData = new StringBuilder(tableColumn.value());
-                        oneColumnData.append("=").append("?");
-                        columnList.add(oneColumnData);
-                        params.add(beanField.get(data));
-                    }
+    private Map<String, List<Object>> buildUpdate(T entity)
+            throws IllegalAccessException {
+        StringBuilder sqlQuery = new StringBuilder("UPDATE ");
+        sqlQuery.append(getDaoEntity().getAnnotation(TableName.class).dbTable());
+        sqlQuery.append(" SET ");
+        StringJoiner columnList = new StringJoiner(",");
+        StringBuilder whereClause = new StringBuilder(" WHERE ");
+        List<Object> params = new ArrayList<>();
+        Object where = null;
+        for (Field beanField : getDaoEntity().getDeclaredFields()) {
+            beanField.setAccessible(true);
+            if (beanField.isAnnotationPresent(TableColumn.class)) {
+                TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
+                if (beanField.isAnnotationPresent(PrimaryKey.class)) {
+                    whereClause.append(tableColumn.value()).append("=").append("?");
+                    where = beanField.get(entity);
+                } else {
+                    StringBuilder oneColumnData = new StringBuilder(tableColumn.value());
+                    oneColumnData.append("=").append("?");
+                    columnList.add(oneColumnData);
+                    params.add(beanField.get(entity));
                 }
-                beanField.setAccessible(false);
             }
-            params.add(where);
-            sqlQuery.append(columnList).append(whereClause);
+            beanField.setAccessible(false);
+        }
+        params.add(where);
+        sqlQuery.append(columnList).append(whereClause);
+        return Collections.singletonMap(sqlQuery.toString(), params);
+    }
+
+    @Override
+    public int update(T entity) {
+        try {
+            Map<String, List<Object>> updateParameters = buildUpdate(entity);
+            List<Object> params = Arrays.asList(updateParameters.values().toArray());
+            String sqlQuery = updateParameters.keySet().toArray(new String[0])[0];
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery.toString(), Statement.RETURN_GENERATED_KEYS)) {

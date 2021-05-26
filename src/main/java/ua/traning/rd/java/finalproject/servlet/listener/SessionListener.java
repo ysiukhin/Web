@@ -30,6 +30,7 @@ public class SessionListener implements HttpSessionListener {
         LoggedAccount account = (LoggedAccount) httpSessionEvent.getSession()
                 .getAttribute("account");
         loggedAccounts.remove(account);
+        httpSessionEvent.getSession().removeAttribute("account");
         httpSessionEvent.getSession().getServletContext().setAttribute("loggedAccounts", loggedAccounts);
     }
 }

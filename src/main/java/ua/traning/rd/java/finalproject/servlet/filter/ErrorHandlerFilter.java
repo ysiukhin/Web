@@ -16,11 +16,11 @@ public class ErrorHandlerFilter extends AbstractFilter {
         } catch (Throwable throwable) {
             String requestUrl = req.getRequestURI();
             logger.error("Request: {} processing error", requestUrl, throwable);
-            if (!requestUrl.startsWith("/error")) {
-                resp.sendRedirect("error");
-            } else {
-                throw new ServletException(throwable);
-            }
+//            if (!requestUrl.startsWith("/error")) {
+            resp.sendRedirect("/WEB-INF/error.jsp");
+//            } else {
+//                throw new ServletException(throwable);
+//            }
         }
     }
 }

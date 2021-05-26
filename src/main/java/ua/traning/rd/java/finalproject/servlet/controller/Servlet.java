@@ -2,9 +2,7 @@ package ua.traning.rd.java.finalproject.servlet.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
-import ua.traning.rd.java.finalproject.servlet.controller.command.LogOutCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.LoginCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.*;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
@@ -19,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Servlet extends HttpServlet {
-    public final static Logger LOGGER = LogManager.getLogger("MysqlDemo");
+    public final static Logger LOGGER = LogManager.getLogger(Servlet.class);
 
     @Resource(name = "jdbc/timecounterdb")
     public static DataSource dataSource;
@@ -29,10 +27,12 @@ public class Servlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        commands.put("error", (r) -> "/WEB-INF/error.jsp");
         commands.put("logout", new LogOutCommand());
         commands.put("login", new LoginCommand());
-        commands.put("error", (r) -> "/error.jsp");
-
+        commands.put("accountList", new AccountListCommand());
+        commands.put("topageaccount", new AccountListToPageCommand());
+        commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
     }
 
@@ -73,18 +73,18 @@ public class Servlet extends HttpServlet {
 //        LOGGER.info("Servlet: -->  getLocalAddr {}", request.getLocalAddr());
 //        LOGGER.info("Servlet: -->  getLocalPort {}", request.getLocalPort());
 //        LOGGER.info("Servlet: -->  getLocalPort {}", request.getLocalPort());
-//
-//        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-//            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
-//        }
-
 
         LOGGER.info("Servlet: -->  getRequestURI: {}", request.getRequestURI());
+        LOGGER.info("Servlet: -->  account: {}", request.getSession().getAttribute("account"));
+        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
+            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
+        }
 
         String path = request.getRequestURI();
+
         path = path.replaceAll(".*" + ContextPath + "/", "");
 
-        LOGGER.info("Servlet: -->  getRequestURI: {}", commands.get(path));
+        LOGGER.info("Servlet: --> Command: --> : {}", commands.get(path));
 
         Command command = commands.getOrDefault(path, (r) -> "/index.jsp");
 
@@ -97,6 +97,7 @@ public class Servlet extends HttpServlet {
 
         if (page.contains("redirect:")) {
             //            TODO
+//            response.sendRedirect("/logout");
             response.sendRedirect(page.replace("redirect:", ContextPath));
         } else {
             request.getRequestDispatcher(page).forward(request, response);

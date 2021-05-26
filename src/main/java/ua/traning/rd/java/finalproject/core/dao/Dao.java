@@ -26,7 +26,7 @@ public abstract class Dao<T> {
         this.daoEntity = daoEntity;
     }
 
-    public abstract List<T> selectBy(String column, Object field);
+    public abstract List<T> selectBy(String column, List<Object> fields);
 
     public abstract List<T> select();
 

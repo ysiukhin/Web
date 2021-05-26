@@ -18,14 +18,7 @@ class CommandUtility {
         newAccount.setRole(role);
         loggedAccounts.add(newAccount);
         request.getServletContext().setAttribute("loggedAccounts", loggedAccounts);
-
-//        request.getServletContext().getAttribute("")
-//
-//        HttpSession session = request.getSession();
-//        ServletContext context = request.getServletContext();
-//
-//        context.setAttribute("userName", name);
-//        session.setAttribute("role", role);
+        request.getSession().setAttribute("account", newAccount);
     }
 
     static boolean checkUserIsLogged(HttpServletRequest request, String email) {
@@ -35,11 +28,5 @@ class CommandUtility {
 
         return loggedAccounts.stream().map(loggedAccount -> loggedAccount.getAccount().getEmail())
                 .anyMatch(email::equals);
-
-
-//        loggedAccounts.add(newAccount);
-//
-//        request.getSession().getServletContext()
-//                .setAttribute("loggedAccounts", loggedAccounts);
     }
 }
