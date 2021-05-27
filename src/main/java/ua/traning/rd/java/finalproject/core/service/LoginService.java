@@ -14,7 +14,7 @@ import ua.traning.rd.java.finalproject.servlet.controller.command.LoginCommand;
 import java.util.Optional;
 
 
-public class LoginService extends Service {
+public class LoginService {
     public final static Logger LOGGER = LogManager.getLogger(LoginCommand.class);
 
     public Account checkAccount(String email, String password) {

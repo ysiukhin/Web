@@ -2,7 +2,8 @@ package ua.traning.rd.java.finalproject.servlet.controller.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.core.model.Account;
+import ua.traning.rd.java.finalproject.core.model.Activity;
+import ua.traning.rd.java.finalproject.core.model.Kind;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.ExceptionService;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
@@ -14,12 +15,12 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AccountListToPageCommand implements Command {
-    public final static Logger LOGGER = LogManager.getLogger(AccountListToPageCommand.class);
+public class KindListToPageCommand implements Command {
+    public final static Logger LOGGER = LogManager.getLogger(KindListToPageCommand.class);
 
     @Override
     public String execute(HttpServletRequest request) {
-        LOGGER.info("IN AccountListToPageCommand");
+        LOGGER.info("IN KindListToPageCommand");
 
         ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
@@ -34,10 +35,9 @@ public class AccountListToPageCommand implements Command {
                 .orElse((Integer) request.getAttribute("pagenumber"));
 
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
-
-        List<Account> accounts;
+        List<Kind> kinds;
         try {
-            accounts = new EntityListService<>(Account.class).getInRange(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
+            kinds = new EntityListService<>(Kind.class).getInRange(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
         } catch (ExceptionService e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
@@ -45,13 +45,11 @@ public class AccountListToPageCommand implements Command {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
-
-        request.setAttribute("accounts", accounts);
-        request.setAttribute("pagenumber", page);
+        request.setAttribute("kinds", kinds);
+        request.setAttribute("pagenumber", pagenumber);
         request.setAttribute("rowsPerPage", rowsPerPage);
-
         LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);
-        LOGGER.info("OUT AccountListToPageCommand");
-        return "/WEB-INF/admin/accountlist.jsp";
+        LOGGER.info("OUT KindListToPageCommand");
+        return "/WEB-INF/admin/kindlist.jsp";
     }
 }

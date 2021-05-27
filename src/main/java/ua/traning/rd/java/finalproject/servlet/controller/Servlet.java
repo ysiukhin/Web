@@ -30,8 +30,17 @@ public class Servlet extends HttpServlet {
         commands.put("error", (r) -> "/WEB-INF/error.jsp");
         commands.put("logout", new LogOutCommand());
         commands.put("login", new LoginCommand());
+        commands.put("adminsection", new AdminSectionCommand());
+        commands.put("usersection", new UserSectionCommand());
+
         commands.put("accountList", new AccountListCommand());
+        commands.put("activityList", new ActivityListCommand());
+        commands.put("kindList", new KindListCommand());
+
         commands.put("topageaccount", new AccountListToPageCommand());
+        commands.put("topageactivity", new ActivityListToPageCommand());
+        commands.put("topagekind", new KindListToPageCommand());
+
         commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
     }
@@ -98,6 +107,8 @@ public class Servlet extends HttpServlet {
         if (page.contains("redirect:")) {
             //            TODO
 //            response.sendRedirect("/logout");
+            String redirect = page.replace("redirect:", ContextPath);
+            LOGGER.info("redirect {} to -> {}", page, redirect);
             response.sendRedirect(page.replace("redirect:", ContextPath));
         } else {
             request.getRequestDispatcher(page).forward(request, response);

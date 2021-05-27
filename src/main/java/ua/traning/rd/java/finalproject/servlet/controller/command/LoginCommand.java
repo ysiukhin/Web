@@ -54,10 +54,12 @@ public class LoginCommand implements Command {
 
         if (!account.getStatus()) {
             CommandUtility.setUserRole(request, LoggedAccount.ROLE.ADMIN, account);
-            return /*redirect:*/"/WEB-INF/admin/adminbasis.jsp";
+            return "redirect:/adminsection";
+//            return "redirect:/adminsection";
         } else if (account.getStatus()) {
             CommandUtility.setUserRole(request, LoggedAccount.ROLE.USER, account);
-            return /*redirect:*/"/WEB-INF/user/userbasis.jsp";
+            return "redirect:/usersection";
+//            return "redirect:/usersection";
         } else {
             CommandUtility.setUserRole(request, LoggedAccount.ROLE.UNKNOWN, account);
             return "/login.jsp";

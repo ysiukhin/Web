@@ -85,13 +85,13 @@
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=accountList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
 
         <%--        <a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=accountlist.jsp&pagenumber=1&rowsPerPage=10">--%>
         <%--    <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=accountlist.jsp&pagenumber=<c:out value="${requestScope.pagenumber}"/>&rowsPerPage=<c:out value="${requestScope.rowsPerPage}"/>">--%>
         <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=accountList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <%--    <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=accountlist.jsp&pagenumber=1&rowsPerPage=10">--%>
         <%--    <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=accountlist.jsp&pagenumber=<c:out value="${requestScope.pagenumber}"/>&rowsPerPage=<c:out value="${requestScope.rowsPerPage}"/>"--%>
         <span class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
@@ -108,22 +108,20 @@
 </div>
 <table>
     <tr>
-        <th><fmt:message key="table.account.column.id"/></th>
-        <th><fmt:message key="table.account.column.first_name"/></th>
-        <th><fmt:message key="table.account.column.last_name"/></th>
-        <th><fmt:message key="table.account.column.middle_name"/></th>
-        <th><fmt:message key="table.account.column.email"/></th>
-        <th><fmt:message key="table.account.column.md5"/></th>
-        <th>
+        <th><fmt:message key="table.kind.column.id"/></th>
+        <th><fmt:message key="table.kind.column.kind"/></th>
     </tr>
-    <c:forEach var="accounts" items="${requestScope.accounts}">
+    <c:forEach var="kind" items="${requestScope.kinds}">
         <tr>
-            <th><c:out value="${accounts.id}"/></th>
-            <th><c:out value="${accounts.firstName}"/></th>
-            <th><c:out value="${accounts.lastName}"/></th>
-            <th><c:out value="${accounts.middleName}"/></th>
-            <th><c:out value="${accounts.email}"/></th>
-            <th><c:out value="${accounts.md5}"/></th>
+            <th><c:out value="${kind.id}"/></th>
+            <c:choose>
+                <c:when test="${sessionScope.lang eq 'en'}">
+                    <th><c:out value="${kind.kindEn}"/></th>
+                </c:when>
+                <c:otherwise>
+                    <th><c:out value="${kind.kindRu}"/></th>
+                </c:otherwise>
+            </c:choose>
         </tr>
     </c:forEach>
 </table>

@@ -61,10 +61,11 @@
     <div class="header-panel">
         <label><h1>Hello ADMIN!</h1></label>
         <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
-        <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=adminbasis.jsp"
+        <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=adminsection"
+        <%--        <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=adminbasis.jsp"--%>
                   class="link-secondary">
             <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
-        <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=adminbasis.jsp"
+        <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=adminsection"
                   class="link-secondary">
             <span class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
     </div>

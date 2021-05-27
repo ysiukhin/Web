@@ -25,9 +25,9 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public List<T> selectBy(String column, List<Object> fields) {
+        String sqlQuery = buildSelect() + (fields.size() > 1 ?
+                " WHERE " + column + " between ? and ?" : " WHERE " + column + "=?");
         try {
-            String sqlQuery = buildSelect() + (fields.size() > 1 ?
-                    " WHERE between ? and ?" : " WHERE =?");
             try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery)) {
                 pst.setObject(1, fields.get(0));
                 if (fields.size() > 1) {
@@ -38,7 +38,7 @@ public class DaoJdbc<T> extends Dao<T> {
                 }
             }
         } catch (InstantiationException | IllegalAccessException | SQLException e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.error("sql: {} message: {}", sqlQuery, e.getMessage(), e);
             throw new DaoException(e.getMessage(), e);
         }
     }

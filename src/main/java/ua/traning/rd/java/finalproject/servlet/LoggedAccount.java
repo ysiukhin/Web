@@ -3,8 +3,17 @@ package ua.traning.rd.java.finalproject.servlet;
 import ua.traning.rd.java.finalproject.core.model.Account;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class LoggedAccount {
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", LoggedAccount.class.getSimpleName() + "[", "]")
+                .add("role=" + role)
+                .add("account=" + account)
+                .toString();
+    }
+
     public enum ROLE {
         USER, ADMIN, UNKNOWN
     }
