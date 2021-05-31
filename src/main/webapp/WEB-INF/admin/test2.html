@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Edit Remove HTML Table Row</title>
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/test1.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="header-panel">
+    <label><h1>Hello ADMIN!</h1></label>
+    <label><a href="/Web/logout">Logout</a></label>
+    <label><a
+            href="/Web/changeLanguage?sessionLocale=en&page=accountList&pagenumber=1&rowsPerPage=10">
+        <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
+    <label><a
+            href="/Web/changeLanguage?sessionLocale=ru&page=accountList&pagenumber=1&rowsPerPage=10">
+        <span class="flag-icon flag-icon-ru"></span>??????</a></label>
+
+</div>
+<br>
+<hr>
+<div class="vertical-menu">
+    <a href="/Web/accountList">Working with users accounts</a>
+    <a href="/Web/activityList">Working with activities</a>
+    <a href="/Web/kindList">Working with activity kinds</a>
+    <a href="/Web/requestList">Working with users requests</a>
+    <a href="#">Working with users requests</a>
+</div>
+
+<div class="container">
+    <div class="tab tab-2">
+        <form action="http://localhost:8080/Web/accountAction" method="POST">
+            <table border="1">
+                <tr>
+                    <td><input type="submit" value=Create name="action" class="input"
+                               onclick="window.alert(this.value);"></td>
+                    <td><input type="submit" value=Update name="action" class="input"
+                               onclick="window.alert(this.value);"></td>
+                    <td><input type="submit" value=Delete name="action" class="input"
+                               onclick="window.alert(this.value);"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="Account ID" name="id" id="id" class="input"></td>
+                    <!--                    <td><input type="text" placeholder="Account ID" id="id" name="id" class="input">-->
+                    <!--                    </td>-->
+                    <td><input type="text" placeholder="First" name="first_name" id="first_name" class="input">
+                    </td>
+                    <td><input type="text" placeholder="Last" name="last_name" id="last_name" class="input">
+                    </td>
+                    <td><input type="text" placeholder="Middle" name="middle_name" id="middle_name" class="input">
+                    </td>
+                    <td><input type="email" placeholder="Email" name="email" id="email" class="input">
+                    </td>
+                    <td><input type="password" placeholder="Password" name="md5" id="md5" class="input">
+                    </td>
+                </tr>
+
+                <!--                <tr>-->
+                <!--                    <td><input type="text" placeholder=Account ID name="id" id="id" class="input"></td>-->
+                <!--                    <td><input type="text" placeholder=First Name name="first_name" id="first_name" class="input"></td>-->
+                <!--                    <td><input type="text" placeholder=Last Name name="last_name" id="last_name" class="input"></td>-->
+                <!--                    <td><input type="text" placeholder=Middle Name name="middle_name" id="middle_name" class="input"></td>-->
+                <!--                    <td><input type="email" placeholder=Email name="email" id="email" class="input"></td>-->
+                <!--                    <td><input type="text" placeholder=Password name="md5" id="md5" class="input"></td>-->
+                <!--                </tr>-->
+            </table>
+        </form>
+    </div>
+    <div class="tab tab-1">
+        <table id="table" border="1">
+            <tr>
+                <td>Account ID</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Middle Name</td>
+                <td>Email</td>
+                <td>Password</td>
+            </tr>
+            <tr class="tblrow">
+                <td>1</td>
+                <td>admin</td>
+                <td>?????</td>
+                <td></td>
+                <td>admin_login@timecounter.com</td>
+                <td>dc073ece3e8333236dca863b122dbf22</td>
+            </tr>
+            <tr class="tblrow">
+                <td>2</td>
+                <td>Barry</td>
+                <td>Hanson</td>
+                <td></td>
+                <td>barry_hanson_login@timecounter.com</td>
+                <td>a94a0fe23a925ec4d2a6befa443816</td>
+            </tr>
+            <tr class="tblrow">
+                <td>3</td>
+                <td>??????</td>
+                <td>????????</td>
+                <td></td>
+                <td>??????_????????_login@timecounter.com</td>
+                <td>2e532d0f039a5a8a3481535428c2eae7</td>
+            </tr>
+            <tr class="tblrow">
+                <td>4</td>
+                <td>?????</td>
+                <td>??????????</td>
+                <td></td>
+                <td>?????_??????????_login@timecounter.com</td>
+                <td>97f8539f1400ef32053aceb8ff1ab404</td>
+            </tr>
+            <tr class="tblrow">
+                <td>5</td>
+                <td>Leslie</td>
+                <td>Kennedy</td>
+                <td></td>
+                <td>leslie_kennedy_login@timecounter.com</td>
+                <td>1abf1767b43d77128bc5092933d6c47e</td>
+            </tr>
+            <tr class="tblrow">
+                <td>6</td>
+                <td>Emily</td>
+                <td>Diaz</td>
+                <td></td>
+                <td>emily_diaz_login@timecounter.com</td>
+                <td>2520d8c72797ef88e960c5c54baa233f</td>
+            </tr>
+            <tr class="tblrow">
+                <td>7</td>
+                <td>Melvin</td>
+                <td>Robertson</td>
+                <td></td>
+                <td>melvin_robertson_login@timecounter.com</td>
+                <td>9f2ce50f7144909aab696bb7ee4876a9</td>
+            </tr>
+            <tr class="tblrow">
+                <td>8</td>
+                <td>??????</td>
+                <td>????????????</td>
+                <td></td>
+                <td>??????_????????????_login@timecounter.com</td>
+                <td>53455d35759001decc3ca55b11832dc5</td>
+            </tr>
+            <tr class="tblrow">
+                <td>9</td>
+                <td>Ellen</td>
+                <td>Mason</td>
+                <td></td>
+                <td>ellen_mason_login@timecounter.com</td>
+                <td>66193be06af54f36ed758c057cea246d</td>
+            </tr>
+            <tr class="tblrow">
+                <td>10</td>
+                <td>Joshua</td>
+                <td>Moreno</td>
+                <td></td>
+                <td>joshua_moreno_login@timecounter.com</td>
+                <td>7f469c1bf1aedfc48bf0d141207e0b71</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script src="test1___.js"></script>
+</body>
+</html>

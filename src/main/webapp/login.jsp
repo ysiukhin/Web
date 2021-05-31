@@ -14,11 +14,12 @@
     <title>${title}</title>
 </head>
 <body>
-<label><a href="login.jsp?sessionLocale=en" class="link-secondary"><span
-        class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
-<label><a href="login.jsp?sessionLocale=ru" class="link-secondary"><span
-        class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
-<h1><fmt:message key="label.welcome"/></h1>
+<div>
+    <label><a href="login.jsp?sessionLocale=en" class="link-secondary"><span
+            class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
+    <label><a href="login.jsp?sessionLocale=ru" class="link-secondary"><span
+            class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
+    <h1><fmt:message key="label.welcome"/></h1>
 <form method="post" action="${pageContext.request.contextPath}/login">
     <div class="form-floating">
         <input name="email" type="email" class="form-control" id="floatingInput"
@@ -32,6 +33,7 @@
     </div>
     <button type="submit" role="button"><fmt:message key="button.sign_in"/></button>
 </form>
+</div>
 <br/>
 <a href="${pageContext.request.contextPath}/logout">На головну</a>
 

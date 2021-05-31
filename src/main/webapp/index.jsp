@@ -22,19 +22,21 @@
     <title>${title}</title>
 </head>
 <body>
-<label><a href="index.jsp?sessionLocale=en" class="link-secondary"><span
-        class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
-<label><a href="index.jsp?sessionLocale=ru" class="link-secondary"><span
-        class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
-<h2>
-    <i>Сегодня <%= getFormattedDate() %>
-    </i>
+<div class="">
+    <label><a href="index.jsp?sessionLocale=en" class="link-secondary"><span
+            class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
+    <label><a href="index.jsp?sessionLocale=ru" class="link-secondary"><span
+            class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
+    <h2>
+        <i>Сегодня <%= getFormattedDate() %>
+        </i>
 </h2>
 
-<br/>
+    <br/>
 <a href="${pageContext.request.contextPath}/login.jsp"><fmt:message key="button.sign_in"/></a>
 <%--<br>--%>
 <%--<a href="${pageContext.request.contextPath}/exception">Exception</a>--%>
 <%--<br>--%>
+</div>
 </body>
 </html>

@@ -49,6 +49,7 @@ public class AccountListToPageCommand implements Command {
         request.setAttribute("accounts", accounts);
         request.setAttribute("pagenumber", page);
         request.setAttribute("rowsPerPage", rowsPerPage);
+        request.setAttribute("rowsPerPage", rowsPerPage);
 
         LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);
         LOGGER.info("OUT AccountListToPageCommand");

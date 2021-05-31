@@ -259,7 +259,8 @@ CREATE TABLE IF NOT EXISTS `request`
     `id`
     INT
     NOT
-    NULL,
+    NULL
+    AUTO_INCREMENT,
     `request`
     TINYINT
     NOT

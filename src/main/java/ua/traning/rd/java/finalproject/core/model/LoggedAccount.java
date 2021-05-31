@@ -1,6 +1,4 @@
-package ua.traning.rd.java.finalproject.servlet;
-
-import ua.traning.rd.java.finalproject.core.model.Account;
+package ua.traning.rd.java.finalproject.core.model;
 
 import java.util.Objects;
 import java.util.StringJoiner;

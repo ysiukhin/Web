@@ -11,6 +11,10 @@ public class Request implements Serializable {
     private int id;
     @TableColumn("request")
     private int request;
+    @TableColumn("account_id")
+    private int accountId;
+    @TableColumn("activity_id")
+    private int activityId;
 
     public int getId() {
         return id;
@@ -26,5 +30,21 @@ public class Request implements Serializable {
 
     public void setRequest(Boolean request) {
         this.request = request ? 1 : 0;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public int getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 }

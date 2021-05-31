@@ -6,10 +6,9 @@ import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.service.LoginService;
 import ua.traning.rd.java.finalproject.core.service.ExceptionService;
 
-import ua.traning.rd.java.finalproject.servlet.LoggedAccount;
+import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
-
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;

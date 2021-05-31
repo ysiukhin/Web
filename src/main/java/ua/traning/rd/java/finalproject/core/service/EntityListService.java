@@ -32,21 +32,29 @@ public class EntityListService<T> {
         LOGGER.info("IN EntityService --> getAllAccounts()");
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
         Dao<T> entityDao = new DaoJdbc<>(sessionManagerJdbc, entityClass);
-        DbService<T> dbServiceAccount = new DbServiceImpl<>(entityDao);
-        Optional<List<T>> accounts = dbServiceAccount.getAllBeans();
+        DbService<T> entityDbService = new DbServiceImpl<>(entityDao);
+        Optional<List<T>> entities = entityDbService.getAllBeans();
         LOGGER.info("IN AccountService --> getAllAccounts()");
-        return accounts.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+        return entities.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
     }
 
     public List<T> getInRange(int from, int to) {
         LOGGER.info("IN EntityService --> getInRange()");
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
-        Dao<T> accountDao =
+        Dao<T> entityDao =
                 new DaoJdbc<>(sessionManagerJdbc, entityClass);
-        DbService<T> dbServiceAccount = new DbServiceImpl<>(accountDao);
-        Optional<List<T>> accounts = dbServiceAccount
+        DbService<T> dbServiceAccount = new DbServiceImpl<>(entityDao);
+        Optional<List<T>> entities = dbServiceAccount
                 .getBeansInRange("id", Arrays.asList(from, to));
         LOGGER.info("IN EntityService --> getInRange()");
-        return accounts.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+        return entities.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+    }
+
+    public T getById(int id) {
+        LOGGER.info("IN EntityService --> getById()");
+        LOGGER.info("IN EntityService --> getById()");
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .getBeansById(id)
+                .orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
     }
 }

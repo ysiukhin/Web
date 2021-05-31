@@ -5,12 +5,11 @@ import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
 import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 import ua.traning.rd.java.finalproject.core.annotation.TableName;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.StringJoiner;
 
 @TableName(dbTable = "account")
-public class Account implements Serializable {
+public class Account extends AbstractModel<Integer> implements CurrentAccount {
     @PrimaryKey
     @TableColumn("id")
     private int id;

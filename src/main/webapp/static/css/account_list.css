@@ -1,0 +1,41 @@
+.container {
+    overflow: hidden
+}
+
+.tab {
+    float: left;
+}
+
+.tab-2 {
+    margin-left: 50px
+}
+
+.tab-2 input {
+    display: block;
+    margin-bottom: 10px
+}
+
+.selected {
+    background-color: red;
+    font-weight: bold;
+    color: #fff;
+}
+
+tr {
+    cursor: pointer;
+    transition: all .25s ease-in-out
+}
+
+tr.tblrow:hover {
+    background-color: orangered;
+    opacity: 0.4;
+    font-weight: bold;
+    cursor: pointer
+}
+
+tr.tblrow.selected:hover {
+    background-color: red;
+    opacity: 1;
+    font-weight: bold;
+    color: #fff;
+}

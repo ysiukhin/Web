@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -14,68 +13,7 @@
     <title>ADMIN THE BASIS</title>
     <%--    <link href="admin.css" rel="stylesheet">--%>
     <style>
-        header.page-header {
-            /*background: no-repeat left/cover url(/media/examples/puppy-header-logo.jpg);*/
-            display: flex;
-            height: 120px;
-            min-width: 120px;
-            align-items: center;
-            color: #c7c7c7;
-            text-shadow: #000 0 0 .2em;
-        }
-
-        header.page-header > h1 {
-            font: bold calc(1em + 2 * (100vw - 120px) / 100) 'Dancing Script', cursive,
-            fantasy;
-            margin: 2%;
-            color: #f6f6f6;
-        }
-
-        main {
-            font: 1rem 'Fira Sans', sans-serif;
-        }
-
-        .vertical-menu {
-            width: 250px; /* Set a width if you like */
-            float: left;
-        }
-
-        .vertical-menu a {
-            background-color: #eee; /* Grey background color */
-            color: black; /* Black text color */
-            display: block; /* Make the links appear below each other */
-            padding: 12px; /* Add some padding */
-            text-decoration: none; /* Remove underline from links */
-        }
-
-        .vertical-menu a:hover {
-            background-color: #ccc; /* Dark grey background on mouse-over */
-        }
-
-        .vertical-menu a.active {
-            background-color: #878787; /* Add a green color to the "active/current" link */
-            color: white;
-        }
-
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            width: 60%;
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 16px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ccc; /* Dark grey background on mouse-over */
-        }
+        <%@include file="css/admin.css" %>
     </style>
 </head>
 
@@ -101,9 +39,13 @@
 </div>
 <table>
     <tr>
+        <a href="${pageContext.request.contextPath}/activityCreate"><fmt:message key="entity.action.create"/></a>
+    </tr>
+    <tr>
         <th><fmt:message key="table.activity.column.id"/></th>
         <th><fmt:message key="table.activity.column.activity"/></th>
         <th><fmt:message key="table.activity.column.activity_kind"/></th>
+        <th><fmt:message key="entity.action"/></th>
         <th>
     </tr>
     <c:forEach var="activity" items="${requestScope.activities}">
@@ -118,6 +60,13 @@
                 </c:otherwise>
             </c:choose>
             <th><c:out value="${requestScope.kinds.get(activity.kindId - 1)}"/></th>
+            <th>
+                <a style="a:hover background-color: #fff;"
+                   href="${pageContext.request.contextPath}/activityUpdate?id=${activity.id}"><fmt:message
+                        key="entity.action.update"/></a>&nbsp;&nbsp;<a
+                    href="${pageContext.request.contextPath}/activityDelete?id=${activity.id}"><fmt:message
+                    key="entity.action.delete"/></a>
+            </th>
         </tr>
     </c:forEach>
 </table>

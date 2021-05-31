@@ -1,6 +1,6 @@
 package ua.traning.rd.java.finalproject.servlet.controller.command;
 
-import ua.traning.rd.java.finalproject.servlet.LoggedAccount;
+import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
 
 import javax.servlet.http.HttpServletRequest;
 

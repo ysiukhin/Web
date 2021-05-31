@@ -3,7 +3,7 @@ package ua.traning.rd.java.finalproject.servlet.listener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ua.traning.rd.java.finalproject.servlet.LoggedAccount;
+import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
@@ -16,8 +16,9 @@ public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        LOGGER.info("Session {} account: {}", httpSessionEvent.getSession().getId(),
-                httpSessionEvent.getSession().getServletContext().getAttribute("account"));
+        LOGGER.info("SessionListener:sessionCreated --> Session {} account: {}",
+                httpSessionEvent.getSession().getId(),
+                httpSessionEvent.getSession().getServletContext().getAttribute("loggedAccounts"));
 
     }
 
@@ -32,5 +33,8 @@ public class SessionListener implements HttpSessionListener {
         loggedAccounts.remove(account);
         httpSessionEvent.getSession().removeAttribute("account");
         httpSessionEvent.getSession().getServletContext().setAttribute("loggedAccounts", loggedAccounts);
+        LOGGER.info("SessionListener:sessionDestroyed --> Session {} account: {}", httpSessionEvent.getSession().getId(),
+                httpSessionEvent.getSession().getServletContext().getAttribute("loggedAccounts"));
+
     }
 }

@@ -1,5 +1,5 @@
 INSERT INTO account (`first_name`, `last_name`, `middle_name`, `email`, `md5`, `status`)
-VALUES ('admin', 'админ', NULL, 'admin_админ_login@timecounter.com', 'dc073ece3e8333236dca863b122dbf22', 1),
+VALUES ('admin', 'админ', NULL, 'admin_login@timecounter.com', 'dc073ece3e8333236dca863b122dbf22', 0),
        ('Barry', 'Hanson', NULL, 'barry_hanson_login@timecounter.com', 'a94a0fe23a925ec4d2a6befa443816', 1),
        ('Сикмис', 'Карбаева', NULL, 'сикмис_карбаева_login@timecounter.com', '2e532d0f039a5a8a3481535428c2eae7', 1),
        ('Авдил', 'Карбовская', NULL, 'авдил_карбовская_login@timecounter.com', '97f8539f1400ef32053aceb8ff1ab404', 1),

@@ -12,15 +12,14 @@ import java.io.IOException;
 @WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
 public class SessionLocaleFilter implements Filter {
 
-    protected final Logger logger = LogManager.getLogger("MysqlDemo");
-
+    protected final static Logger LOGGER = LogManager.getLogger("SessionLocaleFilter");
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         HttpServletRequest req = (HttpServletRequest) request;
 //        logger.info("BEFORE: -->  Request.getLocale(): {}", req.getLocale().toString());
 //        logger.info("BEFORE: -->  sessionId: {}", req.getSession().getId());
 //        logger.info("BEFORE: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
 //        logger.info("BEFORE: -->  session.lang {}", req.getSession().getAttribute("lang"));
+
 
         if (req.getSession().getAttribute("lang") == null) {
             req.getSession().setAttribute("lang", "en");

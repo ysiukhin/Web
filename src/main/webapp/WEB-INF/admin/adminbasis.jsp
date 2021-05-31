@@ -1,12 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="custom" uri="/WEB-INF/taglib.tld" %>
+
 <%@ page isELIgnored="false" %>
-<%@ page session="true" %>
+
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
+<custom:cacheOff/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -56,7 +58,6 @@
         }
     </style>
 </head>
-
 <header class="page-header">
     <div class="header-panel">
         <label><h1>Hello ADMIN!</h1></label>

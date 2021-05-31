@@ -41,12 +41,14 @@ dependencies {
 
 
 //    providedCompile "org.apache.tomcat:tomcat-catalina-ha:${Versions.tomcat}"
-// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
     compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     compileOnly group: 'javax.servlet.jsp', name: 'jsp-api', version: '2.2'
     implementation group: 'javax.servlet.jsp.jstl', name: 'jstl-api', version: '1.2'
     implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
     implementation group: 'jstl', name: 'jstl', version: '1.2'
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20201115'
 
 //    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 //    https://mvnrepository.com/artifact/javax.servlet.jsp/jsp-api

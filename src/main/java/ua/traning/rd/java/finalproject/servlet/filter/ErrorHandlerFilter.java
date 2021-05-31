@@ -12,6 +12,9 @@ public class ErrorHandlerFilter extends AbstractFilter {
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         try {
+            logger.debug("Error filter: session id: {}\nRequestURI: {} \nloggedAccounts: {}",
+                    req.getSession().getId(), req.getRequestURI(),
+                    req.getServletContext().getAttribute("loggedAccounts"));
             chain.doFilter(req, resp);
         } catch (Throwable throwable) {
             String requestUrl = req.getRequestURI();
