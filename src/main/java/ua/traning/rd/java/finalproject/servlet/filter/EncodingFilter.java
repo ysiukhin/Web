@@ -14,5 +14,7 @@ public class EncodingFilter extends AbstractFilter {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         chain.doFilter(req, resp);
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
     }
 }

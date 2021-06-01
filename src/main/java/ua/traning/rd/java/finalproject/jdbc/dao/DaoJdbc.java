@@ -15,6 +15,7 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.util.*;
 
+
 public class DaoJdbc<T> extends Dao<T> {
 
     private static final Logger LOGGER = LogManager.getLogger(DaoJdbc.class);
@@ -131,11 +132,12 @@ public class DaoJdbc<T> extends Dao<T> {
     public int insert(T entity) {
         try {
             Map<String, List<Object>> insertParameters = buildInsert(entity);
-            List<Object> params = Arrays.asList(insertParameters.values().toArray());
+            List<Object> params = new ArrayList<>(insertParameters.values()).get(0);
             String sqlQuery = insertParameters.keySet().toArray(new String[0])[0];
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+//                for (int i = 0; i < params.size(); i++) {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
                 }
@@ -194,7 +196,7 @@ public class DaoJdbc<T> extends Dao<T> {
     public int update(T entity) {
         try {
             Map<String, List<Object>> updateParameters = buildUpdate(entity);
-            List<Object> params = Arrays.asList(updateParameters.values().toArray());
+            List<Object> params = new ArrayList<>(updateParameters.values()).get(0);
             String sqlQuery = updateParameters.keySet().toArray(new String[0])[0];
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
@@ -202,6 +204,28 @@ public class DaoJdbc<T> extends Dao<T> {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
                 }
+                return prepStatement.executeUpdate();
+            } catch (SQLException ex) {
+                getConnection().rollback(savePoint);
+                LOGGER.error(ex.getMessage(), ex);
+                throw ex;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public int delete(int id) {
+        try {
+
+            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+            String sqlQuery = "DELETE FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable() +
+                    " WHERE id = ?";
+            try (PreparedStatement prepStatement =
+                         getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+                prepStatement.setObject(1, id);
                 return prepStatement.executeUpdate();
             } catch (SQLException ex) {
                 getConnection().rollback(savePoint);

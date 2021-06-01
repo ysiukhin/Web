@@ -2,36 +2,40 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
-<%@ page session="true" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cust-tag" uri="/WEB-INF/taglib.tld" %>
+<%@ page isELIgnored="false" %>
+
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
+<cust-tag:cacheOff/>
 
+<!doctype html>
 <html lang="${sessionScope.lang}">
 
 <head>
-    <title>ADMIN</title>
     <style>
-        <%@include file="css/admin.css" %>
+        <%@include file="/static/css/admin.css"%>
+        <%@include file="/static/css/messageform.css"%>
+        <%@include file="/static/css/account_list.css"%>
     </style>
 </head>
 
 <body>
-<div c lass="header-panel">
+<c:if test="${sessionScope.isMessage}">
+    <custom:messageform actionStatus="${sessionScope.actionStatus}" actionMessage=""/>
+    <c:set scope="session" var="isMessage" value="false"/>
+</c:if>
+<div class="header-panel">
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
-
-        <%--        <a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=accountlist.jsp&pagenumber=1&rowsPerPage=10">--%>
-        <%--    <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=accountlist.jsp&pagenumber=<c:out value="${requestScope.pagenumber}"/>&rowsPerPage=<c:out value="${requestScope.rowsPerPage}"/>">--%>
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=activityList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
-        <%--    <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=accountlist.jsp&pagenumber=1&rowsPerPage=10">--%>
-        <%--    <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=accountlist.jsp&pagenumber=<c:out value="${requestScope.pagenumber}"/>&rowsPerPage=<c:out value="${requestScope.rowsPerPage}"/>"--%>
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=activityList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <span class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
-
 </div>
 <br>
 <hr>
@@ -42,44 +46,50 @@
     <a href="${pageContext.request.contextPath}/requestList"><fmt:message key="a.admin.get_requests"/></a>
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
-<table>
-    <tr>
-        <a href="${pageContext.request.contextPath}/kindCreate"><fmt:message key="entity.action.create"/></a>
-    </tr>
-    <tr>
-        <th><fmt:message key="table.kind.column.id"/></th>
-        <th><fmt:message key="table.kind.column.kind"/></th>
-        <th><fmt:message key="entity.action"/></th>
-    </tr>
-    <c:forEach var="kind" items="${requestScope.kinds}">
-        <tr>
-            <th><c:out value="${kind.id}"/></th>
-            <c:choose>
-                <c:when test="${sessionScope.lang eq 'en'}">
-                    <th><c:out value="${kind.kindEn}"/></th>
-                </c:when>
-                <c:otherwise>
-                    <th><c:out value="${kind.kindRu}"/></th>
-                </c:otherwise>
-            </c:choose>
-            <th>
-                <a style="a:hover background-color: #fff;"
-                   href="${pageContext.request.contextPath}/kindUpdate?id=${kind.id}"><fmt:message
-                        key="entity.action.update"/></a>&nbsp;&nbsp;<a
-                    href="${pageContext.request.contextPath}/kindDelete?id=${kind.id}"><fmt:message
-                    key="entity.action.delete"/></a>
-            </th>
-        </tr>
-    </c:forEach>
-</table>
-<hr/>
-<div style="text-align: center; width:100%; background-color: #adb5bd">
-    <c:if test="${sessionScope.pages.size() > 1}">
-        <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">
-            <a href="${pageContext.request.contextPath}${item}">${status.count}</a>
-        </c:forEach>
-    </c:if>
+
+<div class="container">
+    <div class="tab tab-1">
+        <%--        <form action="http://localhost:8080/Web/activityAction" method="POST">--%>
+        <form action="#" method="POST">
+            <table border="1">
+                <tr>
+                    <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
+                               class="input"></td>
+                    <td><input type="submit" value="<fmt:message key="entity.action.update"/>" name="action"
+                               class="input"></td>
+                    <td><input type="submit" value="<fmt:message key="entity.action.delete"/>" name="action"
+                               class="input"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"
+                               name="id" id="id" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.kind"/>"
+                               name="activity" id="activity" class="input"></td>
+                </tr>
+                <c:forEach var="kind" items="${requestScope.kinds}">
+                    <tr>
+                        <td><c:out value="${kind.id}"/></td>
+                        <c:choose>
+                            <c:when test="${sessionScope.lang eq 'en'}">
+                                <td><c:out value="${kind.kindEn}"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><c:out value="${kind.kindRu}"/></td>
+                            </c:otherwise>
+                        </c:choose>
+                    </tr>
+                </c:forEach>
+            </table>
+    </div>
 </div>
 <hr/>
+<custom:pagination/>
+<%--            <div style="text-align: center; width:100%; background-color: #adb5bd">--%>
+<%--                <c:if test="${sessionScope.pages.size() > 1}">--%>
+<%--                    <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">--%>
+<%--                        <a href="${pageContext.request.contextPath}${item}">${status.count}</a>--%>
+<%--                    </c:forEach>--%>
+<%--                </c:if>--%>
+<%--            </div>--%>
 </body>
 </html>

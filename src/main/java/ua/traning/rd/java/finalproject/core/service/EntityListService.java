@@ -51,10 +51,23 @@ public class EntityListService<T> {
     }
 
     public T getById(int id) {
-        LOGGER.info("IN EntityService --> getById()");
-        LOGGER.info("IN EntityService --> getById()");
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansById(id)
                 .orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+    }
+
+    public int insertEntity(T entity) {
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .saveBean(entity);
+    }
+
+    public int updateEntity(T entity) {
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .updateBean(entity);
+    }
+
+    public int deleteEntity(int id) {
+        return new DbServiceImpl<>(new DaoJdbc<>(
+                new SessionManagerJdbc(Servlet.dataSource), entityClass)).deleteBean(id);
     }
 }

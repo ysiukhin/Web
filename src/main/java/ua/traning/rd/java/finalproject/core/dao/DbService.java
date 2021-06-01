@@ -15,4 +15,6 @@ public interface DbService<T> {
     int saveBean(T account);
 
     int updateBean(T account);
+
+    int deleteBean(int id);
 }

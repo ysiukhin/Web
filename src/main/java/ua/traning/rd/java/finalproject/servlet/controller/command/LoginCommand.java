@@ -35,6 +35,7 @@ public class LoginCommand implements Command {
         password = new String(password.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
         if (CommandUtility.checkUserIsLogged(request, email)) {
+
             return "/WEB-INF/error.jsp";   // user loged
         }
 

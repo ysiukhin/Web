@@ -34,6 +34,8 @@ public abstract class Dao<T> {
 
     public abstract int update(T data);
 
+    public abstract int delete(int id);
+
     public SessionManager getSessionManager() {
         return sessionManager;
     }

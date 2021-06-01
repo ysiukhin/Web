@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.HashSet;
 
+@SuppressWarnings("unchecked")
+public
 class CommandUtility {
-    static void setUserRole(HttpServletRequest request,
-                            LoggedAccount.ROLE role, Account account) {
+    public static void setUserRole(HttpServletRequest request,
+                                   LoggedAccount.ROLE role, Account account) {
 
         HashSet<LoggedAccount> loggedAccounts = (HashSet<LoggedAccount>) request
                 .getServletContext().getAttribute("loggedAccounts");
@@ -21,7 +23,7 @@ class CommandUtility {
         request.getSession().setAttribute("account", newAccount);
     }
 
-    static boolean checkUserIsLogged(HttpServletRequest request, String email) {
+    public static boolean checkUserIsLogged(HttpServletRequest request, String email) {
 
         HashSet<LoggedAccount> loggedAccounts = (HashSet<LoggedAccount>) request.getSession().getServletContext()
                 .getAttribute("loggedAccounts");

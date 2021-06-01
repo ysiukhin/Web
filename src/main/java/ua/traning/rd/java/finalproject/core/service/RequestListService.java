@@ -18,8 +18,10 @@ public class RequestListService {
                 .getBeansInRange("id", Arrays.asList(from, to))
                 .orElseThrow(() -> new ExceptionService("RequestListService got error during List<Request> obtain"));
         List<AccountActivityRequestEntity> resultList = new ArrayList<>();
+
         for (Request request : requests) {
             AccountActivityRequestEntity result = new AccountActivityRequestEntity();
+
             Account account = new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), Account.class))
                     .getBeansById(request.getAccountId())
                     .orElseThrow(() ->

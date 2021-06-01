@@ -2,15 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cust-tag" uri="/WEB-INF/taglib.tld" %>
 <%@ page isELIgnored="false" %>
+
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
-
+<cust-tag:cacheOff/>
+<!doctype html>
 <html lang="${sessionScope.lang}">
 
 <head>
-    <title>ADMIN THE BASIS</title>
     <style>
         <%@include file="/static/css/admin.css"%>
         <%@include file="/static/css/messageform.css"%>
@@ -20,7 +22,7 @@
 
 <body>
 <c:if test="${sessionScope.isMessage}">
-    <custom:messageform actionStatus="${sessionScope.actionStatus}"/>
+    <custom:messageform actionStatus="${sessionScope.actionStatus}" actionMessage=""/>
     <c:set scope="session" var="isMessage" value="false"/>
 </c:if>
 
@@ -45,18 +47,11 @@
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
 
-<%--<row:rowEditForm account="${requestScope.accounts.get(1)}" />--%>
-<%--<row:rowEditForm2 accounts="${requestScope.accounts}" />--%>
-
 <div class="container">
     <div class="tab tab-1">
-        <%--        <!--        <form action="http://localhost:8080/Web/accountAction">-->--%>
         <form action="http://localhost:8080/Web/accountAction" method="POST">
             <table border="1">
                 <tr>
-                    <%--                    <td><input type="submit" value="INSERT" name="action" class="input" onclick="window.alert(this.value);"></td>--%>
-                    <%--                    <td><input type="submit" value="UPDATE" name="action" class="input" onclick="window.alert(this.value);"></td>--%>
-                    <%--                    <td><input type="submit" value="DELETE" name="action" class="input" onclick="window.alert(this.value);"></td>--%>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                class="input"></td>
                     <td><input type="submit" value="<fmt:message key="entity.action.update"/>" name="action"

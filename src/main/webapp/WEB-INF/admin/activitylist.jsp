@@ -2,22 +2,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
-<%@ page session="true" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cust-tag" uri="/WEB-INF/taglib.tld" %>
+<%@ page isELIgnored="false" %>
+
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
+<cust-tag:cacheOff/>
 
+<!doctype html>
 <html lang="${sessionScope.lang}">
 
 <head>
-    <title>ADMIN THE BASIS</title>
-    <%--    <link href="admin.css" rel="stylesheet">--%>
     <style>
-        <%@include file="css/admin.css" %>
+        <%@include file="/static/css/admin.css"%>
+        <%@include file="/static/css/messageform.css"%>
+        <%@include file="/static/css/account_list.css"%>
     </style>
 </head>
 
 <body>
+<c:if test="${sessionScope.isMessage}">
+    <custom:messageform actionStatus="${sessionScope.actionStatus}" actionMessage=""/>
+    <c:set scope="session" var="isMessage" value="false"/>
+</c:if>
+
 <div class="header-panel">
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
@@ -37,47 +47,67 @@
     <a href="${pageContext.request.contextPath}/requestList"><fmt:message key="a.admin.get_requests"/></a>
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
-<table>
-    <tr>
-        <a href="${pageContext.request.contextPath}/activityCreate"><fmt:message key="entity.action.create"/></a>
-    </tr>
-    <tr>
-        <th><fmt:message key="table.activity.column.id"/></th>
-        <th><fmt:message key="table.activity.column.activity"/></th>
-        <th><fmt:message key="table.activity.column.activity_kind"/></th>
-        <th><fmt:message key="entity.action"/></th>
-        <th>
-    </tr>
-    <c:forEach var="activity" items="${requestScope.activities}">
-        <tr>
-            <th><c:out value="${activity.id}"/></th>
-            <c:choose>
-                <c:when test="${sessionScope.lang eq 'en'}">
-                    <th><c:out value="${activity.activityRu}"/></th>
-                </c:when>
-                <c:otherwise>
-                    <th><c:out value="${activity.activityEn}"/></th>
-                </c:otherwise>
-            </c:choose>
-            <th><c:out value="${requestScope.kinds.get(activity.kindId - 1)}"/></th>
-            <th>
-                <a style="a:hover background-color: #fff;"
-                   href="${pageContext.request.contextPath}/activityUpdate?id=${activity.id}"><fmt:message
-                        key="entity.action.update"/></a>&nbsp;&nbsp;<a
-                    href="${pageContext.request.contextPath}/activityDelete?id=${activity.id}"><fmt:message
-                    key="entity.action.delete"/></a>
-            </th>
-        </tr>
-    </c:forEach>
-</table>
-<hr/>
-<div style="text-align: center; width:100%; background-color: #adb5bd">
-    <c:if test="${sessionScope.pages.size() > 1}">
-        <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">
-            <a href="${pageContext.request.contextPath}${item}">${status.count}</a>
-        </c:forEach>
-    </c:if>
+
+<div class="container">
+    <div class="tab tab-1">
+        <%--        <form action="http://localhost:8080/Web/activityAction" method="POST">--%>
+        <form action="#" method="POST">
+            <table border="1">
+                <tr>
+                    <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
+                               class="input"></td>
+                    <td><input type="submit" value="<fmt:message key="entity.action.update"/>" name="action"
+                               class="input"></td>
+                    <td><input type="submit" value="<fmt:message key="entity.action.delete"/>" name="action"
+                               class="input"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.id"/>"
+                               name="id" id="id" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity"/>"
+                               name="activity" id="activity" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity_kind"/>"
+                               name="activity_kind" id="activity_kind" class="input"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="tab tab-1">
+        <table id="table" border="1">
+            <tr>
+                <td><fmt:message key="table.activity.column.id"/></
+                <td>>
+                <td><fmt:message key="table.activity.column.activity"/></
+                <td>>
+                <td><fmt:message key="table.activity.column.activity_kind"/></
+                <td>>
+            </tr>
+            <c:forEach var="activity" items="${requestScope.activities}">
+                <tr>
+                    <td><c:out value="${activity.id}"/></td>
+                    <c:choose>
+                        <c:when test="${sessionScope.lang eq 'en'}">
+                            <td><c:out value="${activity.activityRu}"/></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><c:out value="${activity.activityEn}"/></td>
+                        </c:otherwise>
+                    </c:choose>
+                    <td><c:out value="${requestScope.kinds.get(activity.kindId - 1)}"/></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </div>
 </div>
 <hr/>
+<custom:pagination/>
+<%--        <div style="text-align: center; width:100%; background-color: #adb5bd">--%>
+<%--            <c:if test="${sessionScope.pages.size() > 1}">--%>
+<%--                <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">--%>
+<%--                    <a href="${pageContext.request.contextPath}${item}">${status.count}</a>--%>
+<%--                </c:forEach>--%>
+<%--            </c:if>--%>
+<%--        </div>--%>
+<%--        <hr/>--%>
 </body>
 </html>

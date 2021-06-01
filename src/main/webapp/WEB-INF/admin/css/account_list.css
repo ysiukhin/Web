@@ -29,13 +29,13 @@ tr {
 tr:hover {
     background-color: orangered;
     opacity: 0.4;
-    font-weight: bold;
+    /*font-weight: bold;*/
     cursor: pointer
 }
 
 tr.selected:hover {
     background-color: red;
     opacity: 1;
-    font-weight: bold;
+    /*font-weight: bold;*/
     color: #fff;
 }

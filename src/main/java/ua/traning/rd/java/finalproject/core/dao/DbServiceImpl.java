@@ -44,6 +44,10 @@ public class DbServiceImpl<T> implements DbService<T> {
         return doService(() -> dao.update(bean));
     }
 
+    public int deleteBean(int id) {
+        return doService(() -> dao.delete(id));
+    }
+
     private <U> U doService(Supplier<U> service) {
         try (SessionManager sessionManager = dao.getSessionManager()) {
             sessionManager.beginSession();

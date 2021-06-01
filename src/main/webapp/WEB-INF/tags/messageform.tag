@@ -6,7 +6,7 @@
 <fmt:setBundle basename="messages"/>
 <%--<%@ attribute name="account" required="true" type="ua.traning.rd.java.finalproject.core.model.Account" %>--%>
 <%@ attribute name="actionStatus" required="true" type="java.lang.Boolean" %>
-<%@ attribute name="actionCaption" required="false" type="java.lang.String" %>
+<%@ attribute name="actionMessage" required="false" type="java.lang.String" %>
 
 <div onclick="show('none')" id="gray">
     <div id="window">
@@ -22,6 +22,7 @@
                             key="entity.action.result.bad"/></h2>
                 </c:otherwise>
             </c:choose>
+            <label><c:out value="${actionMessage}"/></label>
             <input type="button" onclick="show('none')"><fmt:message key="label.close"/>
         </div>
     </div>
