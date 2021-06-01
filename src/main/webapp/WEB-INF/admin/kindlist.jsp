@@ -49,8 +49,8 @@
 
 <div class="container">
     <div class="tab tab-1">
-        <%--        <form action="http://localhost:8080/Web/activityAction" method="POST">--%>
-        <form action="#" method="POST">
+        <form action="http://localhost:8080/Web/kindAction" method="POST">
+            <%--        <form action="#" method="POST">--%>
             <table border="1">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
@@ -61,35 +61,40 @@
                                class="input"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"
-                               name="id" id="id" class="input"></td>
+                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"--%>
+                    <%--                               name="id" id="id" class="input"></td>--%>
                     <td><input type="text" placeholder="<fmt:message key="table.kind.column.kind"/>"
-                               name="activity" id="activity" class="input"></td>
+                               name="kind" id="kind" class="input"></td>
                 </tr>
-                <c:forEach var="kind" items="${requestScope.kinds}">
-                    <tr>
-                        <td><c:out value="${kind.id}"/></td>
-                        <c:choose>
-                            <c:when test="${sessionScope.lang eq 'en'}">
-                                <td><c:out value="${kind.kindEn}"/></td>
-                            </c:when>
-                            <c:otherwise>
-                                <td><c:out value="${kind.kindRu}"/></td>
-                            </c:otherwise>
-                        </c:choose>
-                    </tr>
-                </c:forEach>
             </table>
+        </form>
+    </div>
+    <div class="tab tab-1">
+        <table id="table" border="1">
+            <tr>
+                <%--                <td><fmt:message key="table.kind.column.id"/></td>--%>
+                <td><fmt:message key="table.kind.column.kind"/></td>
+            </tr>
+            <c:forEach var="kind" items="${requestScope.kinds}">
+                <tr>
+                        <%--                    <td><c:out value="${kind.id}"/></td>--%>
+                    <c:choose>
+                        <c:when test="${sessionScope.lang eq 'en'}">
+                            <td><c:out value="${kind.kindEn}"/></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><c:out value="${kind.kindRu}"/></td>
+                        </c:otherwise>
+                    </c:choose>
+                </tr>
+            </c:forEach>
+        </table>
     </div>
 </div>
 <hr/>
 <custom:pagination/>
-<%--            <div style="text-align: center; width:100%; background-color: #adb5bd">--%>
-<%--                <c:if test="${sessionScope.pages.size() > 1}">--%>
-<%--                    <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">--%>
-<%--                        <a href="${pageContext.request.contextPath}${item}">${status.count}</a>--%>
-<%--                    </c:forEach>--%>
-<%--                </c:if>--%>
-<%--            </div>--%>
+<script>
+    <%@include file="/static/js/kind_list.js"%>
+</script>
 </body>
 </html>

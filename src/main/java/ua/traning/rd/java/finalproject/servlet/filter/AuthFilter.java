@@ -28,8 +28,7 @@ public class AuthFilter extends AbstractFilter {
 
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        LOGGER.info("AuthFilter: session id: {}   \naccounts: {}", req.getSession().getId(),
-                req.getSession().getAttribute("account"));
+        logger.info("AuthFilter");
 
 //        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
 //                new Locale(String.valueOf(req.getSession().getAttribute("lang"))));
@@ -76,6 +75,10 @@ public class AuthFilter extends AbstractFilter {
 //        } else {
 //            moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
 //        }
+        logger.info("AuthFilter: session id: {}\nURI:   {}\naccounts:   {}", req.getSession().getId(), req.getRequestURI(),
+                req.getSession().getAttribute("account"));
+        chain.doFilter(req, resp);
+//        req.getRequestDispatcher(req.getRequestURI()).forward(req, resp);
     }
 
     private void moveToMenu(final HttpServletRequest req,
@@ -84,14 +87,14 @@ public class AuthFilter extends AbstractFilter {
             throws ServletException, IOException {
 
         if (role.equals(LoggedAccount.ROLE.ADMIN)) {
-            LOGGER.info("AuthFilter: redirect -> {}/login.jsp", req.getContextPath() + "/login.jsp");
+            logger.info("AuthFilter: redirect -> {}/login.jsp", req.getContextPath() + "/login.jsp");
             resp.sendRedirect("redirect:/adminsection");
 //            req.getRequestDispatcher("/WEB-INF/view/admin_menu.jsp").forward(req, resp);
 
         } else if (role.equals(LoggedAccount.ROLE.USER)) {
             resp.sendRedirect("redirect:/usersection");
         } else {
-            LOGGER.info("AuthFilter: redirect -> {}/WEB-INF/login.jsp/login.jsp", req.getContextPath());
+            logger.info("AuthFilter: redirect -> {}/WEB-INF/login.jsp/login.jsp", req.getContextPath());
             if (req.getRequestURI().contains("logout")) {
                 resp.sendRedirect("redirect:/logout");
             } else {

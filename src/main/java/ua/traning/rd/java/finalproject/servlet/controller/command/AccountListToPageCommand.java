@@ -33,7 +33,7 @@ public class AccountListToPageCommand implements Command {
         int page = pagenumber.map(Integer::parseInt)
                 .orElse((Integer) request.getAttribute("pagenumber"));
 
-        LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
+//        LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
 
         List<Account> accounts;
         try {
@@ -51,7 +51,6 @@ public class AccountListToPageCommand implements Command {
         request.setAttribute("rowsPerPage", rowsPerPage);
         request.setAttribute("rowsPerPage", rowsPerPage);
 
-        LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);
         LOGGER.info("OUT AccountListToPageCommand");
         return "/WEB-INF/admin/accountlist.jsp";
     }

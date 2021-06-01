@@ -50,8 +50,7 @@
 
 <div class="container">
     <div class="tab tab-1">
-        <%--        <form action="http://localhost:8080/Web/activityAction" method="POST">--%>
-        <form action="#" method="POST">
+        <form action="http://localhost:8080/Web/activityAction" method="POST">
             <table border="1">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
@@ -62,8 +61,8 @@
                                class="input"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.id"/>"
-                               name="id" id="id" class="input"></td>
+                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.id"/>"--%>
+                    <%--                               name="id" id="id" class="input"></td>--%>
                     <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity"/>"
                                name="activity" id="activity" class="input"></td>
                     <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity_kind"/>"
@@ -75,16 +74,13 @@
     <div class="tab tab-1">
         <table id="table" border="1">
             <tr>
-                <td><fmt:message key="table.activity.column.id"/></
-                <td>>
-                <td><fmt:message key="table.activity.column.activity"/></
-                <td>>
-                <td><fmt:message key="table.activity.column.activity_kind"/></
-                <td>>
+                <%--                <td><fmt:message key="table.activity.column.id"/></td>--%>
+                <td><fmt:message key="table.activity.column.activity"/></td>
+                <td><fmt:message key="table.activity.column.activity_kind"/></td>
             </tr>
             <c:forEach var="activity" items="${requestScope.activities}">
                 <tr>
-                    <td><c:out value="${activity.id}"/></td>
+                        <%--                    <td><c:out value="${activity.id}"/></td>--%>
                     <c:choose>
                         <c:when test="${sessionScope.lang eq 'en'}">
                             <td><c:out value="${activity.activityRu}"/></td>
@@ -101,13 +97,8 @@
 </div>
 <hr/>
 <custom:pagination/>
-<%--        <div style="text-align: center; width:100%; background-color: #adb5bd">--%>
-<%--            <c:if test="${sessionScope.pages.size() > 1}">--%>
-<%--                <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">--%>
-<%--                    <a href="${pageContext.request.contextPath}${item}">${status.count}</a>--%>
-<%--                </c:forEach>--%>
-<%--            </c:if>--%>
-<%--        </div>--%>
-<%--        <hr/>--%>
+<script>
+    <%@include file="/static/js/activity_list.js"%>
+</script>
 </body>
 </html>

@@ -18,7 +18,8 @@ public class LoginService {
     public final static Logger LOGGER = LogManager.getLogger(LoginCommand.class);
 
     public Account checkAccount(String email, String password) {
-        LOGGER.info("IN LoginService --> email:{}, password: {}", email, password);
+        LOGGER.info("IN LoginService");
+//        LOGGER.info("IN LoginService --> email:{}, password: {}", email, password);
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
         Dao<Account> accountDao =
@@ -37,7 +38,7 @@ public class LoginService {
             throw new ExceptionService(String
                     .format("Wrong password -> saved: [%s] and provided: [%s]", savedPassword, providedPassword));
         }
-        LOGGER.info("OUT LoginService --> return: {}", account.get());
+        LOGGER.info("OUT LoginService");
         return account.get();
     }
 }

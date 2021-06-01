@@ -7,7 +7,7 @@
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="messages"/>
-<custom:cacheOff/>
+
 <!doctype html>
 <html lang="${sessionScope.lang}">
 <head>
@@ -17,6 +17,7 @@
         <%@include file="/static/css/messageform.css"%>
         <%@include file="/static/css/account_list.css"%>
     </style>
+    <custom:cacheOff/>
 </head>
 <header class="page-header">
     <div class="header-panel">

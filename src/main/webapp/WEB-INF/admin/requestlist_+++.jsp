@@ -49,8 +49,8 @@
 
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/Web/requestAction" method="POST">
-            <table id="table" border="1">
+        <form action="http://localhost:8080/Web/accountAction" method="POST">
+            <table border="1">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                class="input"></td>
@@ -75,42 +75,33 @@
                     <td><input type="text" placeholder="<fmt:message key="table.request.column.activity"/>"
                                name="activity" id="activity" class="input"></td>
                 </tr>
-                <tr>
-                    <%--                            <td><fmt:message key="table.request.column.id"/></td>--%>
-                    <td><fmt:message key="table.request.column.request"/></td>
-                    <%--                            <td><fmt:message key="table.request.column.account_id"/></td>--%>
-                    <td><fmt:message key="table.request.column.account_first_name"/></td>
-                    <td><fmt:message key="table.request.column.account_last_name"/></td>
-                    <%--                            <td><fmt:message key="table.request.column.activity_id"/></td>--%>
-                    <td><fmt:message key="table.request.column.activity"/></td>
-                </tr>
+                >
                 <c:forEach var="list" items="${requestScope.resultList}">
                     <tr>
                             <%--                        <th><c:out value="${list.request.id}"/></th>--%>
                         <c:choose>
                             <c:when test="${list.request.request}">
-                                <td><fmt:message key="table.request.request.message.true"/></td>
+                                <th><fmt:message key="table.request.request.message.true"/></th>
                             </c:when>
                             <c:otherwise>
-                                <td><fmt:message key="table.request.request.message.false"/></td>
+                                <th><fmt:message key="table.request.request.message.false"/></th>
                             </c:otherwise>
                         </c:choose>
                             <%--                        <th><c:out value="${list.account.id}"/></th>--%>
-                        <td><c:out value="${list.account.firstName}"/></td>
-                        <td><c:out value="${list.account.lastName}"/></td>
+                        <th><c:out value="${list.account.firstName}"/></th>
+                        <th><c:out value="${list.account.lastName}"/></th>
                             <%--                        <th><c:out value="${list.activity.id}"/></th>--%>
                         <c:choose>
                             <c:when test="${sessionScope.lang eq 'en'}">
-                                <td><c:out value="${list.activity.activityRu}"/></td>
+                                <th><c:out value="${list.activity.activityRu}"/></th>
                             </c:when>
                             <c:otherwise>
-                                <td><c:out value="${list.activity.activityEn}"/></td>
+                                <th><c:out value="${list.activity.activityEn}"/></th>
                             </c:otherwise>
                         </c:choose>
                     </tr>
                 </c:forEach>
             </table>
-        </form>
     </div>
 </div>
 <hr/>

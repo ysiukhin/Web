@@ -11,7 +11,6 @@ import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -20,7 +19,8 @@ public class LoginCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        LOGGER.info("LoginCommand --> lang: {}", request.getSession().getAttribute("lang"));
+//        LOGGER.info("LoginCommand --> lang: {}", request.getSession().getAttribute("lang"));
+//        LOGGER.info("In LoginCommand ");
         ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
@@ -31,15 +31,10 @@ public class LoginCommand implements Command {
             return "/login.jsp";
         }
 
-        email = new String(email.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-        password = new String(password.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-
         if (CommandUtility.checkUserIsLogged(request, email)) {
 
             return "/WEB-INF/error.jsp";   // user loged
         }
-
-        LOGGER.info("email: {}, password: {}", email, password);
 
         Account account;
         try {
@@ -52,16 +47,20 @@ public class LoginCommand implements Command {
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
 
+
         if (!account.getStatus()) {
             CommandUtility.setUserRole(request, LoggedAccount.ROLE.ADMIN, account);
+//            LOGGER.info("OUT LoginCommand -> redirect:/adminsection");
             return "redirect:/adminsection";
-//            return "redirect:/adminsection";
+
         } else if (account.getStatus()) {
             CommandUtility.setUserRole(request, LoggedAccount.ROLE.USER, account);
+//            LOGGER.info("OUT LoginCommand -> redirect:/usersection");
             return "redirect:/usersection";
-//            return "redirect:/usersection";
+
         } else {
             CommandUtility.setUserRole(request, LoggedAccount.ROLE.UNKNOWN, account);
+//            LOGGER.info("OUT LoginCommand -> /usersection");
             return "/login.jsp";
         }
     }

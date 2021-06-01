@@ -16,12 +16,16 @@ public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        LOGGER.info("SessionListener:sessionCreated --> Session {} account: {}",
-                httpSessionEvent.getSession().getId(),
+        LOGGER.info("Session created  {} \nloggedAccounts: {}", httpSessionEvent.getSession().getId(),
                 httpSessionEvent.getSession().getServletContext().getAttribute("loggedAccounts"));
+
+//        LOGGER.info("SessionListener:sessionCreated --> Session {} account: {}",
+//                httpSessionEvent.getSession().getId(),
+//                httpSessionEvent.getSession().getServletContext().getAttribute("loggedAccounts"));
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
 
@@ -33,8 +37,7 @@ public class SessionListener implements HttpSessionListener {
         loggedAccounts.remove(account);
         httpSessionEvent.getSession().removeAttribute("account");
         httpSessionEvent.getSession().getServletContext().setAttribute("loggedAccounts", loggedAccounts);
-        LOGGER.info("SessionListener:sessionDestroyed --> Session {} account: {}", httpSessionEvent.getSession().getId(),
+        LOGGER.info("Session Destroyed --> {} account: {}", httpSessionEvent.getSession().getId(),
                 httpSessionEvent.getSession().getServletContext().getAttribute("loggedAccounts"));
-
     }
 }

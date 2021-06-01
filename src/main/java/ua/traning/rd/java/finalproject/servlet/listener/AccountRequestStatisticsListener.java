@@ -1,5 +1,7 @@
 package ua.traning.rd.java.finalproject.servlet.listener;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.servlet.util.UrlUtils;
 
@@ -7,6 +9,7 @@ import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,27 +20,30 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public class AccountRequestStatisticsListener implements ServletRequestListener {
 
+    public final static Logger LOGGER = LogManager.getLogger(AccountRequestStatisticsListener.class);
+
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
+        HttpServletRequest req = ((HttpServletRequest) sre.getServletRequest());
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            List<String> actions = (List<String>) session.getAttribute(Constants.ACCOUNT_ACTIONS_HISTORY);
+            actions.add(getCurrentAction(req));
+        }
     }
 
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         HttpServletRequest req = ((HttpServletRequest) sre.getServletRequest());
-        String url = req.getRequestURI();
-//		if(!UrlUtils.isStaticUrl(url) && !UrlUtils.isMediaUrl(url)) {
         List<String> actions = (List<String>) req.getSession().getAttribute(Constants.ACCOUNT_ACTIONS_HISTORY);
         if (actions == null) {
             actions = new ArrayList<>();
             req.getSession().setAttribute(Constants.ACCOUNT_ACTIONS_HISTORY, actions);
         }
-        actions.add(getCurrentAction(req));
-//		}
     }
 
     private String getCurrentAction(HttpServletRequest req) {
         StringBuilder sb = new StringBuilder(req.getMethod()).append(" ").append(req.getRequestURI());
-
         Map<String, String[]> map = req.getParameterMap();
         if (map != null) {
             boolean first = true;

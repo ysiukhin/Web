@@ -43,7 +43,10 @@ public class Servlet extends HttpServlet {
         commands.put("topagekind", new KindListToPageCommand());
         commands.put("topagerequest", new RequestListToPageCommand());
 
-        commands.put("accountAction", new AccountAction());
+        commands.put("accountAction", new AccountActionCommand());
+        commands.put("activityAction", new ActivityActionCommand()); // TODO
+        commands.put("kindAction", new KindActionCommand());        // TODO
+        commands.put("requestAction", new RequestActionCommand());  // TODO
 
         commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
@@ -87,32 +90,29 @@ public class Servlet extends HttpServlet {
 //        LOGGER.info("Servlet: -->  getLocalPort {}", request.getLocalPort());
 //        LOGGER.info("Servlet: -->  getLocalPort {}", request.getLocalPort());
 
-        LOGGER.info("Servlet: -->  getRequestURI: {}", request.getRequestURI());
-        LOGGER.info("Servlet: -->  account: {}", request.getSession().getAttribute("account"));
-        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
-        }
+//        LOGGER.info("Servlet: -->  getRequestURI: {}", request.getRequestURI());
+//        LOGGER.info("Servlet: -->  account: {}", request.getSession().getAttribute("account"));
+//        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
+//            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
+//        }
 
         String path = request.getRequestURI();
 
         path = path.replaceAll(".*" + ContextPath + "/", "");
 
-        LOGGER.info("Servlet: --> Command: --> : {}", commands.get(path));
+//        LOGGER.info("Servlet: --> Command: --> : {}", commands.get(path));
 
         Command command = commands.getOrDefault(path, (r) -> "/index.jsp");
 
         String page = command.execute(request);
 
-        LOGGER.info("Servlet: -->  page: {}", page);
+//        LOGGER.info("Servlet: -->  page: {}", page);
 
-//        response.sendRedirect(page);
-//        request.getRequestDispatcher(page).forward(request,response);
 
         if (page.contains("redirect:")) {
-            //            TODO
-//            response.sendRedirect("/logout");
+
             String redirect = page.replace("redirect:", ContextPath);
-            LOGGER.info("redirect {} to -> {}", page, redirect);
+//            LOGGER.info("redirect {} to -> {}", page, redirect);
             response.sendRedirect(page.replace("redirect:", ContextPath));
         } else {
             request.getRequestDispatcher(page).forward(request, response);

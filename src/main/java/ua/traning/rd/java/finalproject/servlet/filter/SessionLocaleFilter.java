@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
+//@WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
 public class SessionLocaleFilter implements Filter {
 
     protected final static Logger LOGGER = LogManager.getLogger("SessionLocaleFilter");
