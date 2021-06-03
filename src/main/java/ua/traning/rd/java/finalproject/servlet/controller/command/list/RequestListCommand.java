@@ -1,19 +1,17 @@
-package ua.traning.rd.java.finalproject.servlet.controller.command;
+package ua.traning.rd.java.finalproject.servlet.controller.command.list;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.core.model.Account;
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Request;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class RequestListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListCommand.class);
@@ -24,8 +22,7 @@ public class RequestListCommand implements Command {
         ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
-        int rowsPerPage = 10;
-
+        int rowsPerPage = Constants.ROWS_PER_PAGE;
         int totalRecords = 0;
 
         EntityListService<Request> requestService = new EntityListService<>(Request.class);
@@ -46,7 +43,12 @@ public class RequestListCommand implements Command {
                 pagesLinks.add(String.format("/topagerequest?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
             }
         }
-        request.setAttribute("pagenumber", 1);
+        if (Objects.isNull(request.getSession().getAttribute("pagenumber")) ||
+                Objects.isNull(request.getParameter("page")) ||
+                !(request.getParameter("page").equals(request.getRequestURI()
+                        .substring(request.getRequestURI().lastIndexOf('/') + 1)))) {
+            request.getSession().setAttribute("pagenumber", 1);
+        }
         request.getSession().setAttribute("pages", pagesLinks);
         request.setAttribute("rowsPerPage", rowsPerPage);
 

@@ -22,21 +22,25 @@ public class Activity implements Serializable {
     @TableColumn("kind_id")
     private int kindId;
     @Linked("activity_id")
-    private List<AccountActivity> accountActivities;
-//    private List<Account> requests;
-//
+    private List<AccountActivity> activities;
+    @Linked("activity_id")
+    private List<Request> requests;
 
-    public List<AccountActivity> getAccountActivities() {
-        return accountActivities;
+    public List<Request> getRequests() {
+        return requests;
     }
 
-    public void setAccountActivities(List<AccountActivity> accountActivities) {
-        this.accountActivities = accountActivities;
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
-//    public List<Account> getRequests() {
-//        return requests;
-//    }
-//
+
+    public List<AccountActivity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<AccountActivity> activities) {
+        this.activities = activities;
+    }
 
     public int getId() {
         return id;

@@ -25,6 +25,43 @@ public class DaoJdbc<T> extends Dao<T> {
     }
 
     @Override
+    public List<T> selectByFromList(String column, List<Object> values) {
+        StringBuilder sqlQuery = new StringBuilder(buildSelect()).append(" WHERE ").append(column).append(" in (");
+        sqlQuery.append(values.stream().collect(() -> new StringJoiner(","),
+                (sj, ob) -> sj.add("?"), (sj1, sj2) -> sj1.add(sj2.toString()))).append(")");
+        try {
+            try (PreparedStatement prepStatement = getConnection().prepareStatement(sqlQuery.toString())) {
+                for (int i = 0; i < values.size(); i++) {
+                    prepStatement.setObject(i + 1, values.get(i));
+                }
+                try (ResultSet resultSet = prepStatement.executeQuery()) {
+                    return selectResultSetProcess(resultSet);
+                }
+            }
+        } catch (InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error("sql: {}\n values: {}\n message: {}", sqlQuery, values, e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<T> selectByRecordNumberInRange(int limit, int offset) {
+        StringBuilder sqlQuery = new StringBuilder(buildSelect()).append(" LIMIT ? OFFSET ?");
+        try {
+            try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery.toString())) {
+                pst.setInt(1, limit);
+                pst.setInt(2, offset);
+                try (ResultSet resultSet = pst.executeQuery()) {
+                    return selectResultSetProcess(resultSet);
+                }
+            }
+        } catch (InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error("sql: {} message: {}", sqlQuery, e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public List<T> selectBy(String column, List<Object> fields) {
         String sqlQuery = buildSelect() + (fields.size() > 1 ?
                 " WHERE " + column + " between ? and ?" : " WHERE " + column + "=?");
@@ -137,7 +174,6 @@ public class DaoJdbc<T> extends Dao<T> {
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
-//                for (int i = 0; i < params.size(); i++) {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
                 }
@@ -219,13 +255,12 @@ public class DaoJdbc<T> extends Dao<T> {
     @Override
     public int delete(int id) {
         try {
-
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             String sqlQuery = "DELETE FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable() +
                     " WHERE id = ?";
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
-                prepStatement.setObject(1, id);
+                prepStatement.setInt(1, id);
                 return prepStatement.executeUpdate();
             } catch (SQLException ex) {
                 getConnection().rollback(savePoint);

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
@@ -16,9 +16,10 @@
 
 <head>
     <style>
-        <%@include file="/static/css/admin.css"%>
-        <%@include file="/static/css/messageform.css"%>
-        <%@include file="/static/css/account_list.css"%>
+        <%@include file="css/admin.css"%>
+        <%@include file="css/messageform.css"%>
+        <%@include file="css/account_list.css"%>
+        <%@include file="css/pagination.css"%>
     </style>
 </head>
 
@@ -41,17 +42,20 @@
 <br>
 <hr>
 <div class="vertical-menu">
-    <a href="${pageContext.request.contextPath}/accountList"><fmt:message key="a.admin.get_accounts"/></a>
-    <a href="${pageContext.request.contextPath}/activityList"><fmt:message key="a.admin.get_activities"/></a>
-    <a href="${pageContext.request.contextPath}/kindList"><fmt:message key="a.admin.get_kinds"/></a>
-    <a href="${pageContext.request.contextPath}/requestList"><fmt:message key="a.admin.get_requests"/></a>
+    <a href="${pageContext.request.contextPath}/accountList?page=activityList"><fmt:message
+            key="a.admin.get_accounts"/></a>
+    <a href="${pageContext.request.contextPath}/activityList?page=activityList"><fmt:message
+            key="a.admin.get_activities"/></a>
+    <a href="${pageContext.request.contextPath}/kindList?page=activityList"><fmt:message key="a.admin.get_kinds"/></a>
+    <a href="${pageContext.request.contextPath}/requestList?page=activityList"><fmt:message
+            key="a.admin.get_requests"/></a>
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
 
 <div class="container">
     <div class="tab tab-1">
         <form action="http://localhost:8080/Web/activityAction" method="POST">
-            <table border="1">
+            <table id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                class="input"></td>
@@ -61,44 +65,53 @@
                                class="input"></td>
                 </tr>
                 <tr>
-                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.id"/>"--%>
-                    <%--                               name="id" id="id" class="input"></td>--%>
-                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity"/>"
-                               name="activity" id="activity" class="input"></td>
-                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity_kind"/>"
-                               name="activity_kind" id="activity_kind" class="input"></td>
+                    <td style="display:none;"><input type="text"
+                                                     placeholder="<fmt:message key="table.activity.column.id"/>"
+                                                     name="id" id="id" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity_en"/>"
+                               name="activity_en" id="activity_en" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.activity.column.activity_ru"/>"
+                               name="activity_ru" id="activity_ru" class="input"></td>
+                    <td>
+                        <select name="activity_kind" id="activity_kind" class="input" style="width: 100%">
+                            <option><fmt:message key="table.activity.column.activity_kind"/></option>
+                            <c:forEach var="entry" items="${requestScope.kinds.entrySet()}">
+                                <option value="${entry.value.kindEn} | ${entry.value.kindRu}">${entry.value.kindEn}
+                                    | ${entry.value.kindRu}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                    <td style="display:none;"><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"
+                                                     name="kind_id" id="kind_id" class="input"></td>
+                </tr>
+                <tr>
+                    <th style="display:none;"><fmt:message key="table.activity.column.id"/></th>
+                    <th><fmt:message key="table.activity.column.activity_en"/></th>
+                    <th><fmt:message key="table.activity.column.activity_ru"/></th>
+                    <th><fmt:message key="table.activity.column.activity_kind"/></th>
+                    <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
+                </tr>
+                <c:forEach var="activity" items="${requestScope.activities}">
+                    <tr class="tblrow">
+                        <td style="display:none;"><c:out value="${activity.id}"/></td>
+                        <td><c:out value="${activity.activityRu}"/></td>
+                        <td><c:out value="${activity.activityEn}"/></td>
+                        <td><c:out value="${requestScope.kinds.get(activity.kindId).kindEn}"/> | <c:out
+                                value="${requestScope.kinds.get(activity.kindId).kindRu}"/>
+                        </td>
+                        <td style="display:none;"><c:out value="${requestScope.kinds.get(activity.kindId).id}"/></td>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td colspan="4"><custom:pagination/></td>
                 </tr>
             </table>
         </form>
     </div>
-    <div class="tab tab-1">
-        <table id="table" border="1">
-            <tr>
-                <%--                <td><fmt:message key="table.activity.column.id"/></td>--%>
-                <td><fmt:message key="table.activity.column.activity"/></td>
-                <td><fmt:message key="table.activity.column.activity_kind"/></td>
-            </tr>
-            <c:forEach var="activity" items="${requestScope.activities}">
-                <tr>
-                        <%--                    <td><c:out value="${activity.id}"/></td>--%>
-                    <c:choose>
-                        <c:when test="${sessionScope.lang eq 'en'}">
-                            <td><c:out value="${activity.activityRu}"/></td>
-                        </c:when>
-                        <c:otherwise>
-                            <td><c:out value="${activity.activityEn}"/></td>
-                        </c:otherwise>
-                    </c:choose>
-                    <td><c:out value="${requestScope.kinds.get(activity.kindId - 1)}"/></td>
-                </tr>
-            </c:forEach>
-        </table>
-    </div>
 </div>
 <hr/>
-<custom:pagination/>
 <script>
-    <%@include file="/static/js/activity_list.js"%>
+    <%@include file="js/activity_list.js"%>
 </script>
 </body>
 </html>

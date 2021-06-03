@@ -1,10 +1,12 @@
-package ua.traning.rd.java.finalproject.servlet.controller.command;
+package ua.traning.rd.java.finalproject.servlet.controller.command.list;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Activity;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
@@ -20,7 +22,7 @@ public class ActivityListCommand implements Command {
         ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
-        int rowsPerPage = 10;
+        int rowsPerPage = Constants.ROWS_PER_PAGE;
 
         int totalRecords = 0;
 
@@ -42,11 +44,13 @@ public class ActivityListCommand implements Command {
                 pagesLinks.add(String.format("/topageactivity?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
             }
         }
-//        Map<Integer, String> pagesLinks = new LinkedHashMap<>();
-//        for (int i = 0; i < Math.ceil((double)totalRecords / rowsPerPage); i++) {
-//            pagesLinks.put(i+1, String.format("/topageactivity?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
-//        }
-        request.setAttribute("pagenumber", 1);
+
+        if (Objects.isNull(request.getSession().getAttribute("pagenumber")) ||
+                Objects.isNull(request.getParameter("page")) ||
+                !(request.getParameter("page").equals(request.getRequestURI()
+                        .substring(request.getRequestURI().lastIndexOf('/') + 1)))) {
+            request.getSession().setAttribute("pagenumber", 1);
+        }
         request.getSession().setAttribute("pages", pagesLinks);
         request.setAttribute("rowsPerPage", rowsPerPage);
 

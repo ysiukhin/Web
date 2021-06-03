@@ -2,7 +2,6 @@ package ua.traning.rd.java.finalproject.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ActivityBuilder {
     private int id = 0;
@@ -10,8 +9,8 @@ public class ActivityBuilder {
     private String activityRu = "";
     private boolean status = false;
     private int kindId = 0;
-    private List<AccountActivity> accountActivities = new ArrayList<>();
-//    private List<Account> requests = new ArrayList<>();
+    private List<AccountActivity> activities = new ArrayList<>();
+    private List<Request> requests = new ArrayList<>();
 
     public ActivityBuilder addId(int id) {
         this.id = id;
@@ -38,15 +37,15 @@ public class ActivityBuilder {
         return this;
     }
 
-    public ActivityBuilder addAAccountActivity(List<AccountActivity> accountActivities) {
-        this.accountActivities = accountActivities;
+    public ActivityBuilder addActivities(List<AccountActivity> activities) {
+        this.activities = activities;
         return this;
     }
 
-//    public ActivityBuilder addRequests(List<Account> requests) {
-//        this.requests = requests;
-//        return this;
-//    }
+    public ActivityBuilder addRequests(List<Request> requests) {
+        this.requests = requests;
+        return this;
+    }
 
 
     public Activity build() {
@@ -56,8 +55,8 @@ public class ActivityBuilder {
         newActivity.setActivityRu(activityRu);
         newActivity.setStatus(status);
         newActivity.setKindId(kindId);
-        newActivity.setAccountActivities(accountActivities);
-//        newActivity.setRequests(requests);
+        newActivity.setActivities(activities);
+        newActivity.setRequests(requests);
         return newActivity;
     }
 }

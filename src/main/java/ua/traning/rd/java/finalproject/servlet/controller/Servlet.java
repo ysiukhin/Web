@@ -3,6 +3,18 @@ package ua.traning.rd.java.finalproject.servlet.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.servlet.controller.command.*;
+import ua.traning.rd.java.finalproject.servlet.controller.command.action.AccountActionCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.action.KindActionCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.action.RequestActionCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.list.AccountListCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.list.ActivityListCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.list.KindListCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.list.RequestListCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.page.AccountListToPageCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.page.ActivityListToPageCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.page.KindListToPageCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.page.RequestListToPageCommand;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
@@ -44,8 +56,8 @@ public class Servlet extends HttpServlet {
         commands.put("topagerequest", new RequestListToPageCommand());
 
         commands.put("accountAction", new AccountActionCommand());
-        commands.put("activityAction", new ActivityActionCommand()); // TODO
-        commands.put("kindAction", new KindActionCommand());        // TODO
+        commands.put("activityAction", new ActivityActionCommand());
+        commands.put("kindAction", new KindActionCommand());
         commands.put("requestAction", new RequestActionCommand());  // TODO
 
         commands.put("changeLanguage", new ChangeLanguageCommand());
@@ -56,7 +68,6 @@ public class Servlet extends HttpServlet {
                       HttpServletResponse response)
             throws IOException, ServletException {
         processRequest(request, response);
-        //response.getWriter().print("Hello from servlet");
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -66,51 +77,11 @@ public class Servlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        request.setCharacterEncoding("UTF8");
-//        LOGGER.info("Servlet: -->  getLocale(): {}", request.getLocale().toString());
-//        LOGGER.info("Servlet: -->  sessionId: {}", request.getSession().getId());
-//        LOGGER.info("Servlet: -->  sessionLocale {}", request.getParameter("sessionLocale"));
-//        LOGGER.info("Servlet: -->  lang {}", request.getSession().getAttribute("lang"));
-//        LOGGER.info("Servlet: -->  getCharacterEncoding {}", request.getCharacterEncoding());
-//        LOGGER.info("Servlet: -->  getAttributeNames {}", request.getAttributeNames());
-//        LOGGER.info("Servlet: -->  getContentLength {}", request.getContentLength());
-//        LOGGER.info("Servlet: -->  getContentType {}", request.getContentType());
-//        LOGGER.info("Servlet: -->  getParameterNames {}", request.getParameterNames());
-//        LOGGER.info("Servlet: -->  getProtocol {}", request.getProtocol());
-//        LOGGER.info("Servlet: -->  getScheme {}", request.getScheme());
-//        LOGGER.info("Servlet: -->  getServerName {}", request.getServerName());
-//        LOGGER.info("Servlet: -->  getServerPort {}", request.getServerPort());
-//        LOGGER.info("Servlet: -->  getServerPort {}", request.getServerPort());
-//        LOGGER.info("Servlet: -->  getRemoteAddr {}", request.getRemoteAddr());
-//        LOGGER.info("Servlet: -->  getRemoteHost {}", request.getRemoteHost());
-//        LOGGER.info("Servlet: -->  getRemotePort {}", request.getRemotePort());
-//        LOGGER.info("Servlet: -->  getRemotePort {}", request.getRemotePort());
-//        LOGGER.info("Servlet: -->  getLocalName {}", request.getLocalName());
-//        LOGGER.info("Servlet: -->  getLocalAddr {}", request.getLocalAddr());
-//        LOGGER.info("Servlet: -->  getLocalPort {}", request.getLocalPort());
-//        LOGGER.info("Servlet: -->  getLocalPort {}", request.getLocalPort());
-
-//        LOGGER.info("Servlet: -->  getRequestURI: {}", request.getRequestURI());
-//        LOGGER.info("Servlet: -->  account: {}", request.getSession().getAttribute("account"));
-//        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-//            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
-//        }
-
         String path = request.getRequestURI();
-
         path = path.replaceAll(".*" + ContextPath + "/", "");
-
-//        LOGGER.info("Servlet: --> Command: --> : {}", commands.get(path));
-
         Command command = commands.getOrDefault(path, (r) -> "/index.jsp");
-
         String page = command.execute(request);
-
-//        LOGGER.info("Servlet: -->  page: {}", page);
-
-
         if (page.contains("redirect:")) {
-
             String redirect = page.replace("redirect:", ContextPath);
 //            LOGGER.info("redirect {} to -> {}", page, redirect);
             response.sendRedirect(page.replace("redirect:", ContextPath));

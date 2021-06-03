@@ -10,6 +10,7 @@
 <div class="form">
 
     <h1>Вход в систему</h1><br>
+    <a href="${pageContext.request.contextPath}/logout">На головну</a>
     <form method="post" action="${pageContext.request.contextPath}/login">
 
         <input required placeholder="login" name="email" type="email"><br>

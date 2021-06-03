@@ -14,9 +14,10 @@
 
 <head>
     <style>
-        <%@include file="/static/css/admin.css"%>
-        <%@include file="/static/css/messageform.css"%>
-        <%@include file="/static/css/account_list.css"%>
+        <%@include file="css/admin.css"%>
+        <%@include file="css/messageform.css"%>
+        <%@include file="css/account_list.css"%>
+        <%@include file="css/pagination.css"%>
     </style>
 </head>
 
@@ -40,17 +41,20 @@
 <br>
 <hr>
 <div class="vertical-menu">
-    <a href="${pageContext.request.contextPath}/accountList"><fmt:message key="a.admin.get_accounts"/></a>
-    <a href="${pageContext.request.contextPath}/activityList"><fmt:message key="a.admin.get_activities"/></a>
-    <a href="${pageContext.request.contextPath}/kindList"><fmt:message key="a.admin.get_kinds"/></a>
-    <a href="${pageContext.request.contextPath}/requestList"><fmt:message key="a.admin.get_requests"/></a>
+    <a href="${pageContext.request.contextPath}/accountList?page=accountList"><fmt:message
+            key="a.admin.get_accounts"/></a>
+    <a href="${pageContext.request.contextPath}/activityList?page=accountList"><fmt:message
+            key="a.admin.get_activities"/></a>
+    <a href="${pageContext.request.contextPath}/kindList?page=accountList"><fmt:message key="a.admin.get_kinds"/></a>
+    <a href="${pageContext.request.contextPath}/requestList?page=accountList"><fmt:message
+            key="a.admin.get_requests"/></a>
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
 
 <div class="container">
     <div class="tab tab-1">
         <form action="http://localhost:8080/Web/accountAction" method="POST">
-            <table border="1">
+            <table id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                class="input"></td>
@@ -58,10 +62,12 @@
                                class="input"></td>
                     <td><input type="submit" value="<fmt:message key="entity.action.delete"/>" name="action"
                                class="input"></td>
+                    <%--                    <td><input type="hidden" value="accountList" name="page" class="input"></td>--%>
                 </tr>
                 <tr>
-                    <td><input type="text" placeholder="<fmt:message key="table.account.column.id"/>" name="id" id="id"
-                               class="input"></td>
+                    <td style="display:none;"><input type="text"
+                                                     placeholder="<fmt:message key="table.account.column.id"/>"
+                                                     name="id" id="id" class="input"></td>
                     <td><input type="text" placeholder="<fmt:message key="table.account.column.first_name"/>"
                                name="first_name" id="first_name" class="input"></td>
                     <td><input type="text" placeholder="<fmt:message key="table.account.column.last_name"/>"
@@ -73,46 +79,36 @@
                     <td><input type="text" placeholder="<fmt:message key="table.account.column.md5"/>" name="md5"
                                id="md5" class="input"></td>
                 </tr>
+                <tr>
+                    <th style="display:none;"><fmt:message key="table.account.column.id"/></th>
+                    <th><fmt:message key="table.account.column.first_name"/></th>
+                    <th><fmt:message key="table.account.column.last_name"/></th>
+                    <th><fmt:message key="table.account.column.middle_name"/></th>
+                    <th><fmt:message key="table.account.column.email"/></th>
+                    <th><fmt:message key="table.account.column.md5"/></th>
+                </tr>
+                <c:forEach var="accounts" items="${requestScope.accounts}">
+                    <tr class="tblrow">
+                        <td style="display:none;"><c:out value="${accounts.id}"/></td>
+                        <td><c:out value="${accounts.firstName}"/></td>
+                        <td><c:out value="${accounts.lastName}"/></td>
+                        <td><c:out value="${accounts.middleName}"/></td>
+                        <td><c:out value="${accounts.email}"/></td>
+                        <td style="display:none;"><c:out value="${accounts.md5}"/></td>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td colspan="6"><custom:pagination/></td>
+                </tr>
             </table>
         </form>
     </div>
-    <div class="tab tab-1">
-        <table id="table" border="1">
-            <tr>
-                <td><fmt:message key="table.account.column.id"/></td>
-                <td><fmt:message key="table.account.column.first_name"/></td>
-                <td><fmt:message key="table.account.column.last_name"/></td>
-                <td><fmt:message key="table.account.column.middle_name"/></td>
-                <td><fmt:message key="table.account.column.email"/></td>
-                <td><fmt:message key="table.account.column.md5"/></td>
-                <%--                <td><fmt:message key="entity.action"/></td>--%>
-            </tr>
-            <c:forEach var="accounts" items="${requestScope.accounts}">
-                <tr class="tblrow">
-                    <td><c:out value="${accounts.id}"/></td>
-                    <td><c:out value="${accounts.firstName}"/></td>
-                    <td><c:out value="${accounts.lastName}"/></td>
-                    <td><c:out value="${accounts.middleName}"/></td>
-                    <td><c:out value="${accounts.email}"/></td>
-                    <td><c:out value="${accounts.md5}"/></td>
-                        <%--                    <td><fmt:message key="entity.action.delete"/></td>--%>
-                </tr>
-            </c:forEach>
-        </table>
-    </div>
 </div>
 <hr/>
-<custom:pagination/>
-<%--<div style="text-align: center; width:100%; background-color: #adb5bd">--%>
-<%--    <c:if test="${sessionScope.pages.size() > 1}">--%>
-<%--        <c:forEach items="${sessionScope.pages}" var="item" varStatus="status">--%>
-<%--            <a href="${pageContext.request.contextPath}${item}">${status.count}</a>--%>
-<%--        </c:forEach>--%>
-<%--    </c:if>--%>
-<%--</div>--%>
+
 <hr/>
 <script>
-    <%@include file="/static/js/account_list.js"%>
+    <%@include file="js/account_list.js"%>
 </script>
 </body>
 </html>

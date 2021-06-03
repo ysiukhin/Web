@@ -1,7 +1,8 @@
 package ua.traning.rd.java.finalproject;
 
 public final class Constants {
-    public static final String EN_RU_LETTERS_ONLY_REGX_LEN_2_30 = "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\.]{2,30}";
+    public static final String EN_RU_LETTERS_ONLY_REGX_LEN_2_30 = "[-А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\.]{2,30}";
+    public static final String EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50 = "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\. ]{2,50}";
     public static final String EMAIL_REGX =
             "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z0-9]{1}" +
                     "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z0-9_\\.]*" +
@@ -19,4 +20,5 @@ public final class Constants {
     public static final String CURRENT_ACCOUNT = "CURRENT_ACCOUNT";
 
 
+    public static final int ROWS_PER_PAGE = 10;
 }

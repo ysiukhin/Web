@@ -26,14 +26,15 @@ tr {
     transition: all .25s ease-in-out
 }
 
-tr:hover {
-    background-color: orangered;
+tr.tblrow:hover {
+    background-color: #0800ff;
     opacity: 0.4;
     /*font-weight: bold;*/
-    cursor: pointer
+    /*cursor: pointer*/
+    color: #fff;
 }
 
-tr.selected:hover {
+tr.tblrow.selected:hover {
     background-color: red;
     opacity: 1;
     /*font-weight: bold;*/

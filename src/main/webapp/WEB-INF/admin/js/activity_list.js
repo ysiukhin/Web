@@ -9,7 +9,8 @@ function checkEmptyInput() {
         id = document.getElementById("id").value,
         activity_en = document.getElementById("activity_en").value,
         activity_ru = document.getElementById("activity_ru").value,
-        activity_kind = document.getElementById("activity_kind").value;
+        activity_kind = document.getElementById("activity_kind").value,
+        kind_id = document.getElementById("kind_id").value;
 
     if (id === "") {
         alert("Id Connot Be Empty");
@@ -21,6 +22,9 @@ function checkEmptyInput() {
         alert("First Name Connot Be Empty");
         isEmpty = true;
     } else if (activity_kind === "") {
+        alert("Last Name Connot Be Empty");
+        isEmpty = true;
+    } else if (kind_id === "") {
         alert("Last Name Connot Be Empty");
         isEmpty = true;
     }
@@ -40,12 +44,14 @@ function addHtmlTableRow() {
             id = document.getElementById("id").value,
             activity_en = document.getElementById("activity_en").value,
             activity_ru = document.getElementById("activity_ru").value,
-            activity_kind = document.getElementById("activity_kind").value;
+            activity_kind = document.getElementById("activity_kind").value,
+            kind_id = document.getElementById("kind_id").value;
 
         cell1.innerHTML = id;
         cell2.innerHTML = activity_en;
         cell3.innerHTML = activity_ru;
         cell4.innerHTML = activity_kind;
+        cell5.innerHTML = kind_id;
         // call the function to set the event to the new row
         selectedRowToInput();
     }
@@ -65,6 +71,7 @@ function selectedRowToInput() {
             document.getElementById("activity_en").value = this.cells[1].innerHTML;
             document.getElementById("activity_ru").value = this.cells[2].innerHTML;
             document.getElementById("activity_kind").value = this.cells[3].innerHTML;
+            document.getElementById("kind_id").value = this.cells[4].innerHTML;
             console.log(typeof index);
             // get the selected row index
             index = this.rowIndex;
@@ -84,11 +91,14 @@ function editHtmlTbleSelectedRow() {
         activity_en = document.getElementById("activity_en").value,
         activity_ru = document.getElementById("activity_ru").value,
         activity_kind = document.getElementById("activity_kind").value;
+    kind_id = document.getElementById("kind_id").value;
+
     if (!checkEmptyInput()) {
         table.rows[rIndex].cells[0].innerHTML = id;
         table.rows[rIndex].cells[1].innerHTML = activity_en;
         table.rows[rIndex].cells[2].innerHTML = activity_ru;
         table.rows[rIndex].cells[3].innerHTML = activity_kind;
+        table.rows[rIndex].cells[4].innerHTML = kind_id;
     }
 }
 
@@ -100,4 +110,5 @@ function removeSelectedRow() {
     document.getElementById("activity_en").value = "";
     document.getElementById("activity_ru").value = "";
     document.getElementById("activity_kind").value = "";
+    document.getElementById("kind_id").value = "";
 }

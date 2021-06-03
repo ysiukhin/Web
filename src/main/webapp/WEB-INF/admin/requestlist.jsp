@@ -14,9 +14,10 @@
 
 <head>
     <style>
-        <%@include file="/static/css/admin.css"%>
-        <%@include file="/static/css/messageform.css"%>
-        <%@include file="/static/css/account_list.css"%>
+        <%@include file="css/admin.css"%>
+        <%@include file="css/messageform.css"%>
+        <%@include file="css/account_list.css"%>
+        <%@include file="css/pagination.css"%>
     </style>
 </head>
 
@@ -27,7 +28,7 @@
 </c:if>
 
 <div class="header-panel">
-    <label><h1>Hello ADMIN!</h1></label>
+    <h1>Hello ADMIN!</h1>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a
             href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=requestList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
@@ -40,53 +41,84 @@
 <br>
 <hr>
 <div class="vertical-menu">
-    <a href="${pageContext.request.contextPath}/accountList"><fmt:message key="a.admin.get_accounts"/></a>
-    <a href="${pageContext.request.contextPath}/activityList"><fmt:message key="a.admin.get_activities"/></a>
-    <a href="${pageContext.request.contextPath}/kindList"><fmt:message key="a.admin.get_kinds"/></a>
-    <a href="${pageContext.request.contextPath}/requestList"><fmt:message key="a.admin.get_requests"/></a>
+    <a href="${pageContext.request.contextPath}/accountList?page=requestList"><fmt:message
+            key="a.admin.get_accounts"/></a>
+    <a href="${pageContext.request.contextPath}/activityList?page=requestList"><fmt:message
+            key="a.admin.get_activities"/></a>
+    <a href="${pageContext.request.contextPath}/kindList?page=requestList"><fmt:message key="a.admin.get_kinds"/></a>
+    <a href="${pageContext.request.contextPath}/requestList?page=requestList"><fmt:message
+            key="a.admin.get_requests"/></a>
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
 
 <div class="container">
     <div class="tab tab-1">
         <form action="http://localhost:8080/Web/requestAction" method="POST">
-            <table id="table" border="1">
+            <table id="table">
                 <tr>
-                    <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
+                    <td><input type="submit" value="<fmt:message key="entity.action.approve"/>" name="action"
                                class="input"></td>
-                    <td><input type="submit" value="<fmt:message key="entity.action.update"/>" name="action"
-                               class="input"></td>
-                    <td><input type="submit" value="<fmt:message key="entity.action.delete"/>" name="action"
+                    <td><input type="submit" value="<fmt:message key="entity.action.denied"/>" name="action"
                                class="input"></td>
                 </tr>
                 <tr>
-                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.request.column.id"/>" name="id" id="id"--%>
-                    <%--                               class="input"></td>--%>
-                    <td><input type="text" placeholder="<fmt:message key="table.request.column.request"/>"
-                               name="request" id="request" class="input"></td>
-                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.request.column.account_id"/>"--%>
-                    <%--                               name="account_id" id="account_id" class="input"></td>--%>
-                    <td><input type="text" placeholder="<fmt:message key="table.request.column.account_first_name"/>"
-                               name="account_first_name" id="account_first_name" class="input"></td>
-                    <td><input type="text" placeholder="<fmt:message key="table.request.column.account_last_name"/>"
-                               name="account_last_name" id="account_last_name" class="input"></td>
-                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.request.column.activity_id"/>"--%>
-                    <%--                               name="activity_id" id="activity_id" class="input"></td>--%>
-                    <td><input type="text" placeholder="<fmt:message key="table.request.column.activity"/>"
-                               name="activity" id="activity" class="input"></td>
+                    <td style="display:none;">
+                        <input type="text" placeholder="<fmt:message key="table.request.column.id"/>" name="id" id="id"
+                               class="input">
+                    </td>
+                    <td>
+                        <input type="text" readonly="readonly"
+                               placeholder="<fmt:message key="table.request.column.request"/>" name="request"
+                               id="request" class="input">
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" readonly="readonly"
+                               placeholder="<fmt:message key="table.request.column.account_id"/>" name="account_id"
+                               id="account_id" class="input">
+                    </td>
+                    <td>
+                        <input readonly="readonly" type="text"
+                               placeholder="<fmt:message key="table.request.column.account_first_name"/>"
+                               name="account_first_name" id="account_first_name" class="input">
+                    </td>
+                    <td>
+                        <input readonly="readonly" type="text"
+                               placeholder="<fmt:message key="table.request.column.account_last_name"/>"
+                               name="account_last_name" id="account_last_name" class="input">
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" placeholder="<fmt:message key="table.request.column.activity_id"/>"
+                               name="activity_id" id="activity_id" class="input">
+                    </td>
+                    <td>
+                        <input readonly="readonly" type="text"
+                               placeholder="<fmt:message key="table.request.column.activity"/>" name="activity"
+                               id="activity" class="input">
+                    </td>
+                    <td>
+                        <input readonly="readonly" type="text"
+                               placeholder="<fmt:message key="table.request.column.status"/>" name="status" id="status"
+                               class="input">
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" placeholder="<fmt:message key="table.request.column.activity_id"/>"
+                               name="req_status" id="req_status" class="input">
+                    </td>
                 </tr>
                 <tr>
-                    <%--                            <td><fmt:message key="table.request.column.id"/></td>--%>
-                    <td><fmt:message key="table.request.column.request"/></td>
-                    <%--                            <td><fmt:message key="table.request.column.account_id"/></td>--%>
-                    <td><fmt:message key="table.request.column.account_first_name"/></td>
-                    <td><fmt:message key="table.request.column.account_last_name"/></td>
-                    <%--                            <td><fmt:message key="table.request.column.activity_id"/></td>--%>
-                    <td><fmt:message key="table.request.column.activity"/></td>
+                    <th style="display:none;"><fmt:message key="table.request.column.id"/></th>
+                    <th><fmt:message key="table.request.column.request"/></th>
+                    <th style="display:none;"><fmt:message key="table.request.column.account_id"/></th>
+                    <th><fmt:message key="table.request.column.account_first_name"/></th>
+                    <th><fmt:message key="table.request.column.account_last_name"/></th>
+                    <th style="display:none;"><fmt:message key="table.request.column.activity_id"/></th>
+                    <th><fmt:message key="table.request.column.activity"/></th>
+                    <th><fmt:message key="table.request.column.status"/></th>
+                    <th style="display:none;"><fmt:message key="table.request.column.status"/></th>
                 </tr>
                 <c:forEach var="list" items="${requestScope.resultList}">
-                    <tr>
-                            <%--                        <th><c:out value="${list.request.id}"/></th>--%>
+                    <tr class="tblrow">
+                        <td style="display:none;"><c:out value="${list.request.id}"/></td>
                         <c:choose>
                             <c:when test="${list.request.request}">
                                 <td><fmt:message key="table.request.request.message.true"/></td>
@@ -95,10 +127,10 @@
                                 <td><fmt:message key="table.request.request.message.false"/></td>
                             </c:otherwise>
                         </c:choose>
-                            <%--                        <th><c:out value="${list.account.id}"/></th>--%>
+                        <td style="display:none;"><c:out value="${list.account.id}"/></td>
                         <td><c:out value="${list.account.firstName}"/></td>
                         <td><c:out value="${list.account.lastName}"/></td>
-                            <%--                        <th><c:out value="${list.activity.id}"/></th>--%>
+                        <td style="display:none;"><c:out value="${list.activity.id}"/></td>
                         <c:choose>
                             <c:when test="${sessionScope.lang eq 'en'}">
                                 <td><c:out value="${list.activity.activityRu}"/></td>
@@ -107,16 +139,32 @@
                                 <td><c:out value="${list.activity.activityEn}"/></td>
                             </c:otherwise>
                         </c:choose>
+                        <c:choose>
+                            <c:when test="${list.request.status.present}">
+                                <c:if test="${list.request.status.get() eq 0}">
+                                    <td class="processed"><fmt:message key="table.request.column.status.denied"/></td>
+                                </c:if>
+                                <c:if test="${list.request.status.get() eq 1}">
+                                    <td class="processed"><fmt:message key="table.request.column.status.approved"/></td>
+                                </c:if>
+                            </c:when>
+                            <c:otherwise>
+                                <td><fmt:message key="table.request.column.status.process"/></td>
+                            </c:otherwise>
+                        </c:choose>
+                        <td style="display:none;"><c:out value="${list.request.status}"/></td>
                     </tr>
                 </c:forEach>
+                <tr>
+                    <td colspan="8"><custom:pagination/></td>
+                </tr>
             </table>
         </form>
     </div>
 </div>
 <hr/>
-<custom:pagination/>
 <script>
-    <%@include file="/static/js/request_list.js"%>
+    <%@include file="js/request_list.js"%>
 </script>
 </body>
 </html>

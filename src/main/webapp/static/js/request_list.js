@@ -1,6 +1,7 @@
 var index,
     rIndex,
-    table = document.getElementById("table");
+    table = Array.from(document.querySelectorAll("tr.tblrow"));
+// table = document.getElementById("table");
 
 // check the empty input
 function checkEmptyInput() {

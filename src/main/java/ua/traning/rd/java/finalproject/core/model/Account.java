@@ -27,6 +27,16 @@ public class Account extends AbstractModel<Integer> implements CurrentAccount {
     private int status;
     @Linked("account_id")
     private List<AccountActivity> accountActivities;
+    @Linked("account_id")
+    private List<Request> accountRequests;
+
+    public List<Request> getAccountRequests() {
+        return accountRequests;
+    }
+
+    public void setAccountRequests(List<Request> accountRequests) {
+        this.accountRequests = accountRequests;
+    }
 
 
     public int getId() {

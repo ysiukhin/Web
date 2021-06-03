@@ -70,7 +70,7 @@ function addHtmlTableRow() {
 
 // display selected row data into input text
 function selectedRowToInput() {
-    for (var i = 1; i < table.rows.length; i++) {
+    for (var i = 3; i < table.rows.length - 1; i++) {
         table.rows[i].onclick = function () {
             // get the seected row index
             rIndex = this.rowIndex;

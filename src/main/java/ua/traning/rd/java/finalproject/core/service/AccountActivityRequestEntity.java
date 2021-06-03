@@ -9,6 +9,16 @@ public class AccountActivityRequestEntity {
     private Activity activity;
     private Request request;
 
+    public AccountActivityRequestEntity() {
+
+    }
+
+    public AccountActivityRequestEntity(Account account, Activity activity, Request request) {
+        this.account = account;
+        this.activity = activity;
+        this.request = request;
+    }
+
     public Account getAccount() {
         return account;
     }

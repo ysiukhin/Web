@@ -30,12 +30,10 @@ public class LoginCommand implements Command {
             //System.out.println("Not");
             return "/login.jsp";
         }
-
         if (CommandUtility.checkUserIsLogged(request, email)) {
 
             return "/WEB-INF/error.jsp";   // user loged
         }
-
         Account account;
         try {
             account = new LoginService().checkAccount(email, password);

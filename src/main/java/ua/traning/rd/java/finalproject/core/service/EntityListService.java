@@ -50,9 +50,27 @@ public class EntityListService<T> {
         return entities.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
     }
 
+    public List<T> getInRangeByRowNumber(int limit, int offset) {
+        LOGGER.info("IN EntityService --> getInRange()");
+        SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
+        Dao<T> entityDao =
+                new DaoJdbc<>(sessionManagerJdbc, entityClass);
+        DbService<T> dbServiceAccount = new DbServiceImpl<>(entityDao);
+        Optional<List<T>> entities = dbServiceAccount
+                .getBeansInRangeByRowNumber(limit, offset);
+        LOGGER.info("IN EntityService --> getInRange()");
+        return entities.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+    }
+
     public T getById(int id) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansById(id)
+                .orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+    }
+
+    public List<T> getIdByColumn(String columnName, Object value) {
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .getBeansBy(columnName, value)
                 .orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
     }
 

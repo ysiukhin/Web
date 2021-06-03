@@ -12,6 +12,8 @@ public interface DbService<T> {
 
     Optional<List<T>> getBeansInRange(String columnName, List<Object> fields);
 
+    Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset);
+
     int saveBean(T account);
 
     int updateBean(T account);

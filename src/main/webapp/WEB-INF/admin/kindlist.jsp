@@ -16,9 +16,10 @@
 
 <head>
     <style>
-        <%@include file="/static/css/admin.css"%>
-        <%@include file="/static/css/messageform.css"%>
-        <%@include file="/static/css/account_list.css"%>
+        <%@include file="css/admin.css"%>
+        <%@include file="css/messageform.css"%>
+        <%@include file="css/account_list.css"%>
+        <%@include file="css/pagination.css"%>
     </style>
 </head>
 
@@ -31,27 +32,27 @@
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=activityList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=activityList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <span class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
 </div>
 <br>
 <hr>
 <div class="vertical-menu">
-    <a href="${pageContext.request.contextPath}/accountList"><fmt:message key="a.admin.get_accounts"/></a>
-    <a href="${pageContext.request.contextPath}/activityList"><fmt:message key="a.admin.get_activities"/></a>
-    <a href="${pageContext.request.contextPath}/kindList"><fmt:message key="a.admin.get_kinds"/></a>
-    <a href="${pageContext.request.contextPath}/requestList"><fmt:message key="a.admin.get_requests"/></a>
+    <a href="${pageContext.request.contextPath}/accountList?page=kindList"><fmt:message key="a.admin.get_accounts"/></a>
+    <a href="${pageContext.request.contextPath}/activityList?page=kindList"><fmt:message
+            key="a.admin.get_activities"/></a>
+    <a href="${pageContext.request.contextPath}/kindList?page=kindList"><fmt:message key="a.admin.get_kinds"/></a>
+    <a href="${pageContext.request.contextPath}/requestList?page=kindList"><fmt:message key="a.admin.get_requests"/></a>
     <a href="#"><fmt:message key="a.admin.get_requests"/></a>
 </div>
 
 <div class="container">
     <div class="tab tab-1">
         <form action="http://localhost:8080/Web/kindAction" method="POST">
-            <%--        <form action="#" method="POST">--%>
-            <table border="1">
+            <table id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                class="input"></td>
@@ -61,40 +62,41 @@
                                class="input"></td>
                 </tr>
                 <tr>
-                    <%--                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"--%>
-                    <%--                               name="id" id="id" class="input"></td>--%>
-                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.kind"/>"
-                               name="kind" id="kind" class="input"></td>
+                    <td style="display:none;"><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"
+                                                     name="id" id="id" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.kind_en"/>"
+                               name="kind_en" id="kind_en" class="input"></td>
+                    <td><input type="text" placeholder="<fmt:message key="table.kind.column.kind_ru"/>"
+                               name="kind_ru" id="kind_ru" class="input"></td>
+                </tr>
+                <tr>
+                    <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
+                    <th><fmt:message key="table.kind.column.kind_en"/></th>
+                    <th><fmt:message key="table.kind.column.kind_ru"/></th>
+                </tr>
+                <c:forEach var="kind" items="${requestScope.kinds}">
+                    <tr class="tblrow">
+                        <td style="display:none;"><c:out value="${kind.id}"/></td>
+                            <%--                        <c:choose>--%>
+                            <%--                            <c:when test="${sessionScope.lang eq 'en'}">--%>
+                        <td><c:out value="${kind.kindEn}"/></td>
+                            <%--                            </c:when>--%>
+                            <%--                            <c:otherwise>--%>
+                        <td><c:out value="${kind.kindRu}"/></td>
+                            <%--                            </c:otherwise>--%>
+                            <%--                        </c:choose>--%>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td colspan="2"><custom:pagination/></td>
                 </tr>
             </table>
         </form>
     </div>
-    <div class="tab tab-1">
-        <table id="table" border="1">
-            <tr>
-                <%--                <td><fmt:message key="table.kind.column.id"/></td>--%>
-                <td><fmt:message key="table.kind.column.kind"/></td>
-            </tr>
-            <c:forEach var="kind" items="${requestScope.kinds}">
-                <tr>
-                        <%--                    <td><c:out value="${kind.id}"/></td>--%>
-                    <c:choose>
-                        <c:when test="${sessionScope.lang eq 'en'}">
-                            <td><c:out value="${kind.kindEn}"/></td>
-                        </c:when>
-                        <c:otherwise>
-                            <td><c:out value="${kind.kindRu}"/></td>
-                        </c:otherwise>
-                    </c:choose>
-                </tr>
-            </c:forEach>
-        </table>
-    </div>
 </div>
 <hr/>
-<custom:pagination/>
 <script>
-    <%@include file="/static/js/kind_list.js"%>
+    <%@include file="js/kind_list.js" %>
 </script>
 </body>
 </html>

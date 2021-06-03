@@ -31,6 +31,14 @@ public class DbServiceImpl<T> implements DbService<T> {
         return Optional.ofNullable(doService(() -> dao.selectBy(columnName, fields)));
     }
 
+    public Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset) {
+        return Optional.ofNullable(doService(() -> dao.selectByRecordNumberInRange(limit, offset)));
+    }
+
+    public Optional<List<T>> getBeansFromList(String columnName, List<Object> fields) {
+        return Optional.ofNullable(doService(() -> dao.selectByFromList(columnName, fields)));
+    }
+
     public Optional<List<T>> getBeansBy(String columnName, Object value) {
         return Optional.ofNullable(doService(() -> dao.selectBy(columnName,
                 Collections.singletonList(value))));
