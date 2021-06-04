@@ -50,6 +50,10 @@
     <!--    <error-page>-->
     <!--        <location>/error</location>-->
     <!--    </error-page>-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>Servl</servlet-name>
         <servlet-class>ua.traning.rd.java.finalproject.servlet.controller.Servlet</servlet-class>

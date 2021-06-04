@@ -7,14 +7,8 @@ import ua.traning.rd.java.finalproject.servlet.controller.command.action.Account
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.KindActionCommand;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.RequestActionCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.list.AccountListCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.list.ActivityListCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.list.KindListCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.list.RequestListCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.page.AccountListToPageCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.page.ActivityListToPageCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.page.KindListToPageCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.page.RequestListToPageCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.list.*;
+import ua.traning.rd.java.finalproject.servlet.controller.command.page.*;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
@@ -49,16 +43,25 @@ public class Servlet extends HttpServlet {
         commands.put("activityList", new ActivityListCommand());
         commands.put("kindList", new KindListCommand());
         commands.put("requestList", new RequestListCommand());
+        commands.put("reportActivityList", new ReportActivityListCommand());
+        commands.put("reportAccountList", new ReportAccountListCommand());
+
+        commands.put("userTimer", new UserTimerCommand());  // TODO
+        commands.put("userRequestList", new UserRequestListCommand()); // TODO
+
 
         commands.put("topageaccount", new AccountListToPageCommand());
         commands.put("topageactivity", new ActivityListToPageCommand());
         commands.put("topagekind", new KindListToPageCommand());
         commands.put("topagerequest", new RequestListToPageCommand());
+        commands.put("topageuserrequest", new RequestUserListToPageCommand());
+
 
         commands.put("accountAction", new AccountActionCommand());
         commands.put("activityAction", new ActivityActionCommand());
         commands.put("kindAction", new KindActionCommand());
-        commands.put("requestAction", new RequestActionCommand());  // TODO
+        commands.put("requestAction", new RequestActionCommand());
+        commands.put("userRequestAction", new ActivityUserActionCommand());
 
         commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();

@@ -10,8 +10,7 @@
 
 <div onclick="show('none')" id="gray">
     <div id="window">
-        <img class="close" src="${pageContext.request.contextPath}/static/close.png" alt=""
-             onclick="show('none')">
+<%--        <img class="close" src="${pageContext.request.contextPath}/static/close.png" alt="" onclick="show('none')">--%>
         <div class="form">
             <c:choose>
                 <c:when test="${actionStatus}">

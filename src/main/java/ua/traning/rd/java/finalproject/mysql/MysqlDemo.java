@@ -14,12 +14,16 @@ import org.apache.logging.log4j.Logger;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.*;
+import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlDemo {
 
     private static final Logger LOGGER = LogManager.getLogger("MysqlDemo");
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     public static void main(String[] args) throws IOException, SQLException, NoSuchAlgorithmException {
         DataSource dataSource = new DataSourceImpl();
@@ -27,34 +31,23 @@ public class MysqlDemo {
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
 
-        Dao<Kind> kindDao = new DaoJdbc<>(sessionManagerJdbc, Kind.class);
-        Dao<Account> accountDao =
-                new DaoJdbc<>(sessionManagerJdbc, Account.class);
-        Dao<Activity> activityDao =
-                new DaoJdbc<>(sessionManagerJdbc, Activity.class);
-        Dao<AccountActivity> accountActivityDao =
-                new DaoJdbc<>(sessionManagerJdbc, AccountActivity.class);
+//        Dao<Kind> kindDao = new DaoJdbc<>(sessionManagerJdbc, Kind.class);
+//        Dao<Account> accountDao =
+//                new DaoJdbc<>(sessionManagerJdbc, Account.class);
+//        Dao<Activity> activityDao =
+//                new DaoJdbc<>(sessionManagerJdbc, Activity.class);
+//        Dao<AccountActivity> accountActivityDao =
+//                new DaoJdbc<>(sessionManagerJdbc, AccountActivity.class);
 
-        SampleData.processSql(dataSource, System.getProperty("user.dir"), "db-create-auto.sql");
-        SampleData.processSql(dataSource, System.getProperty("user.dir"), "account-test-data-fill.sql");
-        SampleData.processSql(dataSource, System.getProperty("user.dir"), "kind-test-data-fill.sql");
-        SampleData.processSql(dataSource, System.getProperty("user.dir"), "activity-test-data-fill.sql");
-        SampleData.processSql(dataSource, System.getProperty("user.dir"), "account_activity-test-data-fill.sql");
+//        DbService<Record> recordDbService = new DbServiceImpl<>(new DaoJdbc<>(sessionManagerJdbc, Record.class));
+//
+//        DbService<AccountActivity> dbService =
+//                new DbServiceImpl<>(new DaoJdbc<>(sessionManagerJdbc, AccountActivity.class));
+//
+//        List<AccountActivity> list = dbService.getAllBeans().get();
 
 
-//        SampleData.insertTestAccountActivities(dataSource, 2);
-        DbService<AccountActivity> dbServiceAccountActivities = new DbServiceImpl<>(accountActivityDao);
-        DbService<Activity> dbServiceActivity = new DbServiceImpl<>(activityDao);
-        Activity testActivity = dbServiceActivity.getBeansById(5).get();
-        testActivity.setActivityEn("test");
-        testActivity.setActivityRu("тест");
-
-        dbServiceActivity.updateBean(testActivity);
-
-//        List<AccountActivity> accountActivityList = dbServiceAccountActivities.getAllBeans();
-        List<Activity> activityList = dbServiceActivity.getAllBeans().get();
-//        DbService<Kind> dbServiceAccountActivities = new DbServiceImpl<>(kindDao);
-//        List<Kind> accountActivityList = dbServiceAccountActivities.getAllBeans();
+        SampleData.insertTestRecords(dataSource);
 
         LOGGER.info("All done");
     }

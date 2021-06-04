@@ -26,12 +26,12 @@ public class AccountListToPageCommand implements Command {
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
         Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
-        Optional<String> pagenumber = Optional.ofNullable(request.getParameter("pagenumber"));
+        Optional<String> pageNumber = Optional.ofNullable(request.getParameter("pagenumber"));
 
         int rowsPerPage = recordsPerPage.map(Integer::parseInt)
                 .orElse((Integer) request.getAttribute("rowsPerPage"));
 
-        int page = pagenumber.map(Integer::parseInt)
+        int page = pageNumber.map(Integer::parseInt)
                 .orElse((Integer) request.getSession().getAttribute("pagenumber"));
 
 //        LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);

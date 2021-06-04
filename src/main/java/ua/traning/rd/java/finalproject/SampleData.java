@@ -24,6 +24,10 @@ import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,10 +40,8 @@ public class SampleData {
 
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
 
-        Dao<Kind> kindDao =
-                new DaoJdbc<>(sessionManagerJdbc, Kind.class);
-        Dao<Account> accountDao =
-                new DaoJdbc<>(sessionManagerJdbc, Account.class);
+//        Dao<Kind> kindDao =
+//                new DaoJdbc<>(sessionManagerJdbc, Kind.class);
     }
 
 
@@ -126,6 +128,51 @@ public class SampleData {
                 i++;
             }
         }
+    }
+
+    // call when AccountActivity already filled
+    public static void insertTestRecords(DataSource dataSource) {
+        SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(dataSource);
+        DbService<AccountActivity> dbService =
+                new DbServiceImpl<>(new DaoJdbc<>(sessionManagerJdbc, AccountActivity.class));
+
+        List<AccountActivity> list = dbService.getAllBeans().get();
+
+        DbService<Record> dbRecordService =
+                new DbServiceImpl<>(new DaoJdbc<>(sessionManagerJdbc, Record.class));
+
+        int year = 2021;
+        List<Record> records = new ArrayList<>();
+//        for (AccountActivity accountActivity : list) {
+        for (int j = 0; j < list.size(); j++) {
+            if (j % 10 == 0) {
+                continue;
+            }
+            int recordsCountRandom = SECURE_RANDOM.nextInt(4) + 1;
+            for (int i = 0; i < recordsCountRandom; i++) {
+                int month = SECURE_RANDOM.nextInt(6) + 1;
+                int day = SECURE_RANDOM.nextInt(28) + 1;
+                LocalDate localDate = LocalDate.of(year, month, day);
+                int hour = SECURE_RANDOM.nextInt(14) + 7;
+                int minutesStart = SECURE_RANDOM.nextInt(55);
+
+                LocalTime startLocalTime = LocalTime.of(hour, minutesStart, 0);
+                LocalTime endLocalTime = startLocalTime.plusMinutes(SECURE_RANDOM.nextBoolean() ? 45 : 60);
+
+                Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(localDate, startLocalTime));
+                Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(localDate, endLocalTime));
+//                LOGGER.info("localDate: {}  startLocalTime: {} endLocalTime: {}\n\tstartTimestamp: {}\n\tendTimestamp {}"
+//                        , localDate, startLocalTime, endLocalTime, startTimestamp, endTimestamp);
+                Record newRecord = new Record();
+                newRecord.setStart(startTimestamp);
+                newRecord.setEnd(endTimestamp);
+
+                newRecord.setAccountActivityId(list.get(j).getId());
+                records.add(newRecord);
+                dbRecordService.saveBean(newRecord);
+            }
+        }
+        LOGGER.info("Total records created: {}", records.size());
     }
 
     public static void insertTestAccountActivities(DataSource dataSource, int activitiesPerAccount) {

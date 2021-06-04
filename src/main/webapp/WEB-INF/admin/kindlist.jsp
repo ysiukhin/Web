@@ -16,10 +16,11 @@
 
 <head>
     <style>
-        <%@include file="css/admin.css"%>
-        <%@include file="css/messageform.css"%>
-        <%@include file="css/account_list.css"%>
-        <%@include file="css/pagination.css"%>
+        <%@include file="../css/admin.css"%>
+        <%@include file="../css/messageform.css"%>
+        <%@include file="../css/list.css"%>
+        <%@include file="../css/pagination.css"%>
+        <%@include file="../css/table.css"%>
     </style>
 </head>
 
@@ -32,27 +33,32 @@
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=kindList&pagenumber=${sessionScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=kindList&pagenumber=${requestScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
+            href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=kindList&pagenumber=${sessionScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
         <span class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
 </div>
 <br>
 <hr>
 <div class="vertical-menu">
-    <a href="${pageContext.request.contextPath}/accountList?page=kindList"><fmt:message key="a.admin.get_accounts"/></a>
+    <a href="${pageContext.request.contextPath}/accountList?page=kindList"><fmt:message
+            key="a.admin.get_accounts"/></a>
     <a href="${pageContext.request.contextPath}/activityList?page=kindList"><fmt:message
             key="a.admin.get_activities"/></a>
-    <a href="${pageContext.request.contextPath}/kindList?page=kindList"><fmt:message key="a.admin.get_kinds"/></a>
-    <a href="${pageContext.request.contextPath}/requestList?page=kindList"><fmt:message key="a.admin.get_requests"/></a>
-    <a href="#"><fmt:message key="a.admin.get_requests"/></a>
+    <a href="${pageContext.request.contextPath}/kindList?page=kindList"><fmt:message
+            key="a.admin.get_kinds"/></a>
+    <a href="${pageContext.request.contextPath}/requestList?page=kindList"><fmt:message
+            key="a.admin.get_requests"/></a>
+    <a href="${pageContext.request.contextPath}/reportActivityList?page=kindList"><fmt:message
+            key="a.admin.get_report_activity"/></a>
+    <a href="${pageContext.request.contextPath}/reportAccountList?page=kindList"><fmt:message
+            key="a.admin.get_report_account"/></a>
 </div>
-
 <div class="container">
     <div class="tab tab-1">
         <form action="http://localhost:8080/Web/kindAction" method="POST">
-            <table id="table">
+            <table class="table" id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                class="input"></td>
@@ -96,7 +102,7 @@
 </div>
 <hr/>
 <script>
-    <%@include file="js/kind_list.js" %>
+    <%@include file="../js/kind_list.js" %>
 </script>
 </body>
 </html>

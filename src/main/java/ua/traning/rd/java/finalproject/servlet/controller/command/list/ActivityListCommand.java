@@ -23,7 +23,6 @@ public class ActivityListCommand implements Command {
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
         int rowsPerPage = Constants.ROWS_PER_PAGE;
-
         int totalRecords = 0;
 
         EntityListService<Activity> activityService = new EntityListService<>(Activity.class);

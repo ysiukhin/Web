@@ -21,17 +21,17 @@
     color: #fff;
 }
 
-tr {
-    cursor: pointer;
-    transition: all .25s ease-in-out
-}
+/*tr {*/
+/*    cursor: pointer;*/
+/*    transition: all .25s ease-in-out*/
+/*}*/
 
 tr.tblrow:hover {
-    background-color: #0800ff;
-    opacity: 0.4;
-    /*font-weight: bold;*/
-    /*cursor: pointer*/
-    color: #fff;
+    /*    background-color: #0800ff;*/
+    /*    opacity: 0.4;*/
+    /*    !*font-weight: bold;*!*/
+    /*    !*cursor: pointer*!*/
+    /*    color: #fff;*/
 }
 
 tr.tblrow.selected:hover {

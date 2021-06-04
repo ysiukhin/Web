@@ -28,6 +28,14 @@ public class EntityListService<T> {
         return entityList.size();
     }
 
+    public int totalQuantityByCondition(String columnName, Object value) {
+        LOGGER.info("IN EntityService --> totalQuantity()");
+        List<T> entityList = getEntitiesByCondition(columnName, value);
+        LOGGER.info("IN EntityService --> totalQuantity()");
+        return entityList.size();
+    }
+
+
     public List<T> getAllEntities() {
         LOGGER.info("IN EntityService --> getAllAccounts()");
         SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
@@ -36,6 +44,23 @@ public class EntityListService<T> {
         Optional<List<T>> entities = entityDbService.getAllBeans();
         LOGGER.info("IN AccountService --> getAllAccounts()");
         return entities.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+    }
+
+    // TODO
+    public List<T> getEntitiesByCondition(String columnName, Object value) {
+        LOGGER.info("IN EntityService --> getEntitiesByCondition()");
+        SessionManagerJdbc sessionManagerJdbc = new SessionManagerJdbc(Servlet.dataSource);
+        Dao<T> entityDao = new DaoJdbc<>(sessionManagerJdbc, entityClass);
+        DbService<T> entityDbService = new DbServiceImpl<>(entityDao);
+
+        LOGGER.info("IN AccountService --> getEntitiesByCondition()");
+        //        List<T> entities =
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .getBeansBy(columnName, value)
+                .orElseThrow(() -> new ExceptionService("There is no any Entities in database."));
+
+
+//        return entities.orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
     }
 
     public List<T> getInRange(int from, int to) {
@@ -71,7 +96,7 @@ public class EntityListService<T> {
     public List<T> getIdByColumn(String columnName, Object value) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansBy(columnName, value)
-                .orElseThrow(() -> new ExceptionService("There is no any Accounts in database."));
+                .orElseThrow(() -> new ExceptionService("There is no any Entities in database."));
     }
 
     public int insertEntity(T entity) {

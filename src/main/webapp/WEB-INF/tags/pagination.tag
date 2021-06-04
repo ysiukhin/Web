@@ -16,10 +16,10 @@
             <c:choose>
                 <c:when test="${status.count eq sessionScope.pagenumber}">
                     <a style="background-color: red; color: #fff;"
-                       href="${pageContext.request.contextPath}${item}">${status.count}</a>
+                       href="${pageContext.request.contextPath}${item}">${status.count}&nbsp;</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="${pageContext.request.contextPath}${item}">${status.count}</a>
+                    <a href="${pageContext.request.contextPath}${item}">${status.count}&nbsp;</a>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
