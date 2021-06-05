@@ -3,7 +3,9 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Activity;
+import ua.traning.rd.java.finalproject.core.model.AdminActivityList;
 import ua.traning.rd.java.finalproject.core.model.Kind;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
@@ -36,14 +38,18 @@ public class ActivityListToPageCommand implements Command {
 
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
 
-        List<Activity> activities;
-        Map<Integer, Kind> kinds;
-        try {
-            activities = new EntityListService<>(Activity.class)
-                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
-            kinds = new EntityListService<>(Kind.class).getAllEntities()
-                    .stream().collect(Collectors.toMap(Kind::getId, kind -> kind));
+//        List<Activity> activities;
+//        Map<Integer, Kind> kinds;
+        List<AdminActivityList> activitiesList;
 
+        try {
+            activitiesList = new EntityListService<>(AdminActivityList.class)
+                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
+                            Constants.SQL_ADMIN_ACTIVITY + " LIMIT ? OFFSET ?");
+//            activities = new EntityListService<>(Activity.class)
+//                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
+//            kinds = new EntityListService<>(Kind.class).getAllEntities()
+//                    .stream().collect(Collectors.toMap(Kind::getId, kind -> kind));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
@@ -52,8 +58,9 @@ public class ActivityListToPageCommand implements Command {
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
 
-        request.setAttribute("activities", activities);
-        request.setAttribute("kinds", kinds);
+        request.setAttribute("activities", activitiesList);
+//        request.setAttribute("activities", activities);
+//        request.setAttribute("kinds", kinds);
         request.getSession().setAttribute("pagenumber", page);
         request.setAttribute("rowsPerPage", rowsPerPage);
 

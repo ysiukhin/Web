@@ -33,6 +33,12 @@ public class EntityListService<T> {
                 .orElseThrow(() -> new ServiceException("There is no any Accounts in database."));
     }
 
+    public List<T> getInRangeByRowNumber(int limit, int offset, String sqlQuery) {
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .getBeansInRangeByRowNumber(limit, offset, sqlQuery)
+                .orElseThrow(() -> new ServiceException("There is no any Accounts in database."));
+    }
+
     public T getById(int id) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansById(id)

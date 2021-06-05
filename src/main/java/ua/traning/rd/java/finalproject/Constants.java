@@ -19,6 +19,9 @@ public final class Constants {
 
     public static final String CURRENT_ACCOUNT = "CURRENT_ACCOUNT";
 
+    public static final String SQL_ADMIN_ACTIVITY =
+            "SELECT a.id, a.activity_en, a.activity_ru, k.kind_en, k.kind_ru, a.kind_id" +
+                    " FROM activity a INNER JOIN kind k ON k.id = a.kind_id";
 
     public static final int ROWS_PER_PAGE = 10;
 }

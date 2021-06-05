@@ -27,12 +27,12 @@ public class DbServiceImpl<T> implements DbService<T> {
                 Collections.singletonList(id)).get(0)));
     }
 
-//    public Optional<List<T>> getBeansInRange(String columnName, List<Object> fields) {
-//        return Optional.ofNullable(doService(() -> dao.selectBy(columnName, fields)));
-//    }
-
     public Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset) {
         return Optional.ofNullable(doService(() -> dao.selectByRecordNumberInRange(limit, offset)));
+    }
+
+    public Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset, String sqlQuery) {
+        return Optional.ofNullable(doService(() -> dao.selectByRecordNumberInRange(limit, offset, sqlQuery)));
     }
 
     public Optional<List<T>> getBeansFromList(String columnName, List<Object> fields) {
@@ -58,7 +58,7 @@ public class DbServiceImpl<T> implements DbService<T> {
     }
 
     public int beanQuantity() {
-        return doService(() -> dao.size());
+        return doService(dao::size);
     }
 
     public int deleteBean(int id) {

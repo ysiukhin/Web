@@ -47,9 +47,13 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public List<T> selectByRecordNumberInRange(int limit, int offset) {
-        StringBuilder sqlQuery = new StringBuilder(buildSelect()).append(" LIMIT ? OFFSET ?");
+        return selectByRecordNumberInRange(limit, offset, (buildSelect() + " LIMIT ? OFFSET ?"));
+    }
+
+    @Override
+    public List<T> selectByRecordNumberInRange(int limit, int offset, String sqlQuery) {
         try {
-            try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery.toString())) {
+            try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery)) {
                 pst.setInt(1, limit);
                 pst.setInt(2, offset);
                 try (ResultSet resultSet = pst.executeQuery()) {

@@ -79,14 +79,14 @@
                     <td>
                         <select name="activity_kind" id="activity_kind" class="input" style="width: 100%">
                             <option><fmt:message key="table.activity.column.activity_kind"/></option>
-                            <c:forEach var="entry" items="${requestScope.kinds.entrySet()}">
-                                <option value="${entry.value.kindEn} | ${entry.value.kindRu}">${entry.value.kindEn}
-                                    | ${entry.value.kindRu}</option>
+                            <c:forEach var="activity" items="${requestScope.activities}">
+                                <option value="${activity.kindEn} | ${activity.kindRu}">${activity.kindEn}
+                                    | ${activity.kindRu}</option>
                             </c:forEach>
                         </select>
                     </td>
-                    <td style="display:none;"><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"
-                                                     name="kind_id" id="kind_id" class="input"></td>
+                    <td hidden="hidden"><input type="text" placeholder="<fmt:message key="table.kind.column.id"/>"
+                                               name="kind_id" id="kind_id" class="input"></td>
                 </tr>
                 <tr>
                     <th style="display:none;"><fmt:message key="table.activity.column.id"/></th>
@@ -100,10 +100,9 @@
                         <td style="display:none;"><c:out value="${activity.id}"/></td>
                         <td><c:out value="${activity.activityRu}"/></td>
                         <td><c:out value="${activity.activityEn}"/></td>
-                        <td><c:out value="${requestScope.kinds.get(activity.kindId).kindEn}"/> | <c:out
-                                value="${requestScope.kinds.get(activity.kindId).kindRu}"/>
+                        <td><c:out value="${activity.kindEn}"/> | <c:out value="${activity.kindRu}"/>
                         </td>
-                        <td style="display:none;"><c:out value="${requestScope.kinds.get(activity.kindId).id}"/></td>
+                        <td style="display:none;"><c:out value="${activity.kindId}"/></td>
                     </tr>
                 </c:forEach>
                 <tr>

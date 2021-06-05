@@ -34,6 +34,8 @@ public abstract class Dao<T> {
 
     public abstract List<T> selectByRecordNumberInRange(int limit, int offset);
 
+    public abstract List<T> selectByRecordNumberInRange(int limit, int offset, String sqlQuery);
+
     public abstract List<T> select();
 
     public abstract int insert(T data);

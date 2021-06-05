@@ -100,7 +100,6 @@ public class ActivityActionCommand implements Command {
 
         String activity_en = req.getParameter("activity_en");
         String activity_ru = req.getParameter("activity_ru");
-        String activity_kind = req.getParameter("activity_kind");
 
         if (nonNull(activity_en) && nonNull(activity_ru)
                 && activity_en.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50)
@@ -109,12 +108,7 @@ public class ActivityActionCommand implements Command {
                     new ActivityBuilder()
                             .addActivityEn(activity_en)
                             .addActivityRu(activity_ru)
-                            .addKindId(new EntityListService<>(Kind.class)
-                                    .getIdByColumn("kind_en",
-                                            req.getParameter("activity_kind")
-                                                    .substring(0, activity_kind.indexOf("|") - 1)
-                                    )
-                                    .get(0).getId())
+                            .addKindId(Integer.parseInt(req.getParameter("kind_id")))
                             .build());
         } else {
             return Optional.empty();

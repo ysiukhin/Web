@@ -1,13 +1,9 @@
 package ua.traning.rd.java.finalproject.core.model;
 
-import ua.traning.rd.java.finalproject.core.annotation.Linked;
 import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
 import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
-import ua.traning.rd.java.finalproject.core.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.List;
-
 
 public class AdminActivityList implements Serializable {
     @PrimaryKey
@@ -17,27 +13,46 @@ public class AdminActivityList implements Serializable {
     private String activityEn;
     @TableColumn("activity_ru")
     private String activityRu;
+    @TableColumn("kind_ru")
+    private String kindRu;
+    @TableColumn("kind_en")
+    private String kindEn;
     @TableColumn("kind_id")
     private int kindId;
-    @Linked("activity_id")
-    private List<AccountActivity> activities;
-    @Linked("activity_id")
-    private List<Request> requests;
 
-    public List<Request> getRequests() {
-        return requests;
+//    public AdminActivityList() {}
+//
+//    private AdminActivityList(Builder builder) {
+//        this.id = builder.id;
+//        this.activityEn = builder.activityEn;
+//        this.activityRu = builder.activityRu;
+//        this.kindEn = builder.kindEn;
+//        this.kindRu = builder.kindRu;
+//        this.kindId = builder.kindId;
+//    }
+
+    public String getKindRu() {
+        return kindRu;
     }
 
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
+    public void setKindRu(String kindRu) {
+        this.kindRu = kindRu;
     }
 
-    public List<AccountActivity> getActivities() {
-        return activities;
+    public int getKindId() {
+        return kindId;
     }
 
-    public void setActivities(List<AccountActivity> activities) {
-        this.activities = activities;
+    public void setKindId(int kindId) {
+        this.kindId = kindId;
+    }
+
+    public String getKindEn() {
+        return kindEn;
+    }
+
+    public void setKindEn(String kindEn) {
+        this.kindEn = kindEn;
     }
 
     public int getId() {
@@ -64,11 +79,40 @@ public class AdminActivityList implements Serializable {
         this.activityRu = activityRu;
     }
 
-    public int getKindId() {
-        return kindId;
-    }
-
-    public void setKindId(int kindId) {
-        this.kindId = kindId;
-    }
+//    public static class Builder {
+//        private int id;
+//        private String activityEn;
+//        private String activityRu;
+//        private String kindRu;
+//        private String kindEn;
+//        private int kindId;
+//
+//        Builder addId(int id) {
+//            this.id = id;
+//            return this;
+//        }
+//        Builder addActivityEn(String activityEn) {
+//            this.activityEn = activityEn;
+//            return this;
+//        }
+//        Builder addActivityRu(String activityRu) {
+//            this.activityRu = activityRu;
+//            return this;
+//        }
+//        Builder addKindEn(String kindEn) {
+//            this.kindEn = kindEn;
+//            return this;
+//        }
+//        Builder addKindRu(String kindRu) {
+//            this.kindRu = kindRu;
+//            return this;
+//        }
+//        Builder addKindRu(int kindId) {
+//            this.kindId = kindId;
+//            return this;
+//        }
+//        AdminActivityList build() {
+//            return new AdminActivityList(this);
+//        }
+//    }
 }
