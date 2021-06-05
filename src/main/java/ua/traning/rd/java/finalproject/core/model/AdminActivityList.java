@@ -8,8 +8,8 @@ import ua.traning.rd.java.finalproject.core.annotation.TableName;
 import java.io.Serializable;
 import java.util.List;
 
-@TableName(dbTable = "activity")
-public class Activity implements Serializable {
+
+public class AdminActivityList implements Serializable {
     @PrimaryKey
     @TableColumn("id")
     private int id;

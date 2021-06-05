@@ -6,7 +6,6 @@ public class RequestBuilder {
     boolean request;
     private int accountId;
     private int activityId;
-    private Integer status;
 
     public RequestBuilder addId(int id) {
         this.id = id;
@@ -28,18 +27,12 @@ public class RequestBuilder {
         return this;
     }
 
-    public RequestBuilder addStatus(Integer status) {
-        this.status = status;
-        return this;
-    }
-
     public Request build() {
         Request newRequest = new Request();
         newRequest.setId(id);
         newRequest.setRequest(request);
         newRequest.setAccountId(accountId);
         newRequest.setActivityId(activityId);
-        newRequest.setStatus(status);
         return newRequest;
     }
 }

@@ -61,14 +61,13 @@ CREATE TABLE IF NOT EXISTS `activity`
     `id`          INT         NOT NULL AUTO_INCREMENT,
     `activity_en` VARCHAR(50) NOT NULL,
     `activity_ru` VARCHAR(50) NOT NULL,
-    `status`      TINYINT     NOT NULL DEFAULT 1,
     `kind_id`     INT         NOT NULL,
     PRIMARY KEY (`id`, `kind_id`),
     INDEX `fk_activity_kind_idx` (`kind_id` ASC) VISIBLE,
     CONSTRAINT `fk_activity_kind`
         FOREIGN KEY (`kind_id`)
             REFERENCES `kind` (`id`)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB
@@ -82,22 +81,21 @@ DROP TABLE IF EXISTS `account_activity`;
 
 CREATE TABLE IF NOT EXISTS `account_activity`
 (
-    `id`          INT     NOT NULL AUTO_INCREMENT,
-    `status`      TINYINT NOT NULL,
-    `account_id`  INT     NOT NULL,
-    `activity_id` INT     NOT NULL,
+    `id`          INT NOT NULL AUTO_INCREMENT,
+    `account_id`  INT NOT NULL,
+    `activity_id` INT NOT NULL,
     PRIMARY KEY (`id`, `account_id`, `activity_id`),
     INDEX `fk_account_activity_activity_idx` (`activity_id` ASC) INVISIBLE,
     INDEX `fk_account_activity_account_idx` (`account_id` ASC) VISIBLE,
     CONSTRAINT `fk_account_activity_account`
         FOREIGN KEY (`account_id`)
             REFERENCES `account` (`id`)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT `fk_account_activity_activity`
         FOREIGN KEY (`activity_id`)
             REFERENCES `activity` (`id`)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB
@@ -120,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `record`
     CONSTRAINT `fk_record_account_activity1`
         FOREIGN KEY (`account_activity_id`)
             REFERENCES `account_activity` (`id`)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB;
@@ -135,7 +133,6 @@ CREATE TABLE IF NOT EXISTS `request`
 (
     `id`          INT     NOT NULL AUTO_INCREMENT,
     `request`     TINYINT NOT NULL DEFAULT 0,
-    `status`      TINYINT NULL,
     `account_id`  INT     NOT NULL,
     `activity_id` INT     NOT NULL,
     PRIMARY KEY (`id`, `account_id`, `activity_id`),
@@ -144,12 +141,12 @@ CREATE TABLE IF NOT EXISTS `request`
     CONSTRAINT `fk_request_account1`
         FOREIGN KEY (`account_id`)
             REFERENCES `account` (`id`)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE,
     CONSTRAINT `fk_request_activity1`
         FOREIGN KEY (`activity_id`)
             REFERENCES `activity` (`id`)
-            ON DELETE RESTRICT
+            ON DELETE CASCADE
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB;

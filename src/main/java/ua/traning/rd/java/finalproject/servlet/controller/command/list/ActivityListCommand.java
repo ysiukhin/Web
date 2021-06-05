@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Activity;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -28,7 +28,7 @@ public class ActivityListCommand implements Command {
         EntityListService<Activity> activityService = new EntityListService<>(Activity.class);
         try {
             totalRecords = activityService.totalQuantity();
-        } catch (ExceptionService e) {
+        } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
         } catch (Exception e) {

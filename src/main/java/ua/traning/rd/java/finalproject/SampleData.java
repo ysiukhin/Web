@@ -204,7 +204,6 @@ public class SampleData {
                     AccountActivity accountActivity = new AccountActivity();
                     accountActivity.setAccountId(accounts.get(j).getId());
                     accountActivity.setActivityId(randomActivity);
-                    accountActivity.setStatus(true);
                     usedActivities.add(randomActivity);
 //                    LOGGER.info("Before: {}", accountActivity);
                     DbServiceAccountActivity.saveBean(accountActivity);
@@ -242,7 +241,6 @@ public class SampleData {
                     AccountActivity accountActivity = new AccountActivity();
                     accountActivity.setAccountId(accounts.get(j).getId());
                     accountActivity.setActivityId(randomActivity);
-                    accountActivity.setStatus(true);
                     usedActivities.add(randomActivity);
                     DbServiceAccountActivity.saveBean(accountActivity);
                 }

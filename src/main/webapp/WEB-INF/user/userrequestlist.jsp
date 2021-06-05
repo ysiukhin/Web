@@ -75,9 +75,12 @@
                                                id="account_activity_id" class="input"></td>
                     <td hidden="hidden"><input type="text" placeholder="request_id" name="request_id" id="request_id"
                                                class="input"></td>
-                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="activity_id" id="activity_id" class="input"></td>--%>
-                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="account_id" id="account_id" class="input"></td>--%>
-                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="request_id" id="request_id" class="input"></td>--%>
+                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="activity_id" id="activity_id"--%>
+                    <%--                                                     class="input"></td>--%>
+                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="account_id" id="account_id"--%>
+                    <%--                                                     class="input"></td>--%>
+                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="request_id" id="request_id"--%>
+                    <%--                                                     class="input"></td>--%>
 
                 </tr>
                 <tr>
@@ -115,7 +118,7 @@
                                 <td style="background: #EDEDED" ;></td>
                             </c:when>
                             <c:otherwise>
-                                <td style="background: lightseagreen;"></td>
+                                <td class="processed" style="background: lightseagreen;"></td>
                             </c:otherwise>
                         </c:choose>
                         <td style="display:none;"><c:out value="${activity.id}"/></td>

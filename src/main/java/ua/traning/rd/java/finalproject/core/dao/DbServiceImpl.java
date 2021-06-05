@@ -23,13 +23,13 @@ public class DbServiceImpl<T> implements DbService<T> {
     }
 
     public Optional<T> getBeansById(int id) {
-        return Optional.ofNullable(doService(() -> dao.selectBy("id",
+        return Optional.ofNullable(doService(() -> dao.selectBy(Collections.singletonList("id"),
                 Collections.singletonList(id)).get(0)));
     }
 
-    public Optional<List<T>> getBeansInRange(String columnName, List<Object> fields) {
-        return Optional.ofNullable(doService(() -> dao.selectBy(columnName, fields)));
-    }
+//    public Optional<List<T>> getBeansInRange(String columnName, List<Object> fields) {
+//        return Optional.ofNullable(doService(() -> dao.selectBy(columnName, fields)));
+//    }
 
     public Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset) {
         return Optional.ofNullable(doService(() -> dao.selectByRecordNumberInRange(limit, offset)));
@@ -39,9 +39,14 @@ public class DbServiceImpl<T> implements DbService<T> {
         return Optional.ofNullable(doService(() -> dao.selectByFromList(columnName, fields)));
     }
 
+    public Optional<List<T>> getBeansBy(List<String> columnNames, List<Object> values) {
+        return Optional.ofNullable(doService(() -> dao.selectBy(columnNames, values)));
+    }
+
     public Optional<List<T>> getBeansBy(String columnName, Object value) {
-        return Optional.ofNullable(doService(() -> dao.selectBy(columnName,
-                Collections.singletonList(value))));
+        return Optional.ofNullable(doService(() ->
+                dao.selectBy(Collections.singletonList(columnName),
+                        Collections.singletonList(value))));
     }
 
     public int saveBean(T bean) {
@@ -50,6 +55,10 @@ public class DbServiceImpl<T> implements DbService<T> {
 
     public int updateBean(T bean) {
         return doService(() -> dao.update(bean));
+    }
+
+    public int beanQuantity() {
+        return doService(() -> dao.size());
     }
 
     public int deleteBean(int id) {

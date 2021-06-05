@@ -10,13 +10,17 @@ public interface DbService<T> {
 
     Optional<List<T>> getBeansBy(String columnName, Object value);
 
-    Optional<List<T>> getBeansInRange(String columnName, List<Object> fields);
+    Optional<List<T>> getBeansBy(List<String> columnNames, List<Object> values);
+
+//    Optional<List<T>> getBeansInRange(String columnName, List<Object> fields);
 
     Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset);
+
+    Optional<List<T>> getBeansFromList(String columnName, List<Object> fields);
 
     int saveBean(T account);
 
     int updateBean(T account);
 
-    int deleteBean(int id);
+    int beanQuantity();
 }

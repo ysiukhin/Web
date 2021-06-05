@@ -54,14 +54,14 @@ public class Servlet extends HttpServlet {
         commands.put("topageactivity", new ActivityListToPageCommand());
         commands.put("topagekind", new KindListToPageCommand());
         commands.put("topagerequest", new RequestListToPageCommand());
-        commands.put("topageuserrequest", new RequestUserListToPageCommand());
+        commands.put("topageuserrequest", new UserRequestListToPageCommand());
 
 
         commands.put("accountAction", new AccountActionCommand());
         commands.put("activityAction", new ActivityActionCommand());
         commands.put("kindAction", new KindActionCommand());
         commands.put("requestAction", new RequestActionCommand());
-        commands.put("userRequestAction", new UserActivityActionCommand());
+        commands.put("userRequestAction", new UserRequestActionCommand());
 
         commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();

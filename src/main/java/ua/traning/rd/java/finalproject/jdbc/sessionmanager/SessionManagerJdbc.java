@@ -19,7 +19,6 @@ public class SessionManagerJdbc implements SessionManager {
     private DatabaseSession databaseSession;
 
     public SessionManagerJdbc(DataSource dataSource) {
-//        LOGGER.info("SessionManagerJdbc()");
         if (dataSource == null) {
             throw new SessionManagerException("Datasource is null");
         }
@@ -28,11 +27,9 @@ public class SessionManagerJdbc implements SessionManager {
 
     @Override
     public void beginSession() {
-//        LOGGER.info("SessionManagerJdbc.beginSession()");
         try {
             connection = dataSource.getConnection();
             databaseSession = new DatabaseSessionJdbc(connection);
-//            LOGGER.info("connection: {}", connection);
         } catch (SQLException e) {
             throw new SessionManagerException(e);
         }
@@ -40,7 +37,6 @@ public class SessionManagerJdbc implements SessionManager {
 
     @Override
     public void commitSession() {
-//        LOGGER.info("SessionManagerJdbc.commitSession()");
         checkConnection();
         try {
             connection.commit();
@@ -61,7 +57,6 @@ public class SessionManagerJdbc implements SessionManager {
 
     @Override
     public void close() {
-//        LOGGER.info("SessionManagerJdbc.close");
         checkConnection();
         try {
             connection.close();
@@ -72,7 +67,6 @@ public class SessionManagerJdbc implements SessionManager {
 
     @Override
     public DatabaseSession getCurrentSession() {
-//        LOGGER.info("SessionManagerJdbc.getCurrentSession");
         checkConnection();
         return databaseSession;
     }

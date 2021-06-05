@@ -7,7 +7,6 @@ public class ActivityBuilder {
     private int id = 0;
     private String activityEn = "";
     private String activityRu = "";
-    private boolean status = false;
     private int kindId = 0;
     private List<AccountActivity> activities = new ArrayList<>();
     private List<Request> requests = new ArrayList<>();
@@ -27,10 +26,6 @@ public class ActivityBuilder {
         return this;
     }
 
-    public ActivityBuilder addStatus(boolean status) {
-        this.status = status;
-        return this;
-    }
 
     public ActivityBuilder addKindId(int kindId) {
         this.kindId = kindId;
@@ -53,7 +48,6 @@ public class ActivityBuilder {
         newActivity.setId(id);
         newActivity.setActivityEn(activityEn);
         newActivity.setActivityRu(activityRu);
-        newActivity.setStatus(status);
         newActivity.setKindId(kindId);
         newActivity.setActivities(activities);
         newActivity.setRequests(requests);

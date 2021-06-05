@@ -115,7 +115,6 @@ public class ActivityActionCommand implements Command {
                                                     .substring(0, activity_kind.indexOf("|") - 1)
                                     )
                                     .get(0).getId())
-                            .addStatus(true)
                             .build());
         } else {
             return Optional.empty();

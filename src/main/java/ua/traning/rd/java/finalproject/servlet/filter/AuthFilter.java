@@ -2,25 +2,14 @@ package ua.traning.rd.java.finalproject.servlet.filter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
-import ua.traning.rd.java.finalproject.core.service.LoginService;
-import ua.traning.rd.java.finalproject.servlet.controller.command.CommandUtility;
-import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import static java.util.Objects.nonNull;
 
 //@WebFilter(filterName = "AuthFilter", urlPatterns = "/*")
 public class AuthFilter extends AbstractFilter {

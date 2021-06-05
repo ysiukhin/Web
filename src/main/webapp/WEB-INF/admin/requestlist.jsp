@@ -24,8 +24,9 @@
 
 <body>
 <c:if test="${sessionScope.isMessage}">
-    <custom:messageform actionStatus="${sessionScope.actionStatus}" actionMessage=""/>
     <c:set scope="session" var="isMessage" value="false"/>
+    <custom:messageform actionStatus="${sessionScope.actionStatus}" actionMessage="${sessionScope.actionMessage}"/>
+    <%--    <c:set scope="session" var="isMessage" value="false"/>--%>
 </c:if>
 
 <div class="header-panel">
@@ -65,8 +66,8 @@
                     <td><input type="submit" value="<fmt:message key="entity.action.denied"/>" name="action"
                                class="input"></td>
                 </tr>
-                <tr>
-                    <td style="display:none;">
+                <tr hidden="hidden">
+                    <td>
                         <input type="text" placeholder="<fmt:message key="table.request.column.id"/>" name="id" id="id"
                                class="input">
                     </td>
@@ -75,7 +76,7 @@
                                placeholder="<fmt:message key="table.request.column.request"/>" name="request"
                                id="request" class="input">
                     </td>
-                    <td style="display:none;">
+                    <td>
                         <input type="text" readonly="readonly"
                                placeholder="<fmt:message key="table.request.column.account_id"/>" name="account_id"
                                id="account_id" class="input">
@@ -90,7 +91,7 @@
                                placeholder="<fmt:message key="table.request.column.account_last_name"/>"
                                name="account_last_name" id="account_last_name" class="input">
                     </td>
-                    <td style="display:none;">
+                    <td hidden="hidden">
                         <input type="text" placeholder="<fmt:message key="table.request.column.activity_id"/>"
                                name="activity_id" id="activity_id" class="input">
                     </td>
@@ -104,33 +105,28 @@
                                placeholder="<fmt:message key="table.request.column.status"/>" name="status" id="status"
                                class="input">
                     </td>
-                    <td style="display:none;">
-                        <input type="text" placeholder="<fmt:message key="table.request.column.activity_id"/>"
-                               name="req_status" id="req_status" class="input">
+                    <td>
+                        <input type="text" placeholder="<fmt:message key="table.account.column.email"/>"
+                               name="email" id="email" class="input">
                     </td>
                 </tr>
                 <tr>
                     <th style="display:none;"><fmt:message key="table.request.column.id"/></th>
-                    <th><fmt:message key="table.request.column.request"/></th>
-                    <th style="display:none;"><fmt:message key="table.request.column.account_id"/></th>
-                    <th><fmt:message key="table.request.column.account_first_name"/></th>
-                    <th><fmt:message key="table.request.column.account_last_name"/></th>
-                    <th style="display:none;"><fmt:message key="table.request.column.activity_id"/></th>
+                    <%--                    <th><fmt:message key="table.request.column.request"/></th>--%>
+                    <th style="display:none;"><fmt:message key="table.account.column.id"/></th>
+                    <th><fmt:message key="table.account.column.first_name"/></th>
+                    <th><fmt:message key="table.account.column.last_name"/></th>
+                    <th style="display:none;"><fmt:message key="table.activity.column.id"/></th>
                     <th><fmt:message key="table.request.column.activity"/></th>
-                    <th><fmt:message key="table.request.column.status"/></th>
-                    <th style="display:none;"><fmt:message key="table.request.column.status"/></th>
+                    <th><fmt:message key="table.request.column.request"/></th>
+
+                    <%--                    <th><fmt:message key="table.request.column.status"/></th>--%>
+                    <%--                    <th style="display:none;"><fmt:message key="table.request.column.status"/></th>--%>
+                    <th style="display:none;"><fmt:message key="table.account.column.email"/></th>
                 </tr>
                 <c:forEach var="list" items="${requestScope.resultList}">
                     <tr class="tblrow">
                         <td style="display:none;"><c:out value="${list.request.id}"/></td>
-                        <c:choose>
-                            <c:when test="${list.request.request}">
-                                <td><fmt:message key="table.request.request.message.true"/></td>
-                            </c:when>
-                            <c:otherwise>
-                                <td><fmt:message key="table.request.request.message.false"/></td>
-                            </c:otherwise>
-                        </c:choose>
                         <td style="display:none;"><c:out value="${list.account.id}"/></td>
                         <td><c:out value="${list.account.firstName}"/></td>
                         <td><c:out value="${list.account.lastName}"/></td>
@@ -144,19 +140,28 @@
                             </c:otherwise>
                         </c:choose>
                         <c:choose>
-                            <c:when test="${list.request.status.present}">
-                                <c:if test="${list.request.status.get() eq 0}">
-                                    <td class="processed"><fmt:message key="table.request.column.status.denied"/></td>
-                                </c:if>
-                                <c:if test="${list.request.status.get() eq 1}">
-                                    <td class="processed"><fmt:message key="table.request.column.status.approved"/></td>
-                                </c:if>
+                            <c:when test="${list.request.request}">
+                                <td><fmt:message key="table.request.request.message.true"/></td>
                             </c:when>
                             <c:otherwise>
-                                <td><fmt:message key="table.request.column.status.process"/></td>
+                                <td><fmt:message key="table.request.request.message.false"/></td>
                             </c:otherwise>
                         </c:choose>
-                        <td style="display:none;"><c:out value="${list.request.status}"/></td>
+                            <%--                        <c:choose>--%>
+                            <%--                            <c:when test="${list.request.status.present}">--%>
+                            <%--                                <c:if test="${list.request.status.get() eq 0}">--%>
+                            <%--                                    <td class="processed"><fmt:message key="table.request.column.status.denied"/></td>--%>
+                            <%--                                </c:if>--%>
+                            <%--                                <c:if test="${list.request.status.get() eq 1}">--%>
+                            <%--                                    <td class="processed"><fmt:message key="table.request.column.status.approved"/></td>--%>
+                            <%--                                </c:if>--%>
+                            <%--                            </c:when>--%>
+                            <%--                            <c:otherwise>--%>
+                            <%--                                <td><fmt:message key="table.request.column.status.process"/></td>--%>
+                            <%--                            </c:otherwise>--%>
+                            <%--                        </c:choose>--%>
+                            <%--                        <td style="display:none;"><c:out value="${list.request.status}"/></td>--%>
+                        <td style="display:none;"><c:out value="${list.account.email}"/></td>
                     </tr>
                 </c:forEach>
                 <tr>

@@ -18,16 +18,6 @@ public class Request implements Serializable {
     private int accountId;
     @TableColumn("activity_id")
     private int activityId;
-    @TableColumn("status")
-    private Integer status;
-
-    public Optional<Integer> getStatus() {
-        return Optional.ofNullable(status);
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     public int getId() {
         return id;

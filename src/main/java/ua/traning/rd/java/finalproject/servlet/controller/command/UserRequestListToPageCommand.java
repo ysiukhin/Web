@@ -3,10 +3,8 @@ package ua.traning.rd.java.finalproject.servlet.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.*;
-import ua.traning.rd.java.finalproject.core.service.AccountActivityRequestEntity;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
-import ua.traning.rd.java.finalproject.core.service.RequestListService;
+import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.page.RequestListToPageCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -15,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RequestUserListToPageCommand implements Command {
+public class UserRequestListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListToPageCommand.class);
 
     @Override
@@ -53,7 +51,7 @@ public class RequestUserListToPageCommand implements Command {
                     .collect(Collectors.toMap(Request::getActivityId, accountRequest -> accountRequest));
             kinds = new EntityListService<>(Kind.class).getAllEntities()
                     .stream().collect(Collectors.toMap(Kind::getId, kind -> kind));
-        } catch (ExceptionService e) {
+        } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
         } catch (Exception e) {
@@ -68,7 +66,6 @@ public class RequestUserListToPageCommand implements Command {
         request.getSession().setAttribute("pagenumber", page);
         request.setAttribute("rowsPerPage", rowsPerPage);
 
-        LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);
         LOGGER.info("OUT RequestUserListToPageCommand");
         return "/WEB-INF/user/userrequestlist.jsp";
     }

@@ -151,4 +151,4 @@ VALUES ('admin', 'админ', NULL, 'admin_login@timecounter.com', 'dc073ece3e8
         1),
        ('Сигис', 'Радзиванский', NULL, 'сигис_радзиванский_login@timecounter.com', '8a333f25af5b7b356e7471afb2043163',
         1),
-       ('Richard', 'Torres', NULL, 'richard_torres_login@timecounter.com', '6eceaee1ca173426d672f38c8e028ee3', 1)
+       ('Richard', 'Torres', NULL, 'richard_torres_login@timecounter.com', '6eceaee1ca173426d672f38c8e028ee3', 1);

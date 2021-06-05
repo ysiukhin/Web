@@ -11,12 +11,12 @@ import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-public class UserActivityActionCommand implements Command {
+public class UserRequestActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
 
     @Override
     public String execute(HttpServletRequest request) {
-        LOGGER.info("IN ActivityUserActionCommand");
+        LOGGER.info("IN UserRequestActionCommand");
 
         ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
@@ -37,7 +37,7 @@ public class UserActivityActionCommand implements Command {
             StringJoiner mes = new StringJoiner(" ");
             request.getSession().setAttribute("isMessage", true);
 
-            if (new EntityListService<>(Request.class).updateEntity(newRequest) == 1) {
+            if (new EntityListService<>(Request.class).insertEntity(newRequest) == 1) {
                 request.getSession().setAttribute("actionStatus", true);
                 mes.add(messages.getString("user.request.ok"));
             } else {
@@ -45,7 +45,7 @@ public class UserActivityActionCommand implements Command {
                 mes.add(messages.getString("user.request.ok"));
             }
             request.getSession().setAttribute("actionMessage", mes.toString());
-            LOGGER.info("OUT RequestActionCommand");
+            LOGGER.info("OUT UserRequestActionCommand");
             return "redirect:/userRequestList?page=userRequestList";
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

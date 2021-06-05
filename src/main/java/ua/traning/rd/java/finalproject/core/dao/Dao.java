@@ -26,7 +26,9 @@ public abstract class Dao<T> {
         this.daoEntity = daoEntity;
     }
 
-    public abstract List<T> selectBy(String column, List<Object> fields);
+    public abstract List<T> selectBy(List<String> column, List<Object> fields);
+
+    public abstract List<T> selectBy(String sqlQuery, List<Object> values);
 
     public abstract List<T> selectByFromList(String column, List<Object> values);
 
@@ -39,6 +41,10 @@ public abstract class Dao<T> {
     public abstract int update(T data);
 
     public abstract int delete(int id);
+
+    public abstract int delete(List<String> columns, List<Object> values);
+
+    public abstract int size();
 
     public SessionManager getSessionManager() {
         return sessionManager;

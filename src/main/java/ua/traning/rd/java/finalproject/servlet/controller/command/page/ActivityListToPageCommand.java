@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.Activity;
 import ua.traning.rd.java.finalproject.core.model.Kind;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -44,7 +44,7 @@ public class ActivityListToPageCommand implements Command {
             kinds = new EntityListService<>(Kind.class).getAllEntities()
                     .stream().collect(Collectors.toMap(Kind::getId, kind -> kind));
 
-        } catch (ExceptionService e) {
+        } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-package ua.traning.rd.java.finalproject.core.dao;
+package ua.traning.rd.java.finalproject.servlet.exception;
 
 public class DaoException extends RuntimeException {
     public DaoException(Exception ex) {

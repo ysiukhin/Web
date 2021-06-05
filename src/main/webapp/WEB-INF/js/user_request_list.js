@@ -11,8 +11,8 @@ function checkEmptyInput() {
         activity = document.getElementById("activity").value,
         current_activity = document.getElementById("current_activity").value,
         current_request = document.getElementById("current_request").value;
-    activity_id = document.getElementById("activity_id").value,
-        account_activity_id = document.getElementById("account_activity_id").value,
+        activity_id = document.getElementById("activity_id").value,
+            account_activity_id = document.getElementById("account_activity_id").value,
         request_id = document.getElementById("request_id").value;
 
     //     if (id === "") {
@@ -88,9 +88,11 @@ function addHtmlTableRow() {
 function selectedRowToInput() {
     console.info("selectedRowToInput");
     for (var i = 3; i < table.rows.length - 1; i++) {
-        // if (table.rows[i].cells[4].classList.contains("processed")) {
-        //     continue;
-        // }
+        console.log("table.rows[i].cells: 3" + table.rows[i].cells[3].classList.value);
+        console.log("table.rows[i].cells: 4" + table.rows[i].cells[4].classList.value);
+        if (table.rows[i].cells[3].classList.contains("processed")) {
+            continue;
+        }
         table.rows[i].onclick = function () {
             // get the seected row index
             rIndex = this.rowIndex;

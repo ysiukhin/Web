@@ -3,7 +3,7 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.service.AccountActivityRequestEntity;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.core.service.RequestListService;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
@@ -35,8 +35,9 @@ public class RequestListToPageCommand implements Command {
 
         List<AccountActivityRequestEntity> resultList;
         try {
-            resultList = new RequestListService().getList(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
-        } catch (ExceptionService e) {
+            resultList = new RequestListService().getList(rowsPerPage, rowsPerPage * (page - 1));
+//            resultList = new RequestListService().getList(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
+        } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
         } catch (Exception e) {

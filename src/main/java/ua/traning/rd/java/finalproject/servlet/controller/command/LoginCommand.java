@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.service.LoginService;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
 import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
@@ -37,7 +37,7 @@ public class LoginCommand implements Command {
         Account account;
         try {
             account = new LoginService().checkAccount(email, password);
-        } catch (ExceptionService e) {
+        } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.authorization.failed"));
         } catch (Exception e) {

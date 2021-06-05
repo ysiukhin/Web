@@ -5,7 +5,7 @@ import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
 import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 import ua.traning.rd.java.finalproject.core.annotation.TableName;
 import ua.traning.rd.java.finalproject.core.dao.Dao;
-import ua.traning.rd.java.finalproject.core.dao.DaoException;
+import ua.traning.rd.java.finalproject.servlet.exception.DaoException;
 import ua.traning.rd.java.finalproject.core.sessionmanager.SessionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.util.*;
-
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DaoJdbc<T> extends Dao<T> {
 
@@ -62,14 +63,23 @@ public class DaoJdbc<T> extends Dao<T> {
     }
 
     @Override
-    public List<T> selectBy(String column, List<Object> fields) {
-        String sqlQuery = buildSelect() + (fields.size() > 1 ?
-                " WHERE " + column + " between ? and ?" : " WHERE " + column + "=?");
+    public List<T> selectBy(List<String> columns, List<Object> values) {
+        String sqlQuery = buildSelect().concat(columns.stream().map(str -> str.concat("=?"))
+                .collect(Collectors.joining(",", " WHERE ", "")));
+        return selectQuery(values, sqlQuery);
+    }
+
+    @Override
+    public List<T> selectBy(String sqlQuery, List<Object> values) {
+        return selectQuery(values, sqlQuery);
+    }
+
+    private List<T> selectQuery(List<Object> values, String sqlQuery) {
         try {
             try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery)) {
-                pst.setObject(1, fields.get(0));
-                if (fields.size() > 1) {
-                    pst.setObject(2, fields.get(1));
+                pst.setObject(1, values.get(0));
+                if (values.size() > 1) {
+                    pst.setObject(2, values.get(1));
                 }
                 try (ResultSet resultSet = pst.executeQuery()) {
                     return selectResultSetProcess(resultSet);
@@ -125,12 +135,13 @@ public class DaoJdbc<T> extends Dao<T> {
                         primaryKeyValue = beanField.getInt(bean);
                     }
                 }
-                if (beanField.isAnnotationPresent(Linked.class)) {
+                if (beanField.isAnnotationPresent(Linked.class)
+                        && beanField.getAnnotation(Linked.class).strategy().equals("active")) {
                     Linked foreignKeyColumn = beanField.getAnnotation(Linked.class);
                     ParameterizedType genericList = (ParameterizedType) beanField.getGenericType();
                     Class<?> linked = (Class<?>) genericList.getActualTypeArguments()[0];
                     Dao<?> linkedDao = new DaoJdbc<>(getSessionManager(), linked);
-                    List<?> list = linkedDao.selectBy(foreignKeyColumn.value(),
+                    List<?> list = linkedDao.selectBy(Collections.singletonList(foreignKeyColumn.value()),
                             Collections.singletonList(primaryKeyValue));
                     beanField.set(bean, list);
                 }
@@ -236,7 +247,7 @@ public class DaoJdbc<T> extends Dao<T> {
             String sqlQuery = updateParameters.keySet().toArray(new String[0])[0];
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
-                         getConnection().prepareStatement(sqlQuery.toString(), Statement.RETURN_GENERATED_KEYS)) {
+                         getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
                 }
@@ -254,13 +265,22 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public int delete(int id) {
+        return delete(Collections.singletonList("id"), Collections.singletonList(id));
+    }
+
+    @Override
+    public int delete(List<String> columns, List<Object> values) {
+        String sqlQuery = columns.stream().map(str -> str.concat("=?"))
+                .collect(Collectors.joining(" AND "
+                        , "DELETE FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable() + " WHERE "
+                        , ""));
         try {
             Savepoint savePoint = getConnection().setSavepoint("savePointName");
-            String sqlQuery = "DELETE FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable() +
-                    " WHERE id = ?";
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
-                prepStatement.setInt(1, id);
+                for (int i = 0; i < values.size(); i++) {
+                    prepStatement.setObject(i + 1, values.get(i));
+                }
                 return prepStatement.executeUpdate();
             } catch (SQLException ex) {
                 getConnection().rollback(savePoint);
@@ -268,8 +288,20 @@ public class DaoJdbc<T> extends Dao<T> {
                 throw ex;
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.error("SQL: {} and error message:\n{}", sqlQuery, e.getMessage(), e);
             throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public int size() {
+        String sqlQuery = "SELECT count(*) FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable();
+        try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
+             ResultSet resultSet = pst.executeQuery()) {
+            return resultSet.next() ? resultSet.getInt(1) : 0;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
         }
     }
 }

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
-import ua.traning.rd.java.finalproject.core.service.ExceptionService;
+import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -34,14 +34,11 @@ public class AccountListToPageCommand implements Command {
         int page = pageNumber.map(Integer::parseInt)
                 .orElse((Integer) request.getSession().getAttribute("pagenumber"));
 
-//        LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
-
         List<Account> accounts;
         try {
             accounts = new EntityListService<>(Account.class)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
-//                    .getInRange(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
-        } catch (ExceptionService e) {
+        } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
         } catch (Exception e) {

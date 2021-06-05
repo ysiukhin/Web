@@ -14,8 +14,6 @@ public class AccountActivity implements Serializable {
     @PrimaryKey
     @TableColumn("id")
     private int id;
-    @TableColumn("status")
-    private int status;
     @TableColumn("account_id")
     private int accountId;
     @TableColumn("activity_id")
@@ -39,14 +37,6 @@ public class AccountActivity implements Serializable {
         this.id = id;
     }
 
-    public boolean getStatus() {
-        return status == 1;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status ? 1 : 0;
-    }
-
     public int getAccountId() {
         return accountId;
     }
@@ -67,7 +57,6 @@ public class AccountActivity implements Serializable {
     public String toString() {
         return new StringJoiner(", ", AccountActivity.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
-                .add("status=" + status)
                 .add("accountId=" + accountId)
                 .add("activityId=" + activityId)
                 .add("records=" + records)
