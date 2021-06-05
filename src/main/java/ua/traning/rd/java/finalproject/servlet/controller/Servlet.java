@@ -61,7 +61,7 @@ public class Servlet extends HttpServlet {
         commands.put("activityAction", new ActivityActionCommand());
         commands.put("kindAction", new KindActionCommand());
         commands.put("requestAction", new RequestActionCommand());
-        commands.put("userRequestAction", new ActivityUserActionCommand());
+        commands.put("userRequestAction", new UserActivityActionCommand());
 
         commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
