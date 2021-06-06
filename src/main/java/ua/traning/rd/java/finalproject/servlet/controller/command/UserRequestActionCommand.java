@@ -24,9 +24,10 @@ public class UserRequestActionCommand implements Command {
         ResourceBundle messages = ResourceBundle.getBundle("messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
-        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
-        }
+//        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
+//            LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
+//        }
+
         Account user = ((LoggedAccount) request.getSession().getAttribute("account")).getAccount();
         try {
             Request newRequest = new RequestBuilder()

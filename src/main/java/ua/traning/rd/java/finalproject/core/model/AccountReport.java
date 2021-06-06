@@ -1,12 +1,22 @@
 package ua.traning.rd.java.finalproject.core.model;
 
+import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
+import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
+
+import java.math.BigDecimal;
+
 public class AccountReport {
+    @PrimaryKey
+    @TableColumn("id")
     int id;
+    @TableColumn("first_name")
     private String firstName;
+    @TableColumn("last_name")
     private String lastName;
-    private String email;
-    private int activityCount;
-    private int totalTimeInMinutes;
+    @TableColumn("activity_count")
+    private long activityCount;
+    @TableColumn("total_time_In_minutes")
+    private BigDecimal totalTimeInMinutes;
 
     public void setId(int id) {
         this.id = id;
@@ -20,15 +30,11 @@ public class AccountReport {
         this.lastName = lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setActivityCount(int activityCount) {
+    public void setActivityCount(long activityCount) {
         this.activityCount = activityCount;
     }
 
-    public void setTotalTimeInMinutes(int totalTimeInMinutes) {
+    public void setTotalTimeInMinutes(BigDecimal totalTimeInMinutes) {
         this.totalTimeInMinutes = totalTimeInMinutes;
     }
 
@@ -44,15 +50,11 @@ public class AccountReport {
         return lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public int getActivityCount() {
+    public long getActivityCount() {
         return activityCount;
     }
 
-    public int getTotalTimeInMinutes() {
+    public BigDecimal getTotalTimeInMinutes() {
         return totalTimeInMinutes;
     }
 }

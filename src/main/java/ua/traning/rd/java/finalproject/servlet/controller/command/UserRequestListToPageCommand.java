@@ -2,6 +2,7 @@ package ua.traning.rd.java.finalproject.servlet.controller.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
@@ -39,7 +40,10 @@ public class UserRequestListToPageCommand implements Command {
         Map<Integer, Request> accountRequests;
         Map<Integer, Kind> kinds;
         Account user = ((LoggedAccount) request.getSession().getAttribute("account")).getAccount();
+        List<AcountActivityAndRequest> resultList;
         try {
+            resultList = new EntityListService<>(AcountActivityAndRequest.class)
+                    .getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_REQUEST, user.getId());
             activities = new EntityListService<>(Activity.class)
                     .getAllEntities();
 //                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
@@ -59,6 +63,7 @@ public class UserRequestListToPageCommand implements Command {
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
 
+        request.setAttribute("activityList", resultList);
         request.setAttribute("activities", activities);
         request.setAttribute("kinds", kinds);
         request.setAttribute("accountActivities", accountActivities);

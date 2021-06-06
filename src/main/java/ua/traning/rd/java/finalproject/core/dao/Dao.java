@@ -30,6 +30,8 @@ public abstract class Dao<T> {
 
     public abstract List<T> selectBy(String sqlQuery, List<Object> values);
 
+    public abstract List<T> call(String storedProc, List<Object> values);
+
     public abstract List<T> selectByFromList(String column, List<Object> values);
 
     public abstract List<T> selectByRecordNumberInRange(int limit, int offset);
@@ -47,6 +49,8 @@ public abstract class Dao<T> {
     public abstract int delete(List<String> columns, List<Object> values);
 
     public abstract int size();
+
+    public abstract int size(String sqlQuery);
 
     public SessionManager getSessionManager() {
         return sessionManager;

@@ -32,16 +32,6 @@ public class RequestActionCommand implements Command {
             LOGGER.info("Servlet: --> getParameterMap: key : value --> {} : {}", entry.getKey(), entry.getValue());
         }
         try {
-//            Request newRequest =
-//                    new RequestBuilder()
-//                            .addId(Integer.parseInt(request.getParameter("id")))
-//                            .addAccountId(Integer.parseInt(request.getParameter("account_id")))
-//                            .addActivityId(Integer.parseInt(request.getParameter("activity_id")))
-//                            .addRequest((messages.getString("table.request.request.message.true")
-//                                    .equalsIgnoreCase(request.getParameter("request"))))
-//                            .addStatus(messages.getString("entity.action.approve")
-//                                    .equalsIgnoreCase(request.getParameter("action")) ? 1 : 0)
-//                            .build();
             StringJoiner informationMessage = new StringJoiner(" ");
             informationMessage.add(messages.getString("entity.dao.operation"));
             request.getSession().setAttribute("isMessage", true);
@@ -85,15 +75,6 @@ public class RequestActionCommand implements Command {
                             messages.getString("request.result.message.reject")
             ));
 
-////            StringJoiner mes = new StringJoiner(" ");
-////            mes.add(messages.getString("entity.dao.operation"));
-////            request.getSession().setAttribute("isMessage", true);
-//            if (new EntityListService<>(Request.class)
-//                    .deleteEntity(Integer.parseInt(request.getParameter("id"))) == 1) {
-//            } else {
-//                request.getSession().setAttribute("actionStatus", false);
-//                informationMessage.add(messages.getString("entity.action.result.bad"));
-//            }
             request.getSession().setAttribute("actionMessage", informationMessage.toString());
             LOGGER.info("OUT RequestActionCommand");
             return "redirect:/requestList?page=requestList";

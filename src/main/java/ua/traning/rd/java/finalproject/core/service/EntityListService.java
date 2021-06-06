@@ -65,4 +65,15 @@ public class EntityListService<T> {
         return new DbServiceImpl<>(new DaoJdbc<>(
                 new SessionManagerJdbc(Servlet.dataSource), entityClass)).deleteBean(id);
     }
+
+    public int totalEntities() {
+        return new DbServiceImpl<>(new DaoJdbc<>(
+                new SessionManagerJdbc(Servlet.dataSource), entityClass)).beanQuantity();
+    }
+
+    public List<T> getByStoredProc(String storedProc, int id) {
+        return new DbServiceImpl<>(new DaoJdbc<>(
+                new SessionManagerJdbc(Servlet.dataSource), entityClass)).getBeansByCall(storedProc, id)
+                .orElseThrow(() -> new ServiceException("There is no any Entities in database."));
+    }
 }

@@ -96,6 +96,23 @@ public class DaoJdbc<T> extends Dao<T> {
     }
 
     @Override
+    public List<T> call(String storedProc, List<Object> values) {
+        try {
+            try (CallableStatement callStatement = getConnection().prepareCall(storedProc)) {
+                for (int i = 0; i < values.size(); i++) {
+                    callStatement.setObject(i + 1, values.get(i));
+                }
+                try (ResultSet resultSet = callStatement.executeQuery()) {
+                    return selectResultSetProcess(resultSet);
+                }
+            }
+        } catch (InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error("stored proc Name: {} message: {}", storedProc, e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public List<T> select() {
         String sqlQuery = buildSelect();
         try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
@@ -134,6 +151,10 @@ public class DaoJdbc<T> extends Dao<T> {
                 beanField.setAccessible(true);
                 if (beanField.isAnnotationPresent(TableColumn.class)) {
                     TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
+                    Object obj = resultSet.getObject(tableColumn.value());
+                    if (obj == null) {
+                        LOGGER.info("null");
+                    }
                     beanField.set(bean, resultSet.getObject(tableColumn.value()));
                     if (beanField.isAnnotationPresent(PrimaryKey.class)) {
                         primaryKeyValue = beanField.getInt(bean);
@@ -299,7 +320,11 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public int size() {
-        String sqlQuery = "SELECT count(*) FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable();
+        return size("SELECT count(*) FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable());
+    }
+
+    @Override
+    public int size(String sqlQuery) {
         try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
              ResultSet resultSet = pst.executeQuery()) {
             return resultSet.next() ? resultSet.getInt(1) : 0;

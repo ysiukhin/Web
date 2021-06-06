@@ -21,27 +21,25 @@ public class ReportActivityListCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN ReportActivityListCommand");
 
+
         ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
                 new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
 
-        List<ActivityReport> activityReportList = new ArrayList<>();
+        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
+        int rowsPerPage = recordsPerPage.map(Integer::parseInt).orElse(Constants.ROWS_PER_PAGE);
+
+        request.getSession().setAttribute("pagenumber",
+                Optional.ofNullable(request.getParameter("pagenumber"))
+                        .map(Integer::parseInt).orElse(1));
+        int page = (Integer) request.getSession().getAttribute("pagenumber");
+
+        List<ActivityReport> resultList;
+        int totalRecords;
         try {
-            List<Kind> kindList = new EntityListService<>(Kind.class).getAllEntities();
-            int rowNum = 0;
-            for (Kind kind : kindList) {
-                for (Activity activity : kind.getActivities()) {
-                    activityReportList.add(new ActivityReportBuilder()
-                            .addId(rowNum++)
-                            .addKindEn(kind.getKindEn())
-                            .addKindRu(kind.getKindRu())
-                            .addActivityEn(activity.getActivityEn())
-                            .addActivityRu(activity.getActivityRu())
-                            .addAccountCount(activity.getActivities().size())
-                            .addRequestCount(activity.getRequests().size())
-                            .build()
-                    );
-                }
-            }
+            totalRecords = new EntityListService<>(Activity.class).totalEntities();
+            resultList = new EntityListService<>(ActivityReport.class)
+                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
+                            Constants.SQL_ADMIN_REPORT_ACTIVITY + " LIMIT ? OFFSET ?");
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
@@ -50,10 +48,6 @@ public class ReportActivityListCommand implements Command {
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
 
-        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
-        int rowsPerPage = recordsPerPage.map(Integer::parseInt).orElse(Constants.ROWS_PER_PAGE);
-
-        int totalRecords = activityReportList.size();
         int pageCount = (int) Math.ceil((double) totalRecords / rowsPerPage);
         List<String> pagesLinks = new ArrayList<>();
         if (pageCount > 1) {
@@ -61,18 +55,11 @@ public class ReportActivityListCommand implements Command {
                 pagesLinks.add(String.format("/reportActivityList?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
             }
         }
-        request.getSession().setAttribute("pagenumber",
-                Optional.ofNullable(request.getParameter("pagenumber"))
-                        .map(Integer::parseInt).orElse(1));
-        int pageNum = (Integer) request.getSession().getAttribute("pagenumber");
 
         request.getSession().setAttribute("pages", pagesLinks);
         request.setAttribute("rowsPerPage", rowsPerPage);
 
-        List<?> list = activityReportList.stream()
-                .skip((long) (pageNum - 1) * rowsPerPage).limit(rowsPerPage).collect(Collectors.toList());
-        request.setAttribute("activityReportList", list);
-
+        request.setAttribute("activityReportList", resultList);
 
         LOGGER.info("OUT ReportActivityListCommand");
         return "/WEB-INF/admin/reportactivitylist.jsp";

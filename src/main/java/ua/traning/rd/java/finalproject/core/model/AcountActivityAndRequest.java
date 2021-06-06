@@ -3,7 +3,9 @@ package ua.traning.rd.java.finalproject.core.model;
 import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
 import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 
-public class ActivityReport {
+import java.io.Serializable;
+
+public class AcountActivityAndRequest implements Serializable {
     @PrimaryKey
     @TableColumn("id")
     private int id;
@@ -15,8 +17,10 @@ public class ActivityReport {
     private String activityEn;
     @TableColumn("activity_ru")
     private String activityRu;
-    @TableColumn("account_count")
-    private Long accountCount;
+    @TableColumn("account_activity_id")
+    private int accountActivityId;
+    @TableColumn("request_id")
+    private int request_id;
 
     public int getId() {
         return id;
@@ -58,11 +62,19 @@ public class ActivityReport {
         this.activityRu = activityRu;
     }
 
-    public Long getAccountCount() {
-        return accountCount;
+    public int getAccountActivityId() {
+        return accountActivityId;
     }
 
-    public void setAccountCount(Long accountCount) {
-        this.accountCount = accountCount;
+    public void setAccountActivityId(int accountActivityId) {
+        this.accountActivityId = accountActivityId;
+    }
+
+    public int getRequest_id() {
+        return request_id;
+    }
+
+    public void setRequest_id(int request_id) {
+        this.request_id = request_id;
     }
 }

@@ -43,6 +43,15 @@ public class DbServiceImpl<T> implements DbService<T> {
         return Optional.ofNullable(doService(() -> dao.selectBy(columnNames, values)));
     }
 
+    public Optional<List<T>> getBeansByCall(String procName, List<Object> values) {
+        return Optional.ofNullable(doService(() -> dao.call(procName, values)));
+    }
+
+    public Optional<List<T>> getBeansByCall(String procName, Object value) {
+        return Optional.ofNullable(doService(() -> dao.call(procName,
+                Collections.singletonList(value))));
+    }
+
     public Optional<List<T>> getBeansBy(String columnName, Object value) {
         return Optional.ofNullable(doService(() ->
                 dao.selectBy(Collections.singletonList(columnName),

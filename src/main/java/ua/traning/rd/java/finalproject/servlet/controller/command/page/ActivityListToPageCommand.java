@@ -38,18 +38,11 @@ public class ActivityListToPageCommand implements Command {
 
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
 
-//        List<Activity> activities;
-//        Map<Integer, Kind> kinds;
-        List<AdminActivityList> activitiesList;
-
+        List<AdminActivityList> activityList;
         try {
-            activitiesList = new EntityListService<>(AdminActivityList.class)
+            activityList = new EntityListService<>(AdminActivityList.class)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
                             Constants.SQL_ADMIN_ACTIVITY + " LIMIT ? OFFSET ?");
-//            activities = new EntityListService<>(Activity.class)
-//                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
-//            kinds = new EntityListService<>(Kind.class).getAllEntities()
-//                    .stream().collect(Collectors.toMap(Kind::getId, kind -> kind));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
@@ -58,9 +51,7 @@ public class ActivityListToPageCommand implements Command {
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
 
-        request.setAttribute("activities", activitiesList);
-//        request.setAttribute("activities", activities);
-//        request.setAttribute("kinds", kinds);
+        request.setAttribute("activities", activityList);
         request.getSession().setAttribute("pagenumber", page);
         request.setAttribute("rowsPerPage", rowsPerPage);
 

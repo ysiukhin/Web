@@ -12,7 +12,9 @@ public interface DbService<T> {
 
     Optional<List<T>> getBeansBy(List<String> columnNames, List<Object> values);
 
-//    Optional<List<T>> getBeansInRange(String columnName, List<Object> fields);
+    Optional<List<T>> getBeansByCall(String procName, List<Object> values);
+
+    Optional<List<T>> getBeansByCall(String procName, Object value);
 
     Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset);
 

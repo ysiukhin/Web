@@ -39,7 +39,6 @@ public class KindListToPageCommand implements Command {
         try {
             kinds = new EntityListService<>(Kind.class)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
-//                    .getInRange(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));

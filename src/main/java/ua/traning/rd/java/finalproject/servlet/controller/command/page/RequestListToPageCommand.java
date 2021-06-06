@@ -2,9 +2,13 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.core.service.AccountActivityRequestEntity;
+import ua.traning.rd.java.finalproject.Constants;
+
+import ua.traning.rd.java.finalproject.core.model.AdminRequestList;
+
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
-import ua.traning.rd.java.finalproject.core.service.RequestListService;
+
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -33,10 +37,11 @@ public class RequestListToPageCommand implements Command {
 
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
 
-        List<AccountActivityRequestEntity> resultList;
+        List<AdminRequestList> requestLists;
         try {
-            resultList = new RequestListService().getList(rowsPerPage, rowsPerPage * (page - 1));
-//            resultList = new RequestListService().getList(rowsPerPage * (page - 1) + 1, page * rowsPerPage);
+            requestLists = new EntityListService<>(AdminRequestList.class)
+                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
+                            Constants.SQL_ADMIN_REQUEST + " LIMIT ? OFFSET ?");
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));
@@ -44,8 +49,7 @@ public class RequestListToPageCommand implements Command {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString("message.application.failed"));
         }
-
-        request.setAttribute("resultList", resultList);
+        request.setAttribute("resultList", requestLists);
         request.getSession().setAttribute("pagenumber", page);
         request.setAttribute("rowsPerPage", rowsPerPage);
 

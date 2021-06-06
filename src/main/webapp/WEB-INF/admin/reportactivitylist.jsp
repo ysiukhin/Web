@@ -25,11 +25,6 @@
 </head>
 
 <body>
-<%--<c:if test="${sessionScope.isMessage}">--%>
-<%--    <custom:messageform actionStatus="${sessionScope.actionStatus}" actionMessage=""/>--%>
-<%--    <c:set scope="session" var="isMessage" value="false"/>--%>
-<%--</c:if>--%>
-
 <div class="header-panel">
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
@@ -66,7 +61,7 @@
                     <th onclick="sortTable(1)"><fmt:message key="table.activity.column.activity_kind"/></th>
                     <th onclick="sortTable(2)"><fmt:message key="table.request.column.activity"/></th>
                     <th onclick="sortTable(3)"><fmt:message key="report.activity.total.account"/></th>
-                    <th onclick="sortTable(4)"><fmt:message key="report.activity.total.requests"/></th>
+<%--                    <th onclick="sortTable(4)"><fmt:message key="report.activity.total.requests"/></th>--%>
                 </tr>
                 <tr>
                     <td colspan="5">
@@ -77,7 +72,7 @@
                 </tr>
                 <c:forEach var="list" items="${requestScope.activityReportList}">
                     <tr class="tblrow">
-                        <td><c:out value="${list.id + 1}"/></td>
+                        <td><c:out value="${list.id}"/></td>
                         <c:choose>
                             <c:when test="${sessionScope.lang eq 'en'}">
                                 <td><c:out value="${list.kindEn}"/></td>
@@ -89,11 +84,10 @@
                             </c:otherwise>
                         </c:choose>
                         <td><c:out value="${list.accountCount}"/></td>
-                        <td><c:out value="${list.requestCount}"/></td>
                     </tr>
                 </c:forEach>
                 <tr>
-                    <td colspan="5"><custom:pagination/></td>
+                    <td colspan="4"><custom:pagination/></td>
                 </tr>
             </table>
         </form>
