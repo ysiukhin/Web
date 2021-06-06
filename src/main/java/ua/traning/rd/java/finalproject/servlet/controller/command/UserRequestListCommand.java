@@ -41,7 +41,7 @@ public class UserRequestListCommand implements Command {
         List<String> pagesLinks = new ArrayList<>();
         if (pageCount > 1) {
             for (int i = 0; i < Math.ceil((double) totalRecords / rowsPerPage); i++) {
-                pagesLinks.add(String.format("/topageactivity?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
+                pagesLinks.add(String.format("/topageuserrequest?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
             }
         }
 

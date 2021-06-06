@@ -92,21 +92,21 @@
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                 </tr>
-                <c:forEach var="activity" items="${requestScope.activities}" varStatus="status">
+                <%--                <c:forEach var="activity" items="${requestScope.activities}" varStatus="status">--%>
+                <c:forEach var="activity" items="${requestScope.activityList}" varStatus="status">
                     <tr class="tblrow">
-                            <%--                        <td><c:out value="${activity.id}"/></td>--%>
                         <c:choose>
                             <c:when test="${sessionScope.lang eq 'en'}">
-                                <td><c:out value="${requestScope.kinds.get(activity.kindId).kindEn}"/></td>
-                                <td><c:out value="${activity.activityRu}"/></td>
+                                <td><c:out value="${activity.kindEn}"/></td>
+                                <td><c:out value="${activity.activityEn}"/></td>
                             </c:when>
                             <c:otherwise>
-                                <td><c:out value="${requestScope.kinds.get(activity.kindId).kindRu}"/></td>
-                                <td><c:out value="${activity.activityEn}"/></td>
+                                <td><c:out value="${activity.kindRu}"/></td>
+                                <td><c:out value="${activity.activityRu}"/></td>
                             </c:otherwise>
                         </c:choose>
                         <c:choose>
-                            <c:when test="${requestScope.accountActivities.get(activity.id) eq null}">
+                            <c:when test="${activity.accountActivityId eq 0}">
                                 <td style="background: #EDEDED" ;></td>
                             </c:when>
                             <c:otherwise>
@@ -114,7 +114,7 @@
                             </c:otherwise>
                         </c:choose>
                         <c:choose>
-                            <c:when test="${requestScope.accountRequests.get(activity.id) eq null}">
+                            <c:when test="${activity.request_id eq 0}">
                                 <td style="background: #EDEDED" ;></td>
                             </c:when>
                             <c:otherwise>
@@ -122,15 +122,13 @@
                             </c:otherwise>
                         </c:choose>
                         <td style="display:none;"><c:out value="${activity.id}"/></td>
-                        <td style="display:none;"><c:out
-                                value="${requestScope.accountActivities.get(activity.id).id}"/></td>
-                        <td style="display:none;"><c:out
-                                value="${requestScope.accountRequests.get(activity.id).id}"/></td>
+                        <td style="display:none;"><c:out value="${activity.accountActivityId}"/></td>
+                        <td style="display:none;"><c:out value="${activity.request_id}"/></td>
                     </tr>
                 </c:forEach>
-                <%--                <tr>--%>
-                <%--                    <td colspan="4"><custom:pagination/></td>--%>
-                <%--                </tr>--%>
+                <tr>
+                    <td colspan="7"><custom:pagination/></td>
+                </tr>
             </table>
         </form>
     </div>

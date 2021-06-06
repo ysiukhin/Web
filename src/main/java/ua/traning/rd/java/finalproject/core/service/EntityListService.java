@@ -71,9 +71,9 @@ public class EntityListService<T> {
                 new SessionManagerJdbc(Servlet.dataSource), entityClass)).beanQuantity();
     }
 
-    public List<T> getByStoredProc(String storedProc, int id) {
+    public List<T> getByStoredProc(String storedProc, List<Object> values) {
         return new DbServiceImpl<>(new DaoJdbc<>(
-                new SessionManagerJdbc(Servlet.dataSource), entityClass)).getBeansByCall(storedProc, id)
+                new SessionManagerJdbc(Servlet.dataSource), entityClass)).getBeansByCall(storedProc, values)
                 .orElseThrow(() -> new ServiceException("There is no any Entities in database."));
     }
 }

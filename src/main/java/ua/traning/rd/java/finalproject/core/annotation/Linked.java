@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface Linked {
     String value();
 
-    String strategy() default "active";
+    String strategy() default "lazy";
 }

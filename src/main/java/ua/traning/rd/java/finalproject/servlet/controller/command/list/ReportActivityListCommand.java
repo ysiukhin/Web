@@ -55,7 +55,6 @@ public class ReportActivityListCommand implements Command {
                 pagesLinks.add(String.format("/reportActivityList?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
             }
         }
-
         request.getSession().setAttribute("pages", pagesLinks);
         request.setAttribute("rowsPerPage", rowsPerPage);
 

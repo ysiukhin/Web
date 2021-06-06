@@ -18,9 +18,9 @@ public class AcountActivityAndRequest implements Serializable {
     @TableColumn("activity_ru")
     private String activityRu;
     @TableColumn("account_activity_id")
-    private int accountActivityId;
+    private long accountActivityId;
     @TableColumn("request_id")
-    private int request_id;
+    private long request_id;
 
     public int getId() {
         return id;
@@ -62,19 +62,19 @@ public class AcountActivityAndRequest implements Serializable {
         this.activityRu = activityRu;
     }
 
-    public int getAccountActivityId() {
+    public long getAccountActivityId() {
         return accountActivityId;
     }
 
-    public void setAccountActivityId(int accountActivityId) {
+    public void setAccountActivityId(long accountActivityId) {
         this.accountActivityId = accountActivityId;
     }
 
-    public int getRequest_id() {
+    public long getRequest_id() {
         return request_id;
     }
 
-    public void setRequest_id(int request_id) {
+    public void setRequest_id(long request_id) {
         this.request_id = request_id;
     }
 }

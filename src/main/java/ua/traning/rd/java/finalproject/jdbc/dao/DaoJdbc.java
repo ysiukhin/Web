@@ -152,9 +152,6 @@ public class DaoJdbc<T> extends Dao<T> {
                 if (beanField.isAnnotationPresent(TableColumn.class)) {
                     TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
                     Object obj = resultSet.getObject(tableColumn.value());
-                    if (obj == null) {
-                        LOGGER.info("null");
-                    }
                     beanField.set(bean, resultSet.getObject(tableColumn.value()));
                     if (beanField.isAnnotationPresent(PrimaryKey.class)) {
                         primaryKeyValue = beanField.getInt(bean);

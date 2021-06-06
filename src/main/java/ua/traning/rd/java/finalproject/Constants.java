@@ -40,11 +40,7 @@ public final class Constants {
                     " ON aa.activity_id = at.id " +
                     " GROUP BY aa.activity_id ";
 
-//            "select acc.id, acc.first_name, acc.last_name, count(distinct aat.id) activity_count" +
-//        ",  IFNULL(sum(TIMESTAMPDIFF(MINUTE,rec.start, rec.end)), 0) as total_time_In_minutes from account_activity aat " +
-//        "right join account acc on acc.id = aat.account_id left join record rec on aat.id = rec.account_activity_id " +
-//        "group by acc.id";
+    public static final String CALL_GET_USER_ACTIVITIES_AND_REQUEST = "{call GetUserActivitiesAndRequest(?, ?, ?)}";
 
-    public static final String CALL_GET_USER_ACTIVITIES_AND_REQUEST = "{call GetUserActivitiesAndRequest(?)}";
     public static final int ROWS_PER_PAGE = 10;
 }
