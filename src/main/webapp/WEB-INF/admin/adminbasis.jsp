@@ -27,9 +27,9 @@
     <label><h1>Hello ADMIN!</h1></label>
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=adminsection"
-              class="link-secondary"><span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
+              class="link-secondary"><img src="static/flags/gb.svg" width="16" height="16"/>ENGLISH</a></label>
     <label><a href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=adminsection"
-              class="link-secondary"><span class="flag-icon flag-icon-ru"></span>РУССКИЙ</a></label>
+              class="link-secondary"><img src="static/flags/ru.svg" width="16" height="16"/>РУССКИЙ</a></label>
 </div>
 <%--</header>--%>
 <%--<main>--%>

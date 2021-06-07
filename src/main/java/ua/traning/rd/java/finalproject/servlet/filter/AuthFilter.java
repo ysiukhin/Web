@@ -2,7 +2,11 @@ package ua.traning.rd.java.finalproject.servlet.filter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
+import ua.traning.rd.java.finalproject.core.service.LoginService;
+import ua.traning.rd.java.finalproject.servlet.controller.command.CommandUtility;
+import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 
 import javax.servlet.*;
@@ -10,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static java.util.Objects.nonNull;
 
 //@WebFilter(filterName = "AuthFilter", urlPatterns = "/*")
 public class AuthFilter extends AbstractFilter {
@@ -17,8 +25,8 @@ public class AuthFilter extends AbstractFilter {
 
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        logger.info("AuthFilter");
-
+        LOGGER.info("AuthFilter");
+//
 //        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
 //                new Locale(String.valueOf(req.getSession().getAttribute("lang"))));
 //
@@ -26,13 +34,9 @@ public class AuthFilter extends AbstractFilter {
 //        String password = req.getParameter("password");
 //        LoggedAccount currentAccount = ((LoggedAccount) req.getSession().getAttribute("account"));
 //        if (currentAccount != null) {
-//
 //            req.getRequestDispatcher(req.getRequestURI()).forward(req, resp); // if user logged
 //
-//        } else if ( nonNull(email) && nonNull(password)) {
-//            email = new String(email.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-//            password = new String(password.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-//
+//        } else if (nonNull(email) && nonNull(password)) {
 //            if (CommandUtility.checkUserIsLogged(req, email)) { // check if user already logged from other place
 //                req.getSession().setAttribute("actionStatus", false);
 //                req.getSession().setAttribute("isMessage", false);
@@ -50,24 +54,23 @@ public class AuthFilter extends AbstractFilter {
 //                        CommandUtility.setUserRole(req, LoggedAccount.ROLE.USER, account);
 //                        moveToMenu(req, resp, LoggedAccount.ROLE.USER);
 //                    }
-//                } catch (ExceptionService e) {
+//                } catch (Exception e) {
 //                    LOGGER.error(e.getMessage(), e);
 //                    req.getSession().setAttribute("actionStatus", false);
 //                    req.getSession().setAttribute("isMessage", false);
 //                    req.getSession().setAttribute("actionMessage", errorMessages.getString("message.authorization.failed"));
 //                    moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
-//                } catch (Exception e) {
-//                    LOGGER.error(e.getMessage(), e);
 //                    throw new ApplicationException(errorMessages.getString("message.application.failed"));
 //                }
 //            }
-//        } else {
-//            moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
-//        }
-        logger.info("AuthFilter: session id: {}\nURI:   {}\naccounts:   {}", req.getSession().getId(), req.getRequestURI(),
-                req.getSession().getAttribute("account"));
+////        } else {
+////            moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
+////        }
+//            logger.info("AuthFilter: session id: {}\nURI:   {}\naccounts:   {}", req.getSession().getId(), req.getRequestURI(),
+//                    req.getSession().getAttribute("account"));
         chain.doFilter(req, resp);
 //        req.getRequestDispatcher(req.getRequestURI()).forward(req, resp);
+//        }
     }
 
     private void moveToMenu(final HttpServletRequest req,
@@ -92,3 +95,5 @@ public class AuthFilter extends AbstractFilter {
         }
     }
 }
+
+

@@ -8,8 +8,6 @@ public class LogOutCommand implements Command {
         // ToDo delete current user (context & session)
 
         request.getSession().invalidate();
-//
-//        CommandUtility.setUserRole(request, LoggedAccount.ROLE.UNKNOWN, "Guest");
-        return "redirect:/index.jsp";
+        return "redirect:/login.jsp";
     }
 }

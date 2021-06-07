@@ -33,10 +33,10 @@
     <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>
     <label><a
             href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=en&page=accountList&pagenumber=${sessionScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
-        <span class="flag-icon flag-icon-gb"></span>ENGLISH</a></label>
+        <img src="static/flags/gb.svg" width="16" height="16"/>ENGLISH</a></label>
     <label><a
             href="${pageContext.request.contextPath}/changeLanguage?sessionLocale=ru&page=accountList&pagenumber=${sessionScope.pagenumber}&rowsPerPage=${requestScope.rowsPerPage}">
-        <span class="flag-icon flag-icon-ru"></span>РУСКИЙ</a></label>
+        <img src="static/flags/ru.svg" width="16" height="16"/>РУССКИЙ</a></label>
     <br>
     <hr>
     <div class="vertical-menu">
