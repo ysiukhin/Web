@@ -20,30 +20,30 @@ import java.util.stream.Collectors;
 
 public class RequestListService {
     public final static Logger LOGGER = LogManager.getLogger(RequestListService.class);
-    public List<AccountActivityRequestEntity> getList(int from, int to) {
-        List<Request> requests = getRequests(from, to);
-        Map<Integer, Account> accounts = getRequestsAccounts(requests).stream()
-                .collect(Collectors.toMap(Account::getId, list -> list));
-        Map<Integer, Activity> activities = getRequestsActivities(requests).stream()
-                .collect(Collectors.toMap(Activity::getId, list -> list));
-
-        return requests.stream().map(request -> new AccountActivityRequestEntity(
-                accounts.get(request.getAccountId()),
-                activities.get(request.getActivityId()),
-                request))
-                .collect(Collectors.toList());
-    }
-
-    // TRANSACTION
-    public boolean processRequest(boolean isNewAccountActivity, int accountId, int activityId, int requestId) {
-        try (SessionManager sessionManager = new SessionManagerJdbc(Servlet.dataSource)) {
-            Dao<AccountActivity> accountActivityDao =
-                    new DaoJdbc<>(sessionManager, AccountActivity.class);
-            Dao<Request> requestDao =
-                    new DaoJdbc<>(sessionManager, Request.class);
-            sessionManager.beginSession();
-            try {
-                if (isNewAccountActivity) {
+//    public List<AccountActivityRequestEntity> getList(int from, int to) {
+//        List<Request> requests = getRequests(from, to);
+//        Map<Integer, Account> accounts = getRequestsAccounts(requests).stream()
+//                .collect(Collectors.toMap(Account::getId, list -> list));
+//        Map<Integer, Activity> activities = getRequestsActivities(requests).stream()
+//                .collect(Collectors.toMap(Activity::getId, list -> list));
+//
+//        return requests.stream().map(request -> new AccountActivityRequestEntity(
+//                accounts.get(request.getAccountId()),
+//                activities.get(request.getActivityId()),
+//                request))
+//                .collect(Collectors.toList());
+//    }
+//
+// TRANSACTION
+public boolean processRequest(boolean isNewAccountActivity, int accountId, int activityId, int requestId) {
+    try (SessionManager sessionManager = new SessionManagerJdbc(Servlet.dataSource)) {
+        Dao<AccountActivity> accountActivityDao =
+                new DaoJdbc<>(sessionManager, AccountActivity.class);
+        Dao<Request> requestDao =
+                new DaoJdbc<>(sessionManager, Request.class);
+        sessionManager.beginSession();
+        try {
+            if (isNewAccountActivity) {
                     AccountActivity newAccountActivity = new AccountActivity();
                     newAccountActivity.setAccountId(accountId);
                     newAccountActivity.setActivityId(activityId);

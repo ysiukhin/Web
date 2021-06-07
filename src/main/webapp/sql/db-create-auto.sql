@@ -29,11 +29,12 @@ CREATE TABLE IF NOT EXISTS `account`
     `middle_name` VARCHAR(30) NULL     DEFAULT NULL,
     `email`       VARCHAR(50) NOT NULL,
     `md5`         VARCHAR(32) NOT NULL,
-    `status`      TINYINT     NOT NULL DEFAULT 1,
+    `status`      TINYINT     NOT NULL DEFAULT '1',
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 130
+    DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -48,7 +49,9 @@ CREATE TABLE IF NOT EXISTS `kind`
     `kind_ru` VARCHAR(60) NOT NULL,
     PRIMARY KEY (`id`)
 )
-    ENGINE = InnoDB;
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 5
+    DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -71,7 +74,8 @@ CREATE TABLE IF NOT EXISTS `activity`
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 15
+    DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -99,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `account_activity`
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 253
+    DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -110,8 +115,8 @@ DROP TABLE IF EXISTS `record`;
 CREATE TABLE IF NOT EXISTS `record`
 (
     `id`                  INT       NOT NULL AUTO_INCREMENT,
-    `start`               TIMESTAMP NULL,
-    `end`                 TIMESTAMP NULL,
+    `start`               TIMESTAMP NULL DEFAULT NULL,
+    `end`                 TIMESTAMP NULL DEFAULT NULL,
     `account_activity_id` INT       NOT NULL,
     PRIMARY KEY (`id`, `account_activity_id`),
     INDEX `fk_record_account_activity_idx` (`account_activity_id` ASC) INVISIBLE,
@@ -121,7 +126,9 @@ CREATE TABLE IF NOT EXISTS `record`
             ON DELETE CASCADE
             ON UPDATE CASCADE
 )
-    ENGINE = InnoDB;
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 572
+    DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -132,7 +139,7 @@ DROP TABLE IF EXISTS `request`;
 CREATE TABLE IF NOT EXISTS `request`
 (
     `id`          INT     NOT NULL AUTO_INCREMENT,
-    `request`     TINYINT NOT NULL DEFAULT 0,
+    `request`     TINYINT NOT NULL DEFAULT '0',
     `account_id`  INT     NOT NULL,
     `activity_id` INT     NOT NULL,
     PRIMARY KEY (`id`, `account_id`, `activity_id`),
@@ -149,9 +156,41 @@ CREATE TABLE IF NOT EXISTS `request`
             ON DELETE CASCADE
             ON UPDATE CASCADE
 )
-    ENGINE = InnoDB;
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 44
+    DEFAULT CHARACTER SET = utf8mb3;
 
 USE `timecounterdb`;
+
+-- -----------------------------------------------------
+-- procedure GetUserActivities
+-- -----------------------------------------------------
+
+USE `timecounterdb`;
+DROP procedure IF EXISTS `GetUserActivities`;
+
+DELIMITER $$
+USE `timecounterdb`$$
+CREATE
+    DEFINER = `web`@`localhost` PROCEDURE `GetUserActivities`(IN accountId INT, IN lim INT, IN offs INT)
+BEGIN
+    select aa.id             account_activity_id,
+           kind_en,
+           kind_ru,
+           activity_en,
+           activity_ru,
+           rec.start         start,
+           ifnull(rec.id, 0) record_id
+    from account_activity aa
+             inner join activity at on aa.activity_id = at.id
+             inner join kind ki on at.kind_id = ki.id
+             left join record rec on (aa.id = rec.account_activity_id and end is null)
+    where aa.account_id = accountId
+    order by rec.start desc
+    LIMIT lim OFFSET offs;
+END$$
+
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- procedure GetUserActivitiesAndRequest
@@ -162,7 +201,8 @@ DROP procedure IF EXISTS `GetUserActivitiesAndRequest`;
 
 DELIMITER $$
 USE `timecounterdb`$$
-CREATE PROCEDURE `GetUserActivitiesAndRequest`(IN accountId INT, IN lim INT, IN offs INT)
+CREATE
+    DEFINER = `web`@`localhost` PROCEDURE `GetUserActivitiesAndRequest`(IN accountId INT, IN lim INT, IN offs INT)
 BEGIN
     SELECT at.id,
            kind_en,
@@ -188,29 +228,6 @@ BEGIN
         WHERE ac.id = accountId
           AND aa.id IS NULL
     ) un ON at.id = un.activity_id
-    LIMIT lim OFFSET offs;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure GetUserActivities
--- -----------------------------------------------------
-
-USE `timecounterdb`;
-DROP procedure IF EXISTS `GetUserActivities`;
-
-DELIMITER $$
-USE `timecounterdb`$$
-CREATE PROCEDURE `GetUserActivities`(IN accountId INT, IN lim INT, IN offs INT)
-BEGIN
-    select aa.account_id, aa.id, kind_en, kind_ru, activity_en, activity_ru, rec.start
-    from account_activity aa
-             inner join activity at on aa.activity_id = at.id
-             inner join kind ki on at.kind_id = ki.id
-             left join record rec on (aa.id = rec.account_activity_id and end is null)
-    where aa.account_id = accountId
-    order by rec.start desc
     LIMIT lim OFFSET offs;
 END$$
 

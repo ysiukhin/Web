@@ -26,27 +26,38 @@ public class AuthFilter extends AbstractFilter {
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         LOGGER.info("AuthFilter");
+
+        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
+                new Locale(String.valueOf(req.getSession().getAttribute("lang"))));
+
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
+        String uri = req.getRequestURI();
+
+
+        LoggedAccount currentAccount = ((LoggedAccount) req.getSession().getAttribute("account"));
+        LOGGER.info("Request URI -> {}", req.getRequestURI());
 //
-//        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-//                new Locale(String.valueOf(req.getSession().getAttribute("lang"))));
+        if (nonNull(currentAccount)) {
+            LOGGER.info("Account URI -> {}", currentAccount.getAccount().toString());
+            req.getRequestDispatcher(req.getRequestURI()).forward(req, resp); // if user logged
+        }
+
+        if (nonNull(email) && nonNull(password)) {  // если запрос логина
+            LOGGER.info("nonNull(email): {} && nonNull(password): {}", email, password);
 //
-//        String email = req.getParameter("email");
-//        String password = req.getParameter("password");
-//        LoggedAccount currentAccount = ((LoggedAccount) req.getSession().getAttribute("account"));
-//        if (currentAccount != null) {
-//            req.getRequestDispatcher(req.getRequestURI()).forward(req, resp); // if user logged
+////            if (CommandUtility.checkUserIsLogged(req, email)) { // check if user already logged from other place
+////                req.getSession().setAttribute("actionStatus", false);
+////                req.getSession().setAttribute("isMessage", false);
+////                req.getSession().setAttribute("actionMessage", errorMessages.getString("message.user.already.logged"));
+////                moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
+////            } else {
 //
-//        } else if (nonNull(email) && nonNull(password)) {
-//            if (CommandUtility.checkUserIsLogged(req, email)) { // check if user already logged from other place
-//                req.getSession().setAttribute("actionStatus", false);
-//                req.getSession().setAttribute("isMessage", false);
-//                req.getSession().setAttribute("actionMessage", errorMessages.getString("message.user.already.logged"));
-//                moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
-//            } else {
 //                Account account;
-//                try {
+//                try { // попытка логина
 //                    account = new LoginService().checkAccount(email, password);
 //                    //account has been authenticated and now authorize account
+//
 //                    if (!account.getStatus()) {
 //                        CommandUtility.setUserRole(req, LoggedAccount.ROLE.ADMIN, account);
 //                        moveToMenu(req, resp, LoggedAccount.ROLE.ADMIN);
@@ -54,6 +65,7 @@ public class AuthFilter extends AbstractFilter {
 //                        CommandUtility.setUserRole(req, LoggedAccount.ROLE.USER, account);
 //                        moveToMenu(req, resp, LoggedAccount.ROLE.USER);
 //                    }
+//
 //                } catch (Exception e) {
 //                    LOGGER.error(e.getMessage(), e);
 //                    req.getSession().setAttribute("actionStatus", false);
@@ -62,16 +74,18 @@ public class AuthFilter extends AbstractFilter {
 //                    moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
 //                    throw new ApplicationException(errorMessages.getString("message.application.failed"));
 //                }
-//            }
-////        } else {
-////            moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
-////        }
+//
+//        } else {
+//            moveToMenu(req, resp, LoggedAccount.ROLE.UNKNOWN);
+//
 //            logger.info("AuthFilter: session id: {}\nURI:   {}\naccounts:   {}", req.getSession().getId(), req.getRequestURI(),
 //                    req.getSession().getAttribute("account"));
+
+//            req.getRequestDispatcher(req.getRequestURI()).forward(req, resp);
+        }
         chain.doFilter(req, resp);
-//        req.getRequestDispatcher(req.getRequestURI()).forward(req, resp);
-//        }
     }
+
 
     private void moveToMenu(final HttpServletRequest req,
                             final HttpServletResponse resp,
