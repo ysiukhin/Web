@@ -3,6 +3,15 @@ var index,
     // table = Array.from(document.querySelectorAll("tr.tblrow"));
     table = document.getElementById("table");
 
+function check(message) {
+    var record = document.getElementById("activity_id").value;
+    if (record === "") {
+        alert(message);
+        return false;
+    }
+    return true;
+}
+
 // check the empty input
 function checkEmptyInput() {
     console.log("selectedRowToInput");
@@ -11,7 +20,7 @@ function checkEmptyInput() {
         activity = document.getElementById("activity").value,
         current_activity = document.getElementById("current_activity").value,
         current_request = document.getElementById("current_request").value;
-        activity_id = document.getElementById("activity_id").value,
+    activity_id = document.getElementById("activity_id").value,
             account_activity_id = document.getElementById("account_activity_id").value,
         request_id = document.getElementById("request_id").value;
 

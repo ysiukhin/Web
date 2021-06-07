@@ -31,12 +31,13 @@ public class UserRequestListToPageCommand implements Command {
         int page = pagenumber.map(Integer::parseInt)
                 .orElse((Integer) request.getSession().getAttribute("pagenumber"));
 
-        LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
+//        LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
         Account user = ((LoggedAccount) request.getSession().getAttribute("account")).getAccount();
-        List<AcountActivityAndRequest> resultList;
+        List<AccountActivityAndRequest> resultList;
         try {
-            resultList = new EntityListService<>(AcountActivityAndRequest.class)
-                    .getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_REQUEST, Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
+            resultList = new EntityListService<>(AccountActivityAndRequest.class)
+                    .getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_REQUEST,
+                            Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString("message.request.data.empty"));

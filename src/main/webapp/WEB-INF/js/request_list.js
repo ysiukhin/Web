@@ -3,6 +3,15 @@ var index,
     // table = Array.from(document.querySelectorAll("tr.tblrow"));
     table = document.getElementById("table");
 
+function check(message) {
+    var record = document.getElementById("request").value;
+    if (record === "") {
+        alert(message);
+        return false;
+    }
+    return true;
+}
+
 // check the empty input
 function checkEmptyInput() {
     console.log("selectedRowToInput");

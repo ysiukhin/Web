@@ -47,7 +47,7 @@ public class Servlet extends HttpServlet {
         commands.put("reportAccountList", new ReportAccountListCommand());
 
         commands.put("userTimer", new UserTimerCommand());  // TODO
-        commands.put("userRequestList", new UserRequestListCommand()); // TODO
+        commands.put("userRequestList", new UserRequestListCommand());
 
 
         commands.put("topageaccount", new AccountListToPageCommand());
@@ -55,6 +55,7 @@ public class Servlet extends HttpServlet {
         commands.put("topagekind", new KindListToPageCommand());
         commands.put("topagerequest", new RequestListToPageCommand());
         commands.put("topageuserrequest", new UserRequestListToPageCommand());
+        commands.put("topageusertimer", new UserTimerToPageCommand());
 
 
         commands.put("accountAction", new AccountActionCommand());
@@ -62,6 +63,7 @@ public class Servlet extends HttpServlet {
         commands.put("kindAction", new KindActionCommand());
         commands.put("requestAction", new RequestActionCommand());
         commands.put("userRequestAction", new UserRequestActionCommand());
+        commands.put("userTimerAction", new UserTimerActionCommand());
 
         commands.put("changeLanguage", new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();

@@ -56,17 +56,18 @@
 
     <div class="container">
         <div class="tab tab-1">
-            <form action="http://localhost:8080/Web/accountAction" method="POST">
+            <form action="http://localhost:8080/Web/accountAction" method="POST"
+                  onSubmit="return check('<fmt:message key="admin.account.alert.message.empty"/>');">
                 <table class="table" id="table">
                     <tr>
                         <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
                                    class="input"></td>
                         <td><input type="submit" value="<fmt:message key="entity.action.update"/>" name="action"
-                               class="input"></td>
-                    <td><input type="submit" value="<fmt:message key="entity.action.delete"/>" name="action"
-                               class="input"></td>
-                    <%--                    <td><input type="hidden" value="accountList" name="page" class="input"></td>--%>
-                </tr>
+                                   class="input"></td>
+                        <td><input type="submit" value="<fmt:message key="entity.action.delete"/>" name="action"
+                                   class="input"></td>
+                        <%--                    <td><input type="hidden" value="accountList" name="page" class="input"></td>--%>
+                    </tr>
                 <tr>
                     <td style="display:none;"><input type="text"
                                                      placeholder="<fmt:message key="table.account.column.id"/>"

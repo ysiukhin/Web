@@ -5,35 +5,29 @@ import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 
 import java.io.Serializable;
 
-public class AdminActivityList implements Serializable {
+public class AccountActivityAndRequest implements Serializable {
     @PrimaryKey
     @TableColumn("id")
     private int id;
+    @TableColumn("kind_en")
+    private String kindEn;
+    @TableColumn("kind_ru")
+    private String kindRu;
     @TableColumn("activity_en")
     private String activityEn;
     @TableColumn("activity_ru")
     private String activityRu;
-    @TableColumn("kind_ru")
-    private String kindRu;
-    @TableColumn("kind_en")
-    private String kindEn;
-    @TableColumn("kind_id")
-    private int kindId;
+    @TableColumn("account_activity_id")
+    private long accountActivityId;
+    @TableColumn("request_id")
+    private long requestId;
 
-    public String getKindRu() {
-        return kindRu;
+    public int getId() {
+        return id;
     }
 
-    public void setKindRu(String kindRu) {
-        this.kindRu = kindRu;
-    }
-
-    public int getKindId() {
-        return kindId;
-    }
-
-    public void setKindId(int kindId) {
-        this.kindId = kindId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getKindEn() {
@@ -44,12 +38,12 @@ public class AdminActivityList implements Serializable {
         this.kindEn = kindEn;
     }
 
-    public int getId() {
-        return id;
+    public String getKindRu() {
+        return kindRu;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setKindRu(String kindRu) {
+        this.kindRu = kindRu;
     }
 
     public String getActivityEn() {
@@ -68,4 +62,19 @@ public class AdminActivityList implements Serializable {
         this.activityRu = activityRu;
     }
 
+    public long getAccountActivityId() {
+        return accountActivityId;
+    }
+
+    public void setAccountActivityId(long accountActivityId) {
+        this.accountActivityId = accountActivityId;
+    }
+
+    public long getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(long requestId) {
+        this.requestId = requestId;
+    }
 }

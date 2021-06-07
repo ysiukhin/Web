@@ -66,6 +66,10 @@ public class DbServiceImpl<T> implements DbService<T> {
         return doService(() -> dao.update(bean));
     }
 
+    public int updateBean(String sqlQuery, List<Object> values) {
+        return doService(() -> dao.update(sqlQuery, values));
+    }
+
     public int beanQuantity() {
         return doService(dao::size);
     }

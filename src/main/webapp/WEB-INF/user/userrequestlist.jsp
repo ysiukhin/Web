@@ -50,7 +50,8 @@
 </div>
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/Web/userRequestAction" method="POST">
+        <form action="http://localhost:8080/Web/userRequestAction" method="POST"
+              onSubmit="return check('<fmt:message key="user.request.activity.alert.message.empty"/>');">
             <table class="table" id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="user.report.request.action"/>" name="action"
@@ -75,13 +76,6 @@
                                                id="account_activity_id" class="input"></td>
                     <td hidden="hidden"><input type="text" placeholder="request_id" name="request_id" id="request_id"
                                                class="input"></td>
-                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="activity_id" id="activity_id"--%>
-                    <%--                                                     class="input"></td>--%>
-                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="account_id" id="account_id"--%>
-                    <%--                                                     class="input"></td>--%>
-                    <%--                    <td style="display:none;"><input type="text" placeholder="" name="request_id" id="request_id"--%>
-                    <%--                                                     class="input"></td>--%>
-
                 </tr>
                 <tr>
                     <th><fmt:message key="table.activity.column.activity_kind"/></th>
@@ -92,7 +86,6 @@
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                 </tr>
-                <%--                <c:forEach var="activity" items="${requestScope.activities}" varStatus="status">--%>
                 <c:forEach var="activity" items="${requestScope.activityList}" varStatus="status">
                     <tr class="tblrow">
                         <c:choose>
@@ -114,7 +107,7 @@
                             </c:otherwise>
                         </c:choose>
                         <c:choose>
-                            <c:when test="${activity.request_id eq 0}">
+                            <c:when test="${activity.requestId eq 0}">
                                 <td style="background: #EDEDED" ;></td>
                             </c:when>
                             <c:otherwise>
@@ -123,7 +116,7 @@
                         </c:choose>
                         <td style="display:none;"><c:out value="${activity.id}"/></td>
                         <td style="display:none;"><c:out value="${activity.accountActivityId}"/></td>
-                        <td style="display:none;"><c:out value="${activity.request_id}"/></td>
+                        <td style="display:none;"><c:out value="${activity.requestId}"/></td>
                     </tr>
                 </c:forEach>
                 <tr>

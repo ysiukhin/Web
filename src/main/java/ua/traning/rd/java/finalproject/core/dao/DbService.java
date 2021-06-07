@@ -26,5 +26,7 @@ public interface DbService<T> {
 
     int updateBean(T account);
 
+    int updateBean(String sqlQuery, List<Object> values);
+
     int beanQuantity();
 }

@@ -58,7 +58,8 @@
 </div>
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/Web/activityAction" method="POST">
+        <form action="http://localhost:8080/Web/activityAction" method="POST"
+              onSubmit="return check('<fmt:message key="admin.activity.alert.message.empty"/>');">>
             <table class="table" id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"

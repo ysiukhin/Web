@@ -151,7 +151,6 @@ public class DaoJdbc<T> extends Dao<T> {
                 beanField.setAccessible(true);
                 if (beanField.isAnnotationPresent(TableColumn.class)) {
                     TableColumn tableColumn = beanField.getAnnotation(TableColumn.class);
-                    Object obj = resultSet.getObject(tableColumn.value());
                     beanField.set(bean, resultSet.getObject(tableColumn.value()));
                     if (beanField.isAnnotationPresent(PrimaryKey.class)) {
                         primaryKeyValue = beanField.getInt(bean);
@@ -272,6 +271,27 @@ public class DaoJdbc<T> extends Dao<T> {
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
+                }
+                return prepStatement.executeUpdate();
+            } catch (SQLException ex) {
+                getConnection().rollback(savePoint);
+                LOGGER.error(ex.getMessage(), ex);
+                throw ex;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public int update(String sqlQuery, List<Object> values) {
+        try {
+            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+            try (PreparedStatement prepStatement =
+                         getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+                for (int i = 0; i < values.size(); i++) {
+                    prepStatement.setObject(i + 1, values.get(i));
                 }
                 return prepStatement.executeUpdate();
             } catch (SQLException ex) {

@@ -44,6 +44,8 @@ public abstract class Dao<T> {
 
     public abstract int update(T data);
 
+    public abstract int update(String sqlQuery, List<Object> values);
+
     public abstract int delete(int id);
 
     public abstract int delete(List<String> columns, List<Object> values);

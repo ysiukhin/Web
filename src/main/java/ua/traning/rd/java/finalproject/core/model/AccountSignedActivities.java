@@ -4,11 +4,12 @@ import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
 import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
-public class AcountActivityAndRequest implements Serializable {
+public class AccountSignedActivities implements Serializable {
     @PrimaryKey
-    @TableColumn("id")
-    private int id;
+    @TableColumn("account_activity_id")
+    private int accountActivityId;
     @TableColumn("kind_en")
     private String kindEn;
     @TableColumn("kind_ru")
@@ -17,17 +18,17 @@ public class AcountActivityAndRequest implements Serializable {
     private String activityEn;
     @TableColumn("activity_ru")
     private String activityRu;
-    @TableColumn("account_activity_id")
-    private long accountActivityId;
-    @TableColumn("request_id")
-    private long request_id;
+    @TableColumn("start")
+    private Timestamp start;
+    @TableColumn("record_id")
+    private long recordId;
 
-    public int getId() {
-        return id;
+    public int getAccountActivityId() {
+        return accountActivityId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAccountActivityId(int accountActivityId) {
+        this.accountActivityId = accountActivityId;
     }
 
     public String getKindEn() {
@@ -62,19 +63,19 @@ public class AcountActivityAndRequest implements Serializable {
         this.activityRu = activityRu;
     }
 
-    public long getAccountActivityId() {
-        return accountActivityId;
+    public Timestamp getStart() {
+        return start;
     }
 
-    public void setAccountActivityId(long accountActivityId) {
-        this.accountActivityId = accountActivityId;
+    public void setStart(Timestamp start) {
+        this.start = start;
     }
 
-    public long getRequest_id() {
-        return request_id;
+    public long getRecordId() {
+        return recordId;
     }
 
-    public void setRequest_id(long request_id) {
-        this.request_id = request_id;
+    public void setRecordId(long recordId) {
+        this.recordId = recordId;
     }
 }

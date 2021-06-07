@@ -57,7 +57,8 @@
 </div>
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/Web/kindAction" method="POST">
+        <form action="http://localhost:8080/Web/kindAction" method="POST"
+              onSubmit="return check('<fmt:message key="admin.kind.alert.message.empty"/>');">
             <table class="table" id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"

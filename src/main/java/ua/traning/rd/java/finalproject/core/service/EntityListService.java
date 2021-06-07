@@ -8,6 +8,7 @@ import ua.traning.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EntityListService<T> {
@@ -59,6 +60,11 @@ public class EntityListService<T> {
     public int updateEntity(T entity) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .updateBean(entity);
+    }
+
+    public int updateEntity(String sqlQuery, Object value) {
+        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .updateBean(sqlQuery, Collections.singletonList(value));
     }
 
     public int deleteEntity(int id) {

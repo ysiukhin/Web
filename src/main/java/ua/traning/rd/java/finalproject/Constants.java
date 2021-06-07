@@ -42,5 +42,11 @@ public final class Constants {
 
     public static final String CALL_GET_USER_ACTIVITIES_AND_REQUEST = "{call GetUserActivitiesAndRequest(?, ?, ?)}";
 
+    public static final String CALL_GET_USER_ACTIVITIES_AND_RECORDS = "{call GetUserActivities(?, ?, ?)}";
+
+    public static final String STOP_TIMER_QUERY = "UPDATE record SET end = NOW() WHERE id = ?";
+
+    public static final int AFFECTED_QUANTITY_ONE = 1;
+
     public static final int ROWS_PER_PAGE = 10;
 }

@@ -58,7 +58,8 @@
 </div>
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/Web/requestAction" method="POST">
+        <form action="http://localhost:8080/Web/requestAction" method="POST"
+              onSubmit="return check('<fmt:message key="admin.request.alert.message.empty"/>');">
             <table class="table" id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.approve"/>" name="action"
