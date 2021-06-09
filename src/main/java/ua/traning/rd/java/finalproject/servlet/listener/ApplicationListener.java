@@ -8,6 +8,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.util.HashSet;
 
+import static ua.traning.rd.java.finalproject.Constants.ALL_LOGGED_ACCOUNTS;
+
 @WebListener
 public class ApplicationListener implements ServletContextListener {
     private static final Logger LOGGER = LogManager.getLogger(ApplicationListener.class);
@@ -15,7 +17,7 @@ public class ApplicationListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOGGER.info("Application started.");
-        sce.getServletContext().setAttribute("loggedAccounts", new HashSet<String>());
+        sce.getServletContext().setAttribute(ALL_LOGGED_ACCOUNTS, new HashSet<String>());
     }
 
     @Override

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static ua.traning.rd.java.finalproject.Constants.SPACE;
+
 @WebListener
 @SuppressWarnings("unchecked")
 public class AccountRequestStatisticsListener implements ServletRequestListener {
@@ -40,7 +42,7 @@ public class AccountRequestStatisticsListener implements ServletRequestListener 
     }
 
     private String getCurrentAction(HttpServletRequest req) {
-        StringBuilder sb = new StringBuilder(req.getMethod()).append(" ").append(req.getRequestURI());
+        StringBuilder sb = new StringBuilder(req.getMethod()).append(SPACE).append(req.getRequestURI());
         Map<String, String[]> map = req.getParameterMap();
         if (map != null) {
             boolean first = true;

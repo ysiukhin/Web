@@ -13,16 +13,18 @@ import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class RequestListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListCommand.class);
 
     @Override
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN RequestListCommand");
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        int rowsPerPage = Constants.ROWS_PER_PAGE;
+        int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords = 0;
 
         EntityListService<Request> requestService = new EntityListService<>(Request.class);
@@ -31,28 +33,28 @@ public class RequestListCommand implements Command {
             totalRecords = requestService.totalQuantity();
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString("message.request.data.empty"));
+            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
         int pageCount = (int) Math.ceil((double) totalRecords / rowsPerPage);
         List<String> pagesLinks = new ArrayList<>();
         if (pageCount > 1) {
             for (int i = 0; i < Math.ceil((double) totalRecords / rowsPerPage); i++) {
-                pagesLinks.add(String.format("/topagerequest?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
+                pagesLinks.add(String.format("%s?%s=%d&%s=%d", COMMAND_ADMIN_TO_PAGE_REQUEST, PAGE_NUMBER, i + 1, ROWS_PER_PAGE, rowsPerPage));
             }
         }
-        if (Objects.isNull(request.getSession().getAttribute("pagenumber")) ||
-                Objects.isNull(request.getParameter("page")) ||
-                !(request.getParameter("page").equals(request.getRequestURI()
+        if (Objects.isNull(request.getSession().getAttribute(Constants.PAGE_NUMBER)) ||
+                Objects.isNull(request.getParameter(Constants.PAGE)) ||
+                !(request.getParameter(Constants.PAGE).equals(request.getRequestURI()
                         .substring(request.getRequestURI().lastIndexOf('/') + 1)))) {
-            request.getSession().setAttribute("pagenumber", 1);
+            request.getSession().setAttribute(Constants.PAGE_NUMBER, 1);
         }
-        request.getSession().setAttribute("pages", pagesLinks);
-        request.setAttribute("rowsPerPage", rowsPerPage);
+        request.getSession().setAttribute(PAGINATION, pagesLinks);
+        request.setAttribute(ROWS_PER_PAGE, rowsPerPage);
 
         LOGGER.info("OUT RequestListCommand");
-        return "/topagerequest";
+        return COMMAND_ADMIN_TO_PAGE_REQUEST;
     }
 }

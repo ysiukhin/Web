@@ -15,9 +15,8 @@ public final class Constants {
 //            "[^A-Z]*\\z)(?=(?:[^a-z]*[a-z]){2,4}" +
 //            "[^a-z]*\\z)(?=(?:\\D*\\d){2,4}\\D*\\z)[A-Za-z\\d]+";
 
-    public static final String ACCOUNT_ACTIONS_HISTORY = "ACCOUNT_ACTIONS_HISTORY";
 
-    public static final String CURRENT_ACCOUNT = "CURRENT_ACCOUNT";
+    public static final String SQL_LIMIT_OFFSET_BOUNDS = " LIMIT ? OFFSET ?";
 
     public static final String SQL_ADMIN_ACTIVITY =
             "SELECT a.id, a.activity_en, a.activity_ru, k.kind_en, k.kind_ru, a.kind_id" +
@@ -48,5 +47,150 @@ public final class Constants {
 
     public static final int AFFECTED_QUANTITY_ONE = 1;
 
-    public static final int ROWS_PER_PAGE = 10;
+    public static final int DEFAULT_ROWS_PER_PAGE = 10;
+
+    public static final String LOCALE_ENGLISH = "en";
+    public static final String LOCALE_RUSSIAN = "ru";
+    public static final String ACCOUNT_ACTIONS_HISTORY = "ACCOUNT_ACTIONS_HISTORY";
+    public static final String CURRENT_ACCOUNT = "CURRENT_ACCOUNT";
+    public static final String INDEX_JSP = "/index.jsp";
+    public static final String ERROR_JSP = "/WEB-INF/error.jsp";
+    public static final String LOGIN_JSP = "/login.jsp";
+    public static final String USER_SECTION = "/WEB-INF/user/userbasis.jsp";
+    public static final String ADMIN_SECTION = "/WEB-INF/admin/adminbasis.jsp";
+    public static final String USER_REQUEST_LIST_JSP = "/WEB-INF/user/userrequestlist.jsp";
+    public static final String USER_TIMER_LIST_JSP = "/WEB-INF/user/usertimerlist.jsp";
+    public static final String ADMIN_ACTIVITY_REPORT_LIST_JSP = "/WEB-INF/admin/reportactivitylist.jsp";
+    public static final String ADMIN_ACCOUNT_REPORT_LIST_JSP = "/WEB-INF/admin/reportaccountlist.jsp";
+    public static final String ADMIN_ACTIVITY_LIST_JSP = "/WEB-INF/admin/activitylist.jsp";
+    public static final String ADMIN_ACCOUNT_LIST_JSP = "/WEB-INF/admin/accountlist.jsp";
+    public static final String ADMIN_KIND_LIST_JSP = "/WEB-INF/admin/kindlist.jsp";
+    public static final String ADMIN_REQUEST_LIST_JSP = "/WEB-INF/admin/requestlist.jsp";
+
+
+    public static final String SERVER_PORT = "http://localhost:8080/";
+    public static final String REDIRECT = "redirect";
+    public static final String PAGE = "page";
+    public static final String PAGINATION = "pages";
+
+    public static final String PAGE_NUMBER = "pagenumber";
+
+    public static final String ROWS_PER_PAGE = "rowsPerPage";
+    public static final String ERROR_MESSAGES_BUNDLE = "error_messages";
+    public static final String MESSAGES_BUNDLE = "messages";
+    public static final String LOGGED_ACCOUNT = "account";
+    public static final String ALL_LOGGED_ACCOUNTS = "loggedAccounts";
+
+    public static final String ACCOUNT_ACTIVITY_ID_VALUE = "account_activity_id";
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String ACCOUNT_ID = "account_id";
+    public static final String ACTIVITY_ID = "activity_id";
+    public static final String ACTIVITY_ENGLISH = "activity_en";
+    public static final String ACTIVITY_RUSSIAN = "activity_ru";
+
+    public static final String ACCOUNT_LAST_NAME = "account_last_name";
+    public static final String ACCOUNT_FIRST_NAME = "account_first_name";
+
+    public static final String MIDDLE_NAME = "middle_name";
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "md5";
+    public static final String KIND_ENGLISH = "kind_en";
+    public static final String KIND_RUSSIAN = "kind_ru";
+    public static final String KIND_ID = "kind_id";
+
+    public static final String REPORT_ACCOUNT_LIST = "accountReportList";
+    public static final String ACCOUNT_LIST = "accounts";
+    public static final String ACTIVITY_LIST = "activities";
+    public static final String KIND_LIST = "kinds";
+    public static final String RESULT_LIST = "resultList";
+    public static final String TIMER_ACTIVITY_LIST = "timerActivityList";
+
+    public static final String REPORT_ACTIVITY_LIST = "activityReportList";
+
+
+    public static final String ID = "id";
+    public static final String SPACE = " ";
+    public static final String ZERO = "0";
+
+
+    public static final String IS_MESSAGE_TO_SHOW = "isMessage";
+    public static final String LAST_ACTION_STATUS = "actionStatus";
+    public static final String LAST_ACTION_MESSAGE_SHORT = "actionCaption";
+    public static final String LAST_ACTION_MESSAGE_FULL = "actionMessage";
+
+    public static final String MESSAGE_VALIDATION_ERROR = "message.validation.error";
+    public static final String MESSAGE_AUTHORIZATION_ERROR = "message.authorization.failed";
+    public static final String MESSAGE_APPLICATION_FAILED = "message.application.failed";
+    public static final String RESULT_MESSAGE_TEXT = "request.result.message.text";
+    public static final String TIMER_STARTED_MESSAGE = "user.timer.started.message";
+    public static final String TIMER_STOPPED_MESSAGE = "user.timer.stopped.message";
+
+
+    public static final String REQUEST_REJECTED = "request.result.message.reject";
+    public static final String REQUEST_APPROVED = "request.result.message.approve";
+
+    public static final String SIGN_IN = "table.request.request.message.true";
+    public static final String SIGN_OUT = "table.request.request.message.false";
+
+
+    public static final String USER_REQUEST_SUCCESS = "user.request.ok";
+    public static final String USER_REQUEST_FAILED = "user.request.BAD";
+
+    public static final String REQUEST = "request";
+    public static final String ACTIVITY = "activity";
+    public static final String RECORD = "record";
+    public static final String ACTION = "action";
+    public static final String ENTITY_INSERT_ACTION = "entity.action.create";
+    public static final String ENTITY_UPDATE_ACTION = "entity.action.update";
+    public static final String ENTITY_DELETE_ACTION = "entity.action.delete";
+    public static final String REQUEST_APPROVE_ACTION = "entity.action.approve";
+
+    public static final String DAO_ACTION_RESULT_FAIL = "entity.action.result.bad";
+    public static final String DAO_ACTION_RESULT_OK = "entity.action.result.ok";
+
+    public static final String DAO_OPERATION = "entity.dao.operation";
+
+    public static final String EMPTY_RESULT = "message.request.data.empty";
+
+
+    public static final String LANGUAGE = "lang";
+    public static final String DBNAME = "jdbc/timecounterdb";
+
+
+    public static final int ACCESS_SECTION = 2;
+
+    public static final String COMMAND_CHANGE_LANGUAGE = "/changeLanguage";
+    public static final String COMMAND_LOGIN = "/login";
+    public static final String COMMAND_LOGOUT = "/logout";
+    public static final String COMMAND_ERROR = "/error";
+
+    public static final String COMMAND_ADMIN_SECTION = "/admin";
+    public static final String COMMAND_USER_SECTION = "/user";
+    public static final String COMMAND_USER_TIMER = "/user/userTimer";
+    public static final String COMMAND_USER_REQUEST_LIST = "/user/userRequestList";
+
+    public static final String COMMAND_ADMIN_ACCOUNT_LIST = "/admin/accountList";
+    public static final String COMMAND_ADMIN_ACTIVITY_LIST = "/admin/activityList";
+    public static final String COMMAND_ADMIN_KIND_LIST = "/admin/kindList";
+    public static final String COMMAND_ADMIN_REQUEST_LIST = "/admin/requestList";
+    public static final String COMMAND_ADMIN_REPORT_REQUEST_LIST = "/admin/reportActivityList";
+    public static final String COMMAND_ADMIN_REPORT_ACCOUNT_LIST = "/admin/reportAccountList";
+
+    public static final String COMMAND_ADMIN_TO_PAGE_ACCOUNT = "/admin/topageaccount";
+    public static final String COMMAND_ADMIN_TO_PAGE_ACTIVITY = "/admin/topageactivity";
+    public static final String COMMAND_ADMIN_TO_PAGE_KIND = "/admin/topagekind";
+    public static final String COMMAND_ADMIN_TO_PAGE_REQUEST = "/admin/topagerequest";
+
+    public static final String COMMAND_USER_TO_PAGE_REQUEST = "/user/topageuserrequest";
+    public static final String COMMAND_USER_TO_PAGE_TIMER = "/user/topageusertimer";
+
+    public static final String COMMAND_ADMIN_ACCOUNT_ACTION = "/admin/accountAction";
+    public static final String COMMAND_ADMIN_ACTIVITY_ACTION = "/admin/activityAction";
+    public static final String COMMAND_ADMIN_KIND_ACTION = "/admin/kindAction";
+    public static final String COMMAND_ADMIN_REQUEST_ACTION = "/admin/requestAction";
+    public static final String COMMAND_USER_REQUEST_ACTION = "/user/userRequestAction";
+    public static final String COMMAND_USER_TIMER_ACTION = "/user/userTimerAction";
+
+
 }

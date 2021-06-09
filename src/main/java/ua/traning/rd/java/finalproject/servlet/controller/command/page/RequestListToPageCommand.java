@@ -16,6 +16,8 @@ import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class RequestListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListToPageCommand.class);
 
@@ -23,17 +25,17 @@ public class RequestListToPageCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN AccountListToPageCommand");
 
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
-        Optional<String> pagenumber = Optional.ofNullable(request.getParameter("pagenumber"));
+        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter(ROWS_PER_PAGE));
+        Optional<String> pagenumber = Optional.ofNullable(request.getParameter(Constants.PAGE_NUMBER));
 
         int rowsPerPage = recordsPerPage.map(Integer::parseInt)
-                .orElse((Integer) request.getAttribute("rowsPerPage"));
+                .orElse((Integer) request.getAttribute(ROWS_PER_PAGE));
 
         int page = pagenumber.map(Integer::parseInt)
-                .orElse((Integer) request.getSession().getAttribute("pagenumber"));
+                .orElse((Integer) request.getSession().getAttribute(Constants.PAGE_NUMBER));
 
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
 
@@ -41,20 +43,20 @@ public class RequestListToPageCommand implements Command {
         try {
             requestLists = new EntityListService<>(AdminRequestList.class)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
-                            Constants.SQL_ADMIN_REQUEST + " LIMIT ? OFFSET ?");
+                            Constants.SQL_ADMIN_REQUEST + SQL_LIMIT_OFFSET_BOUNDS);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString("message.request.data.empty"));
+            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
-        request.setAttribute("resultList", requestLists);
-        request.getSession().setAttribute("pagenumber", page);
-        request.setAttribute("rowsPerPage", rowsPerPage);
+        request.setAttribute(RESULT_LIST, requestLists);
+        request.getSession().setAttribute(Constants.PAGE_NUMBER, page);
+        request.setAttribute(ROWS_PER_PAGE, rowsPerPage);
 
         LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);
         LOGGER.info("OUT AccountListToPageCommand");
-        return "/WEB-INF/admin/requestlist.jsp";
+        return ADMIN_REQUEST_LIST_JSP;
     }
 }

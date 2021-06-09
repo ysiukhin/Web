@@ -1,4 +1,0 @@
--- SELECT id, kind_ru, kind_en FROM kind;
--- SELECT id, kind_ru, kind_en FROM kind where id = ?;
--- INSERT INTO kind (kind_ru, kind_en) VALUES ('оздоровительная секция', 'wellness section');
--- INSERT INTO kind (kind_ru, kind_en) VALUES (?, ?);

@@ -2,6 +2,7 @@ package ua.traning.rd.java.finalproject.servlet.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.servlet.controller.command.*;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.AccountActionCommand;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ import java.util.Map;
 public class Servlet extends HttpServlet {
     public final static Logger LOGGER = LogManager.getLogger(Servlet.class);
 
-    @Resource(name = "jdbc/timecounterdb")
+    @Resource(name = DBNAME)
     public static DataSource dataSource;
     public static String ContextPath;
     private final Map<String, Command> commands = new HashMap<>();
@@ -33,39 +35,39 @@ public class Servlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        commands.put("error", (r) -> "/WEB-INF/error.jsp");
-        commands.put("logout", new LogOutCommand());
-        commands.put("login", new LoginCommand());
-        commands.put("adminsection", new AdminSectionCommand());
-        commands.put("usersection", new UserSectionCommand());
+        commands.put(COMMAND_ERROR, (r) -> ERROR_JSP);
+        commands.put(COMMAND_LOGOUT, new LogOutCommand());
+        commands.put(COMMAND_LOGIN, new LoginCommand());
+        commands.put(COMMAND_ADMIN_SECTION, new AdminSectionCommand());
+        commands.put(COMMAND_USER_SECTION, new UserSectionCommand());
 
-        commands.put("accountList", new AccountListCommand());
-        commands.put("activityList", new ActivityListCommand());
-        commands.put("kindList", new KindListCommand());
-        commands.put("requestList", new RequestListCommand());
-        commands.put("reportActivityList", new ReportActivityListCommand());
-        commands.put("reportAccountList", new ReportAccountListCommand());
+        commands.put(COMMAND_ADMIN_ACCOUNT_LIST, new AccountListCommand());
+        commands.put(COMMAND_ADMIN_ACTIVITY_LIST, new ActivityListCommand());
+        commands.put(COMMAND_ADMIN_KIND_LIST, new KindListCommand());
+        commands.put(COMMAND_ADMIN_REQUEST_LIST, new RequestListCommand());
+        commands.put(COMMAND_ADMIN_REPORT_REQUEST_LIST, new ReportActivityListCommand());
+        commands.put(COMMAND_ADMIN_REPORT_ACCOUNT_LIST, new ReportAccountListCommand());
 
-        commands.put("userTimer", new UserTimerCommand());  // TODO
-        commands.put("userRequestList", new UserRequestListCommand());
-
-
-        commands.put("topageaccount", new AccountListToPageCommand());
-        commands.put("topageactivity", new ActivityListToPageCommand());
-        commands.put("topagekind", new KindListToPageCommand());
-        commands.put("topagerequest", new RequestListToPageCommand());
-        commands.put("topageuserrequest", new UserRequestListToPageCommand());
-        commands.put("topageusertimer", new UserTimerToPageCommand());
+        commands.put(COMMAND_USER_TIMER, new UserTimerCommand());
+        commands.put(COMMAND_USER_REQUEST_LIST, new UserRequestListCommand());
 
 
-        commands.put("accountAction", new AccountActionCommand());
-        commands.put("activityAction", new ActivityActionCommand());
-        commands.put("kindAction", new KindActionCommand());
-        commands.put("requestAction", new RequestActionCommand());
-        commands.put("userRequestAction", new UserRequestActionCommand());
-        commands.put("userTimerAction", new UserTimerActionCommand());
+        commands.put(COMMAND_ADMIN_TO_PAGE_ACCOUNT, new AccountListToPageCommand());
+        commands.put(COMMAND_ADMIN_TO_PAGE_ACTIVITY, new ActivityListToPageCommand());
+        commands.put(COMMAND_ADMIN_TO_PAGE_KIND, new KindListToPageCommand());
+        commands.put(COMMAND_ADMIN_TO_PAGE_REQUEST, new RequestListToPageCommand());
+        commands.put(COMMAND_USER_TO_PAGE_REQUEST, new UserRequestListToPageCommand());
+        commands.put(COMMAND_USER_TO_PAGE_TIMER, new UserTimerToPageCommand());
 
-        commands.put("changeLanguage", new ChangeLanguageCommand());
+
+        commands.put(COMMAND_ADMIN_ACCOUNT_ACTION, new AccountActionCommand());
+        commands.put(COMMAND_ADMIN_ACTIVITY_ACTION, new ActivityActionCommand());
+        commands.put(COMMAND_ADMIN_KIND_ACTION, new KindActionCommand());
+        commands.put(COMMAND_ADMIN_REQUEST_ACTION, new RequestActionCommand());
+        commands.put(COMMAND_USER_REQUEST_ACTION, new UserRequestActionCommand());
+        commands.put("/userTimerAction", new UserTimerActionCommand());
+
+        commands.put(COMMAND_CHANGE_LANGUAGE, new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
     }
 
@@ -83,13 +85,23 @@ public class Servlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        path = path.replaceAll(".*" + ContextPath + "/", "");
-        Command command = commands.getOrDefault(path, (r) -> "/index.jsp");
+//        path = path.replaceAll(".*" + ContextPath + "/", "");
+
+        path = path.replaceAll(".*" + ContextPath, "");
+
+        LOGGER.info("Before command execute: path -> {}", path);
+        Command command = commands.getOrDefault(path, (r) -> Constants.LOGIN_JSP);
+
+        //        Command command = commands.getOrDefault(path, (r) -> "/" + Constants.LOGIN_JSP);
+
         String page = command.execute(request);
-        if (page.contains("redirect:")) {
-            String redirect = page.replace("redirect:", ContextPath);
+
+        LOGGER.info("Command to path -> {} executed result path: {}", path, page);
+
+        if (page.contains(REDIRECT + ":")) {
+            String redirect = page.replace(REDIRECT + ":", ContextPath);
 //            LOGGER.info("redirect {} to -> {}", page, redirect);
-            response.sendRedirect(page.replace("redirect:", ContextPath));
+            response.sendRedirect(page.replace(REDIRECT + ":", ContextPath));
         } else {
             request.getRequestDispatcher(page).forward(request, response);
         }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static java.util.Objects.nonNull;
+import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class ActivityActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
@@ -19,87 +20,92 @@ public class ActivityActionCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN ActivityActionCommand");
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        ResourceBundle messages = ResourceBundle.getBundle("messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle messages = ResourceBundle.getBundle(MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
         try {
             Optional<Activity> newActivity = requestIsValid(request);
             if (newActivity.isPresent()) {
-                String action = request.getParameter("action");
-                request.getSession().setAttribute("actionStatus", true);
-                request.getSession().setAttribute("isMessage", true);
+                String action = request.getParameter(ACTION);
+                request.getSession().setAttribute(LAST_ACTION_STATUS, true);
+                request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
                 StringJoiner mes = new StringJoiner(" ");
-                mes.add(messages.getString("entity.action.create"))
-                        .add(messages.getString("entity.dao.operation"));
+                mes.add(messages.getString(ENTITY_INSERT_ACTION))
+                        .add(messages.getString(DAO_OPERATION));
 
-                if (messages.getString("entity.action.create").equalsIgnoreCase(action)) {
+                if (messages.getString(ENTITY_INSERT_ACTION).equalsIgnoreCase(action)) {
                     mes.add(insert(request, messages, newActivity.get()));
-                } else if (messages.getString("entity.action.update").equalsIgnoreCase(action)) {
+                } else if (messages.getString(ENTITY_UPDATE_ACTION).equalsIgnoreCase(action)) {
                     mes.add(update(request, messages, newActivity.get()));
 
-                } else if (messages.getString("entity.action.delete").equalsIgnoreCase(action)) {
+                } else if (messages.getString(ENTITY_DELETE_ACTION).equalsIgnoreCase(action)) {
                     mes.add(delete(request, messages));
                 }
             } else {
-                request.getSession().setAttribute("actionStatus", false);
-                request.getSession().setAttribute("isMessage", true);
-                request.getSession().setAttribute("actionMessage",
-                        errorMessages.getString("message.validation.error"));
+                request.getSession().setAttribute(LAST_ACTION_STATUS, false);
+                request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
+                request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT,
+                        errorMessages.getString(MESSAGE_VALIDATION_ERROR));
+//                request.getSession().setAttribute("actionMessage",
+//                        errorMessages.getString("message.validation.error"));
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
-        request.getSession().setAttribute("actionStatus", true);
-        request.getSession().setAttribute("isMessage", true);
+        request.getSession().setAttribute(LAST_ACTION_STATUS, true);
+        request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
         LOGGER.info("OUT ActivityActionCommand");
-        return "redirect:/activityList?page=activityList";
+        return REDIRECT + ":" + COMMAND_ADMIN_ACTIVITY_LIST + "?" + PAGE + "=" + COMMAND_ADMIN_ACTIVITY_LIST;
     }
 
     private String delete(HttpServletRequest request, ResourceBundle messages) {
         StringJoiner mes = new StringJoiner(" ");
         if (new EntityListService<>(Activity.class)
-                .deleteEntity(Integer.parseInt(request.getParameter("id"))) == 0) {
-            request.getSession().setAttribute("actionStatus", false);
-            mes.add(messages.getString("entity.action.result.bad"));
+                .deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
+            request.getSession().setAttribute(LAST_ACTION_STATUS, false);
+            mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
-            mes.add(messages.getString("entity.action.result.ok"));
+            mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
-        request.getSession().setAttribute("actionMessage", mes.toString());
+        request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
+//        request.getSession().setAttribute("actionMessage", mes.toString());
         return mes.toString();
     }
 
     private String update(HttpServletRequest request, ResourceBundle messages, Activity newActivity) {
         StringJoiner mes = new StringJoiner(" ");
-        newActivity.setId(Integer.parseInt(request.getParameter("id")));
+        newActivity.setId(Integer.parseInt(request.getParameter(ID)));
         if (new EntityListService<>(Activity.class).updateEntity(newActivity) == 0) {
-            request.getSession().setAttribute("actionStatus", false);
-            mes.add(messages.getString("entity.action.result.bad"));
+            request.getSession().setAttribute(LAST_ACTION_STATUS, false);
+            mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
-            mes.add(messages.getString("entity.action.result.ok"));
+            mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
-        request.getSession().setAttribute("actionMessage", mes.toString());
+        request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
+//        request.getSession().setAttribute("actionMessage", mes.toString());
         return mes.toString();
     }
 
     private String insert(HttpServletRequest request, ResourceBundle messages, Activity newActivity) {
         StringJoiner mes = new StringJoiner(" ");
         if (new EntityListService<>(Activity.class).insertEntity(newActivity) == 0) {
-            request.getSession().setAttribute("actionStatus", false);
-            mes.add(messages.getString("entity.action.result.bad"));
+            request.getSession().setAttribute(LAST_ACTION_STATUS, false);
+            mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
-            mes.add(messages.getString("entity.action.result.ok"));
+            mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
-        request.getSession().setAttribute("actionMessage", mes.toString());
+        request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
+//        request.getSession().setAttribute("actionMessage", mes.toString());
         return mes.toString();
     }
 
     private Optional<Activity> requestIsValid(final HttpServletRequest req) {
 
-        String activity_en = req.getParameter("activity_en");
-        String activity_ru = req.getParameter("activity_ru");
+        String activity_en = req.getParameter(ACTIVITY_ENGLISH);
+        String activity_ru = req.getParameter(ACTIVITY_RUSSIAN);
 
         if (nonNull(activity_en) && nonNull(activity_ru)
                 && activity_en.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50)
@@ -108,7 +114,7 @@ public class ActivityActionCommand implements Command {
                     new ActivityBuilder()
                             .addActivityEn(activity_en)
                             .addActivityRu(activity_ru)
-                            .addKindId(Integer.parseInt(req.getParameter("kind_id")))
+                            .addKindId(Integer.parseInt(req.getParameter(KIND_ID)))
                             .build());
         } else {
             return Optional.empty();

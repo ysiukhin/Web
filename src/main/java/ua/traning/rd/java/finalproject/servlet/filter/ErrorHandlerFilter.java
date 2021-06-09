@@ -2,7 +2,7 @@ package ua.traning.rd.java.finalproject.servlet.filter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,9 +13,6 @@ public class ErrorHandlerFilter extends AbstractFilter {
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         logger.info("ErrorHandlerFilter");
         try {
-//            logger.debug("Error filter: session id: {}\nRequestURI: {} \nloggedAccounts: {}",
-//                    req.getSession().getId(), req.getRequestURI(),
-//                    req.getServletContext().getAttribute("loggedAccounts"));
             chain.doFilter(req, resp);
         } catch (Throwable throwable) {
             String requestUrl = req.getRequestURI();

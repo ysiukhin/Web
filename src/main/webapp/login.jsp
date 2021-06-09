@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
 
@@ -19,6 +20,12 @@
 </head>
 
 <body class="w-100 text-center" style="background-color: #e3e3e3;">
+<c:if test="${sessionScope.isMessage}">
+    <c:set scope="session" var="${Constants.IS_MESSAGE_TO_SHOW}" value="false"/>
+    <custom:messageform actionStatus="${sessionScope.actionStatus}"
+                        actionCaption="${sessionScope.actionCaption}"
+                        actionMessage="${sessionScope.actionMessage}"/>
+</c:if>
 <main>
     <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
         <label class=""><a href="login.jsp?sessionLocale=en" class="link-secondary">
@@ -27,7 +34,7 @@
         <label class=""><a href="login.jsp?sessionLocale=ru" class="link-secondary">
             <img src="${pageContext.request.contextPath}/static/flags/ru.svg" width="16"
                  height="16"/>РУССКИЙ</a></label>
-        <%--        <label><a href="${pageContext.request.contextPath}/logout">Logout</a></label>--%>
+        <%--        <label><a href="${pageContext.request.contextPath}/${Constants.COMMAND_LOGOUT}">Logout</a></label>--%>
         <form action="${pageContext.request.contextPath}/login" method="POST" role="form">
             <h1 class="h3 mb-3 fw-normal"><fmt:message key="label.welcome"/></h1>
             <div class="form-floating">

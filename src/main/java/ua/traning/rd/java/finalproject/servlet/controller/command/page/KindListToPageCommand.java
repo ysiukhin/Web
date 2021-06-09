@@ -2,6 +2,7 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Kind;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
@@ -15,6 +16,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class KindListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(KindListToPageCommand.class);
 
@@ -22,17 +25,17 @@ public class KindListToPageCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN KindListToPageCommand");
 
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
-        Optional<String> pagenumber = Optional.ofNullable(request.getParameter("pagenumber"));
+        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter(ROWS_PER_PAGE));
+        Optional<String> pagenumber = Optional.ofNullable(request.getParameter(Constants.PAGE_NUMBER));
 
         int rowsPerPage = recordsPerPage.map(Integer::parseInt)
-                .orElse((Integer) request.getAttribute("rowsPerPage"));
+                .orElse((Integer) request.getAttribute(ROWS_PER_PAGE));
 
         int page = pagenumber.map(Integer::parseInt)
-                .orElse((Integer) request.getSession().getAttribute("pagenumber"));
+                .orElse((Integer) request.getSession().getAttribute(Constants.PAGE_NUMBER));
 
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
         List<Kind> kinds;
@@ -41,16 +44,16 @@ public class KindListToPageCommand implements Command {
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString("message.request.data.empty"));
+            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
-        request.setAttribute("kinds", kinds);
-        request.getSession().setAttribute("pagenumber", page);
-        request.setAttribute("rowsPerPage", rowsPerPage);
+        request.setAttribute(KIND_LIST, kinds);
+        request.getSession().setAttribute(Constants.PAGE_NUMBER, page);
+        request.setAttribute(ROWS_PER_PAGE, rowsPerPage);
         LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);
         LOGGER.info("OUT KindListToPageCommand");
-        return "/WEB-INF/admin/kindlist.jsp";
+        return ADMIN_KIND_LIST_JSP;
     }
 }

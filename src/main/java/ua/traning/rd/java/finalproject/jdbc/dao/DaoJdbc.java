@@ -17,6 +17,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static ua.traning.rd.java.finalproject.Constants.ID;
+import static ua.traning.rd.java.finalproject.Constants.SQL_LIMIT_OFFSET_BOUNDS;
+
 public class DaoJdbc<T> extends Dao<T> {
 
     private static final Logger LOGGER = LogManager.getLogger(DaoJdbc.class);
@@ -47,7 +50,7 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public List<T> selectByRecordNumberInRange(int limit, int offset) {
-        return selectByRecordNumberInRange(limit, offset, (buildSelect() + " LIMIT ? OFFSET ?"));
+        return selectByRecordNumberInRange(limit, offset, (buildSelect() + SQL_LIMIT_OFFSET_BOUNDS));
     }
 
     @Override
@@ -213,7 +216,7 @@ public class DaoJdbc<T> extends Dao<T> {
                 try (ResultSet rs = prepStatement.getGeneratedKeys()) {
                     rs.next();
                     int generatedKey = rs.getInt(1);
-                    Field primaryKey = getDaoEntity().getDeclaredField("id");
+                    Field primaryKey = getDaoEntity().getDeclaredField(ID);
                     primaryKey.setAccessible(true);
                     primaryKey.set(entity, generatedKey);
                     primaryKey.setAccessible(false);
@@ -307,7 +310,7 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public int delete(int id) {
-        return delete(Collections.singletonList("id"), Collections.singletonList(id));
+        return delete(Collections.singletonList(ID), Collections.singletonList(id));
     }
 
     @Override

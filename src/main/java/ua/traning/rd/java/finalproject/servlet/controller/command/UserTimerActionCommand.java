@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class UserTimerActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
 
@@ -20,37 +22,39 @@ public class UserTimerActionCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN UserTimerActionCommand");
 
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        ResourceBundle messages = ResourceBundle.getBundle("messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle messages = ResourceBundle.getBundle(MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        Optional<String> record = Optional.ofNullable(request.getParameter("record"));
+        Optional<String> record = Optional.ofNullable(request.getParameter(RECORD));
 
         try {
-            if (request.getParameter("record").equals("0")) {
+            if (request.getParameter(RECORD).equals(ZERO)) {
                 Record newRecord = new Record();
                 newRecord.setStart(Timestamp.valueOf(LocalDateTime.now()));
-                newRecord.setAccountActivityId(Integer.parseInt(request.getParameter("account_activity_id")));
+                newRecord.setAccountActivityId(Integer.parseInt(request.getParameter(ACCOUNT_ACTIVITY_ID_VALUE)));
                 new EntityListService<>(Record.class).insertEntity(newRecord);
-                request.getSession().setAttribute("actionStatus", true);
-                request.getSession().setAttribute("isMessage", true);
-                request.getSession().setAttribute("actionMessage",
-                        messages.getString("user.timer.started.message"));
+                request.getSession().setAttribute(LAST_ACTION_STATUS, true);
+                request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
+                request.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL,
+                        messages.getString(TIMER_STARTED_MESSAGE));
             } else {
                 new EntityListService<>(Record.class)
                         .updateEntity(Constants.STOP_TIMER_QUERY, Integer.parseInt(record.get()));
-                request.getSession().setAttribute("actionStatus", true);
-                request.getSession().setAttribute("isMessage", true);
-                request.getSession().setAttribute("actionMessage",
-                        messages.getString("user.timer.stopped.message"));
+                request.getSession().setAttribute(LAST_ACTION_STATUS, true);
+                request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
+                request.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL,
+                        messages.getString(TIMER_STOPPED_MESSAGE));
             }
             LOGGER.info("OUT UserTimerActionCommand");
-            return "redirect:/userTimer?page=userTimer";
+            ///TODO
+            return REDIRECT + ":" + COMMAND_USER_TIMER + "?" + PAGE + "=" + COMMAND_USER_TIMER;
+//            return REDIRECT+":/userTimer?page=userTimer";
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
     }
 }

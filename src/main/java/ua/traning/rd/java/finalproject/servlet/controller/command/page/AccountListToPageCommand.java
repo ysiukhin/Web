@@ -2,6 +2,7 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
@@ -15,6 +16,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class AccountListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(AccountListToPageCommand.class);
 
@@ -22,17 +25,17 @@ public class AccountListToPageCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN AccountListToPageCommand");
 
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
-        Optional<String> pageNumber = Optional.ofNullable(request.getParameter("pagenumber"));
+        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter(ROWS_PER_PAGE));
+        Optional<String> pageNumber = Optional.ofNullable(request.getParameter(PAGE_NUMBER));
 
         int rowsPerPage = recordsPerPage.map(Integer::parseInt)
-                .orElse((Integer) request.getAttribute("rowsPerPage"));
+                .orElse((Integer) request.getAttribute(ROWS_PER_PAGE));
 
         int page = pageNumber.map(Integer::parseInt)
-                .orElse((Integer) request.getSession().getAttribute("pagenumber"));
+                .orElse((Integer) request.getSession().getAttribute(PAGE_NUMBER));
 
         List<Account> accounts;
         try {
@@ -40,18 +43,17 @@ public class AccountListToPageCommand implements Command {
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString("message.request.data.empty"));
+            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
 
-        request.setAttribute("accounts", accounts);
-        request.getSession().setAttribute("pagenumber", page);
-        request.setAttribute("rowsPerPage", rowsPerPage);
-        request.setAttribute("rowsPerPage", rowsPerPage);
+        request.setAttribute(ACCOUNT_LIST, accounts);
+        request.getSession().setAttribute(PAGE_NUMBER, page);
+        request.setAttribute(ROWS_PER_PAGE, rowsPerPage);
 
         LOGGER.info("OUT AccountListToPageCommand");
-        return "/WEB-INF/admin/accountlist.jsp";
+        return ADMIN_ACCOUNT_LIST_JSP;
     }
 }

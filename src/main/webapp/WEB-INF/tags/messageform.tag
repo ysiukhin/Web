@@ -3,10 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="messages"/>
+<fmt:setBundle basename="${Constants.MESSAGES_BUNDLE}"/>
 <%@ attribute name="actionStatus" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="actionMessage" required="false" type="java.lang.String" %>
-
+<%@ attribute name="actionCaption" required="true" type="java.lang.String" %>
 
 <style>
     body {
@@ -112,23 +112,22 @@
 </style>
 
 <body>
-
-
 <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
         <c:choose>
             <c:when test="${actionStatus}">
                 <div class="modal-header ok">
+                    <h3><c:out value="${actionCaption}"/></h3>
                     <span class="close">&times;</span>
-                    <h3><fmt:message key="entity.dao.operation"/>&nbsp;<fmt:message key="entity.action.result.ok"/></h3>
+                        <%--                    <h3><fmt:message key="entity.dao.operation"/>&nbsp;<fmt:message key="entity.action.result.ok"/></h3>--%>
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="modal-header bad">
+                    <h3><c:out value="${actionCaption}"/></h3>
                     <span class="close">&times;</span>
-                    <h3><fmt:message key="entity.action.create"/>&nbsp;<fmt:message
-                            key="entity.action.result.bad"/></h3>
+                        <%--                    <h3><fmt:message key="entity.action.create"/>&nbsp;<fmt:message key="entity.action.result.bad"/></h3>--%>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -138,15 +137,16 @@
         <c:choose>
             <c:when test="${actionStatus}">
                 <div class="modal-footer ok">
-                    <span class="close">&times;</span>
-                    <h4><fmt:message key="entity.dao.operation"/>&nbsp;<fmt:message key="entity.action.result.ok"/></h4>
+                        <%--                    <h4><c:out value="${actionCaption}"/></h4>--%>
+                        <%--                    <span class="close">&times;</span>--%>
+                        <%--                    <h4><fmt:message key="entity.dao.operation"/>&nbsp;<fmt:message key="entity.action.result.ok"/></h4>--%>
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="modal-footer bad">
-                    <span class="close">&times;</span>
-                    <h4><fmt:message key="entity.action.create"/>&nbsp;<fmt:message
-                            key="entity.action.result.bad"/></h4>
+                        <%--                    <h4><c:out value="${actionCaption}"/></h4>--%>
+                        <%--                    <span class="close">&times;</span>--%>
+                        <%--                    <h4><fmt:message key="entity.action.create"/>&nbsp;<fmt:message key="entity.action.result.bad"/></h4>--%>
                 </div>
             </c:otherwise>
         </c:choose>

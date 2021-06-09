@@ -13,6 +13,8 @@ import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class ReportAccountListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ReportAccountListCommand.class);
 
@@ -20,16 +22,16 @@ public class ReportAccountListCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN ReportActivityListCommand");
 
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter("rowsPerPage"));
-        int rowsPerPage = recordsPerPage.map(Integer::parseInt).orElse(Constants.ROWS_PER_PAGE);
+        Optional<String> recordsPerPage = Optional.ofNullable(request.getParameter(ROWS_PER_PAGE));
+        int rowsPerPage = recordsPerPage.map(Integer::parseInt).orElse(Constants.DEFAULT_ROWS_PER_PAGE);
 
-        request.getSession().setAttribute("pagenumber",
-                Optional.ofNullable(request.getParameter("pagenumber"))
+        request.getSession().setAttribute(PAGE_NUMBER,
+                Optional.ofNullable(request.getParameter(PAGE_NUMBER))
                         .map(Integer::parseInt).orElse(1));
-        int page = (Integer) request.getSession().getAttribute("pagenumber");
+        int page = (Integer) request.getSession().getAttribute(PAGE_NUMBER);
 
         List<AccountReport> resultList;
         int totalRecords;
@@ -37,29 +39,29 @@ public class ReportAccountListCommand implements Command {
             totalRecords = new EntityListService<>(Account.class).totalEntities();
             resultList = new EntityListService<>(AccountReport.class)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
-                            Constants.SQL_ADMIN_REPORT_ACCOUNT + " LIMIT ? OFFSET ?");
+                            Constants.SQL_ADMIN_REPORT_ACCOUNT + SQL_LIMIT_OFFSET_BOUNDS);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString("message.request.data.empty"));
+            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
 
         int pageCount = (int) Math.ceil((double) totalRecords / rowsPerPage);
         List<String> pagesLinks = new ArrayList<>();
         if (pageCount > 1) {
             for (int i = 0; i < Math.ceil((double) totalRecords / rowsPerPage); i++) {
-                pagesLinks.add(String.format("/reportAccountList?pagenumber=%d&rowsPerPage=%d", i + 1, rowsPerPage));
+                pagesLinks.add(String.format("%s?%s=%d&%s=%d", COMMAND_ADMIN_REPORT_ACCOUNT_LIST, PAGE_NUMBER, i + 1, ROWS_PER_PAGE, rowsPerPage));
             }
         }
 
-        request.getSession().setAttribute("pages", pagesLinks);
-        request.setAttribute("rowsPerPage", rowsPerPage);
+        request.getSession().setAttribute(PAGINATION, pagesLinks);
+        request.setAttribute(ROWS_PER_PAGE, rowsPerPage);
 
-        request.setAttribute("accountReportList", resultList);
+        request.setAttribute(REPORT_ACCOUNT_LIST, resultList);
 
         LOGGER.info("OUT ReportActivityListCommand");
-        return "/WEB-INF/admin/reportaccountlist.jsp";
+        return ADMIN_ACCOUNT_REPORT_LIST_JSP;
     }
 }

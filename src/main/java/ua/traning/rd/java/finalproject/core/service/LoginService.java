@@ -12,6 +12,8 @@ import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
 import java.util.Optional;
 
+import static ua.traning.rd.java.finalproject.Constants.EMAIL;
+
 
 public class LoginService {
     public final static Logger LOGGER = LogManager.getLogger(LoginCommand.class);
@@ -20,7 +22,7 @@ public class LoginService {
         LOGGER.info("IN LoginService");
         Optional<Account> account = new DbServiceImpl<>(new DaoJdbc<>(
                 new SessionManagerJdbc(Servlet.dataSource), Account.class))
-                .getBeansBy("email", email).map(list -> list.get(0));
+                .getBeansBy(EMAIL, email).map(list -> list.get(0));
 
         String savedPassword =
                 account.map(Account::getMd5).orElseThrow(() ->

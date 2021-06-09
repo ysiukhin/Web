@@ -6,7 +6,7 @@
 <%@ page session="true" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="messages"/>
+<fmt:setBundle basename="${Constants.MESSAGES_BUNDLE}"/>
 
 <html>
 <head>

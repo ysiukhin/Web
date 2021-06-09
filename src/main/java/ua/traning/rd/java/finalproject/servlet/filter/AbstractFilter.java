@@ -10,9 +10,19 @@ import java.io.IOException;
 
 public abstract class AbstractFilter implements Filter {
     protected final Logger logger = LogManager.getLogger(getClass());
+    protected FilterConfig filterConfig;
+
+    public void setFilterConfig(FilterConfig filterConfig) {
+        this.filterConfig = filterConfig;
+    }
+
+    public FilterConfig getFilterConfig() {
+        return filterConfig;
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        this.filterConfig = filterConfig;
     }
 
     @Override

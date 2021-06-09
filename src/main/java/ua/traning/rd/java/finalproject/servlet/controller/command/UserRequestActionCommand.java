@@ -11,6 +11,8 @@ import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static ua.traning.rd.java.finalproject.Constants.*;
+
 public class UserRequestActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
 
@@ -18,35 +20,35 @@ public class UserRequestActionCommand implements Command {
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN UserRequestActionCommand");
 
-        ResourceBundle errorMessages = ResourceBundle.getBundle("error_messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        ResourceBundle messages = ResourceBundle.getBundle("messages",
-                new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
+        ResourceBundle messages = ResourceBundle.getBundle(MESSAGES_BUNDLE,
+                new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
 
-        Account user = ((LoggedAccount) request.getSession().getAttribute("account")).getAccount();
+        Account user = ((LoggedAccount) request.getSession().getAttribute(LOGGED_ACCOUNT)).getAccount();
         try {
             Request newRequest = new RequestBuilder()
                     .addAccountId(user.getId())
-                    .addActivityId(Integer.parseInt(request.getParameter("activity_id")))
-                    .addRequest(request.getParameter("account_activity_id").isEmpty())
+                    .addActivityId(Integer.parseInt(request.getParameter(ACTIVITY_ID)))
+                    .addRequest(request.getParameter(ACCOUNT_ACTIVITY_ID_VALUE).isEmpty())
                     .build();
             StringJoiner mes = new StringJoiner(" ");
-            request.getSession().setAttribute("isMessage", true);
+            request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
 
             if (new EntityListService<>(Request.class).insertEntity(newRequest) == 1) {
-                request.getSession().setAttribute("actionStatus", true);
-                mes.add(messages.getString("user.request.ok"));
+                request.getSession().setAttribute(LAST_ACTION_STATUS, true);
+                mes.add(messages.getString(USER_REQUEST_SUCCESS));
             } else {
-                request.getSession().setAttribute("actionStatus", false);
-                mes.add(messages.getString("user.request.ok"));
+                request.getSession().setAttribute(LAST_ACTION_STATUS, false);
+                mes.add(messages.getString(USER_REQUEST_FAILED));
             }
-            request.getSession().setAttribute("actionMessage", mes.toString());
+            request.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL, mes.toString());
             LOGGER.info("OUT UserRequestActionCommand");
-            return "redirect:/userRequestList?page=userRequestList";
+            return REDIRECT + ":" + COMMAND_USER_REQUEST_LIST + "?" + PAGE + "=" + COMMAND_USER_REQUEST_LIST;
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationException(errorMessages.getString("message.application.failed"));
+            throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
     }
 }

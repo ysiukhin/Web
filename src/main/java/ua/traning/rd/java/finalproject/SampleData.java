@@ -31,6 +31,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ua.traning.rd.java.finalproject.Constants.PASSWORD;
+
 public class SampleData {
     private static final Logger LOGGER = LogManager.getLogger("MysqlDemo");
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
@@ -64,7 +66,7 @@ public class SampleData {
         MessageDigest messageDigest;
         byte[] bytesEncoded;
         try {
-            messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest = MessageDigest.getInstance(PASSWORD);
             messageDigest.update(input.getBytes(StandardCharsets.UTF_8));
             bytesEncoded = messageDigest.digest();
             return new BigInteger(1, bytesEncoded).toString(16);

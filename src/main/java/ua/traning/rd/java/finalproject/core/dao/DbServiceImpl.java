@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static ua.traning.rd.java.finalproject.Constants.ID;
+
 public class DbServiceImpl<T> implements DbService<T> {
     private final static Logger LOGGER = LogManager.getLogger(DbServiceImpl.class);
 
@@ -23,7 +25,7 @@ public class DbServiceImpl<T> implements DbService<T> {
     }
 
     public Optional<T> getBeansById(int id) {
-        return Optional.ofNullable(doService(() -> dao.selectBy(Collections.singletonList("id"),
+        return Optional.ofNullable(doService(() -> dao.selectBy(Collections.singletonList(ID),
                 Collections.singletonList(id)).get(0)));
     }
 

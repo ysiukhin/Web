@@ -11,6 +11,8 @@ import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import java.util.Collections;
 import java.util.List;
 
+import static ua.traning.rd.java.finalproject.Constants.EMPTY_RESULT;
+
 public class EntityListService<T> {
     public final static Logger LOGGER = LogManager.getLogger(EntityListService.class);
     private final Class<T> entityClass;
@@ -25,31 +27,25 @@ public class EntityListService<T> {
 
     public List<T> getAllEntities() {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass)).getAllBeans()
-                .orElseThrow(() -> new ServiceException("There is no any Entities in database."));
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 
     public List<T> getInRangeByRowNumber(int limit, int offset) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansInRangeByRowNumber(limit, offset)
-                .orElseThrow(() -> new ServiceException("There is no any Accounts in database."));
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 
     public List<T> getInRangeByRowNumber(int limit, int offset, String sqlQuery) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansInRangeByRowNumber(limit, offset, sqlQuery)
-                .orElseThrow(() -> new ServiceException("There is no any Accounts in database."));
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 
     public T getById(int id) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansById(id)
-                .orElseThrow(() -> new ServiceException("There is no any Accounts in database."));
-    }
-
-    public List<T> getIdByColumn(String columnName, Object value) {
-        return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
-                .getBeansBy(columnName, value)
-                .orElseThrow(() -> new ServiceException("There is no any Entities in database."));
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 
     public int insertEntity(T entity) {
@@ -80,6 +76,6 @@ public class EntityListService<T> {
     public List<T> getByStoredProc(String storedProc, List<Object> values) {
         return new DbServiceImpl<>(new DaoJdbc<>(
                 new SessionManagerJdbc(Servlet.dataSource), entityClass)).getBeansByCall(storedProc, values)
-                .orElseThrow(() -> new ServiceException("There is no any Entities in database."));
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 }

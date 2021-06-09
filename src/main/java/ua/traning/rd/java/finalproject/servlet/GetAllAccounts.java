@@ -27,6 +27,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static ua.traning.rd.java.finalproject.Constants.ACCOUNT_LIST;
+import static ua.traning.rd.java.finalproject.Constants.EMAIL;
+
 //@WebServlet("/accounts")
 public class GetAllAccounts extends HttpServlet {
     private final static String index = "/WEB-INF/view/index.jsp";
@@ -55,7 +58,7 @@ public class GetAllAccounts extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        req.setAttribute("accounts", accounts);
+        req.setAttribute(ACCOUNT_LIST, accounts);
         req.getRequestDispatcher(index).forward(req, resp);
     }
 
@@ -77,7 +80,7 @@ public class GetAllAccounts extends HttpServlet {
                 .addFirstName(req.getParameter("firstName"))
                 .addLastName(req.getParameter("lastName"))
                 .addMiddleName(req.getParameter("middleName"))
-                .addEmail(req.getParameter("email"))
+                .addEmail(req.getParameter(EMAIL))
                 .addMd5(SampleData.getMd5(req.getParameter("login")))
                 .addStatus(Integer.parseInt(req.getParameter("status")) == 1)
                 .build();
