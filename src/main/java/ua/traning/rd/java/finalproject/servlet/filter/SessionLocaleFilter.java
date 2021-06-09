@@ -9,8 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static ua.traning.rd.java.finalproject.Constants.LANGUAGE;
-import static ua.traning.rd.java.finalproject.Constants.LOCALE_ENGLISH;
+import static ua.traning.rd.java.finalproject.Constants.*;
 
 //@WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
 public class SessionLocaleFilter implements Filter {
@@ -19,25 +18,12 @@ public class SessionLocaleFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-//        logger.info("BEFORE: -->  Request.getLocale(): {}", req.getLocale().toString());
-//        logger.info("BEFORE: -->  sessionId: {}", req.getSession().getId());
-//        logger.info("BEFORE: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
-//        logger.info("BEFORE: -->  session.lang {}", req.getSession().getAttribute("lang"));
-
-
         if (req.getSession().getAttribute(LANGUAGE) == null) {
             req.getSession().setAttribute(LANGUAGE, LOCALE_ENGLISH);
         }
-        if (req.getParameter("sessionLocale") != null) {
-            req.getSession().setAttribute(LANGUAGE, req.getParameter("sessionLocale"));
+        if (req.getParameter(SESSION_LOCALE) != null) {
+            req.getSession().setAttribute(LANGUAGE, req.getParameter(SESSION_LOCALE));
         }
-//        else {
-//            req.getSession().setAttribute("lang", req.getParameter("sessionLocale"));
-//        }
-//        logger.info("AFTER: -->  sessionId: {}", req.getSession().getId());
-//        logger.info("AFTER: -->  Request.sessionLocale {}", req.getParameter("sessionLocale"));
-//        logger.info("AFTER: -->  session.lang {}", req.getSession().getAttribute("lang"));
-
         chain.doFilter(request, response);
     }
 

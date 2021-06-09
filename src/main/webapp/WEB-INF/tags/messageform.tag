@@ -83,12 +83,16 @@
     }
 
     .modal-header.ok {
+        font-size: 16px;
+        font-weight: bold;
         padding: 2px 16px;
         background-color: #5cb85c;
         color: white;
     }
 
     .modal-header.bad {
+        font-size: 16px;
+        font-weight: bold;
         padding: 2px 16px;
         background-color: red;
         color: white;
@@ -118,14 +122,14 @@
         <c:choose>
             <c:when test="${actionStatus}">
                 <div class="modal-header ok">
-                    <h3><c:out value="${actionCaption}"/></h3>
+                    <h5><c:out value="${actionCaption}"/></h5>
                     <span class="close">&times;</span>
                         <%--                    <h3><fmt:message key="entity.dao.operation"/>&nbsp;<fmt:message key="entity.action.result.ok"/></h3>--%>
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="modal-header bad">
-                    <h3><c:out value="${actionCaption}"/></h3>
+                    <h5><c:out value="${actionCaption}"/></h5>
                     <span class="close">&times;</span>
                         <%--                    <h3><fmt:message key="entity.action.create"/>&nbsp;<fmt:message key="entity.action.result.bad"/></h3>--%>
                 </div>

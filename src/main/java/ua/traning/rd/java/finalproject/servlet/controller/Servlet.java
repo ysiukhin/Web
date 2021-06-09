@@ -2,12 +2,8 @@ package ua.traning.rd.java.finalproject.servlet.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.servlet.controller.command.*;
-import ua.traning.rd.java.finalproject.servlet.controller.command.action.AccountActionCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.action.KindActionCommand;
-import ua.traning.rd.java.finalproject.servlet.controller.command.action.RequestActionCommand;
+import ua.traning.rd.java.finalproject.servlet.controller.command.action.*;
 import ua.traning.rd.java.finalproject.servlet.controller.command.list.*;
 import ua.traning.rd.java.finalproject.servlet.controller.command.page.*;
 
@@ -36,8 +32,10 @@ public class Servlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         commands.put(COMMAND_ERROR, (r) -> ERROR_JSP);
+
         commands.put(COMMAND_LOGOUT, new LogOutCommand());
         commands.put(COMMAND_LOGIN, new LoginCommand());
+
         commands.put(COMMAND_ADMIN_SECTION, new AdminSectionCommand());
         commands.put(COMMAND_USER_SECTION, new UserSectionCommand());
 
@@ -65,7 +63,7 @@ public class Servlet extends HttpServlet {
         commands.put(COMMAND_ADMIN_KIND_ACTION, new KindActionCommand());
         commands.put(COMMAND_ADMIN_REQUEST_ACTION, new RequestActionCommand());
         commands.put(COMMAND_USER_REQUEST_ACTION, new UserRequestActionCommand());
-        commands.put("/userTimerAction", new UserTimerActionCommand());
+        commands.put(COMMAND_USER_TIMER_ACTION, new UserTimerActionCommand());
 
         commands.put(COMMAND_CHANGE_LANGUAGE, new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
@@ -90,17 +88,14 @@ public class Servlet extends HttpServlet {
         path = path.replaceAll(".*" + ContextPath, "");
 
         LOGGER.info("Before command execute: path -> {}", path);
-        Command command = commands.getOrDefault(path, (r) -> Constants.LOGIN_JSP);
-
-        //        Command command = commands.getOrDefault(path, (r) -> "/" + Constants.LOGIN_JSP);
+        Command command = commands.getOrDefault(path, (r) -> COMMAND_LOGOUT);
 
         String page = command.execute(request);
 
         LOGGER.info("Command to path -> {} executed result path: {}", path, page);
 
         if (page.contains(REDIRECT + ":")) {
-            String redirect = page.replace(REDIRECT + ":", ContextPath);
-//            LOGGER.info("redirect {} to -> {}", page, redirect);
+//            String redirect = page.replace(REDIRECT + ":", ContextPath);
             response.sendRedirect(page.replace(REDIRECT + ":", ContextPath));
         } else {
             request.getRequestDispatcher(page).forward(request, response);

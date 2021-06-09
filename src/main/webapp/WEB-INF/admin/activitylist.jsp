@@ -14,7 +14,7 @@
 <html lang="${sessionScope.lang}">
 
 <head>
-    <title>ADMIN SECTION</title>
+    <title>ADMIN section</title>
     <style>
         <%@include file="../css/admin.css"%>
         <%@include file="../css/messageform.css"%>
@@ -27,21 +27,21 @@
 
 <body>
 <c:if test="${sessionScope.isMessage}">
-    <c:set scope="session" var="IS_MESSAGE_TO_SHOW" value="false"/>
+    <c:set scope="session" var="isMessage" value="false"/>
     <custom:messageform actionStatus="${sessionScope.actionStatus}"
                         actionCaption="${sessionScope.actionCaption}"
                         actionMessage="${sessionScope.actionMessage}"/>
 </c:if>
 <div class="header-panel">
-    <label><h1>Hello ADMIN!</h1></label>
+    <label><h1>${sessionScope.account.account.firstName}&nbsp;${sessionScope.account.account.lastName}</h1></label>
     <label><a href="${pageContext.request.contextPath}${Constants.COMMAND_LOGOUT}">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?sessionLocale=en&page=${Constants.COMMAND_ADMIN_ACTIVITY_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
-        <img src="${pageContext.request.contextPath}/static/flags/gb.svg" width="16" height="16"/></span>
+            href="${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACTIVITY_LIST}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_ENGLISH}&${Constants.PAGE}=${Constants.COMMAND_ADMIN_ACTIVITY_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
+        <img src="${pageContext.request.contextPath}/static/flags/gb.png" width="20" height="16"/></span>
         ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?sessionLocale=ru&page=${Constants.COMMAND_ADMIN_ACTIVITY_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
-        <img src="${pageContext.request.contextPath}/static/flags/ru.svg" width="16" height="16"/>РУССКИЙ</a></label>
+            href="${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACTIVITY_LIST}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_RUSSIAN}&${Constants.PAGE}=${Constants.COMMAND_ADMIN_ACTIVITY_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
+        <img src="${pageContext.request.contextPath}/static/flags/ru.png" width="20" height="16"/>РУССКИЙ</a></label>
 </div>
 <br>
 <hr>
@@ -63,7 +63,7 @@
     <div class="tab tab-1">
         <form action="http://localhost:8080/${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACTIVITY_ACTION}"
               method="POST"
-              onSubmit="return check('<fmt:message key="admin.activity.alert.message.empty"/>');">>
+              onSubmit="return check('<fmt:message key="admin.activity.alert.message.empty"/>');">
             <table class="table" id="table">
                 <tr>
                     <td><input type="submit" value="<fmt:message key="entity.action.create"/>" name="action"
@@ -84,7 +84,7 @@
                     <td>
                         <select name="activity_kind" id="activity_kind" class="input" style="width: 100%">
                             <option><fmt:message key="table.activity.column.activity_kind"/></option>
-                            <c:forEach var="${Constants.ACTIVITY}" items="${requestScope.activities}">
+                            <c:forEach var="activity" items="${requestScope.activities}">
                                 <option value="${activity.kindEn} | ${activity.kindRu}">${activity.kindEn}
                                     | ${activity.kindRu}</option>
                             </c:forEach>
@@ -100,7 +100,7 @@
                     <th><fmt:message key="table.activity.column.activity_kind"/></th>
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                 </tr>
-                <c:forEach var="${Constants.ACTIVITY}" items="${requestScope.activities}">
+                <c:forEach var="activity" items="${requestScope.activities}">
                     <tr class="tblrow">
                         <td style="display:none;"><c:out value="${activity.id}"/></td>
                         <td><c:out value="${activity.activityRu}"/></td>

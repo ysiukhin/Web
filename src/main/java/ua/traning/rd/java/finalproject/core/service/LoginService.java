@@ -31,6 +31,7 @@ public class LoginService {
         String providedPassword = ServiceUtils.getMd5(password);
 
         if (!savedPassword.equalsIgnoreCase(providedPassword)) {
+
             throw new ServiceException(String
                     .format("Wrong password -> saved: [%s] and provided: [%s]", savedPassword, providedPassword));
         }

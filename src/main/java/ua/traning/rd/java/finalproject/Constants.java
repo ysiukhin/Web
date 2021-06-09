@@ -68,7 +68,7 @@ public final class Constants {
     public static final String ADMIN_REQUEST_LIST_JSP = "/WEB-INF/admin/requestlist.jsp";
 
 
-    public static final String SERVER_PORT = "http://localhost:8080/";
+    public static final String SERVER_PORT_AND_PORT = "http://localhost:8080/";
     public static final String REDIRECT = "redirect";
     public static final String PAGE = "page";
     public static final String PAGINATION = "pages";
@@ -94,7 +94,8 @@ public final class Constants {
 
     public static final String MIDDLE_NAME = "middle_name";
     public static final String EMAIL = "email";
-    public static final String PASSWORD = "md5";
+    public static final String PASSWORD = "password";
+    public static final String PASSWORD_MD5 = "md5";
     public static final String KIND_ENGLISH = "kind_en";
     public static final String KIND_RUSSIAN = "kind_ru";
     public static final String KIND_ID = "kind_id";
@@ -111,6 +112,8 @@ public final class Constants {
 
     public static final String ID = "id";
     public static final String SPACE = " ";
+    public static final String EMPTY_STRING = "";
+
     public static final String ZERO = "0";
 
 
@@ -121,7 +124,11 @@ public final class Constants {
 
     public static final String MESSAGE_VALIDATION_ERROR = "message.validation.error";
     public static final String MESSAGE_AUTHORIZATION_ERROR = "message.authorization.failed";
+    public static final String MESSAGE_AUTHORIZATION_ERROR_FULL = "message.authorization.failed.full";
     public static final String MESSAGE_APPLICATION_FAILED = "message.application.failed";
+    public static final String MESSAGE_ACCOUNT_ALREADY_IN_USE = "message.user.already.logged";
+    public static final String MESSAGE_ACCOUNT_ALREADY_IN_USE_FULL = "message.user.already.logged.full";
+
     public static final String RESULT_MESSAGE_TEXT = "request.result.message.text";
     public static final String TIMER_STARTED_MESSAGE = "user.timer.started.message";
     public static final String TIMER_STOPPED_MESSAGE = "user.timer.stopped.message";
@@ -135,7 +142,7 @@ public final class Constants {
 
 
     public static final String USER_REQUEST_SUCCESS = "user.request.ok";
-    public static final String USER_REQUEST_FAILED = "user.request.BAD";
+    public static final String USER_REQUEST_FAILED = "user.request.bad";
 
     public static final String REQUEST = "request";
     public static final String ACTIVITY = "activity";
@@ -155,13 +162,20 @@ public final class Constants {
 
 
     public static final String LANGUAGE = "lang";
+    public static final String SESSION_LOCALE = "sessionLocale";
+
     public static final String DBNAME = "jdbc/timecounterdb";
 
 
     public static final int ACCESS_SECTION = 2;
+    public static final int SESSION_TIMEOUT = 180;
+    public static final String ENCODING_UTF_8 = "UTF-8";
+
 
     public static final String COMMAND_CHANGE_LANGUAGE = "/changeLanguage";
+
     public static final String COMMAND_LOGIN = "/login";
+
     public static final String COMMAND_LOGOUT = "/logout";
     public static final String COMMAND_ERROR = "/error";
 

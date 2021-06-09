@@ -107,7 +107,7 @@ public class AccountActionCommand implements Command {
         String lastName = req.getParameter(LAST_NAME);
         String middleName = req.getParameter(MIDDLE_NAME);
         String email = req.getParameter(EMAIL);
-        String md5 = req.getParameter(PASSWORD);
+        String md5 = req.getParameter(PASSWORD_MD5);
         if (nonNull(firstName) && nonNull(lastName) && nonNull(email) && nonNull(md5)
                 && firstName.matches(Constants.EN_RU_LETTERS_ONLY_REGX_LEN_2_30)
                 && lastName.matches(Constants.EN_RU_LETTERS_ONLY_REGX_LEN_2_30)

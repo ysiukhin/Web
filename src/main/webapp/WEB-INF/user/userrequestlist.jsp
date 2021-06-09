@@ -13,7 +13,7 @@
 <html lang="${sessionScope.lang}">
 
 <head>
-    <title>USER SECTION</title>
+    <title>USER section</title>
     <style>
         <%@include file="../css/admin.css"%>
         <%@include file="../css/messageform.css"%>
@@ -26,7 +26,7 @@
 
 <body>
 <c:if test="${sessionScope.isMessage}">
-    <c:set scope="session" var="${Constants.IS_MESSAGE_TO_SHOW}" value="false"/>
+    <c:set scope="session" var="isMessage" value="false"/>
     <custom:messageform actionStatus="${sessionScope.actionStatus}"
                         actionCaption="${sessionScope.actionCaption}"
                         actionMessage="${sessionScope.actionMessage}"/>
@@ -37,11 +37,11 @@
     <label><h2>${sessionScope.account.account.email}</h2></label>
     <label><a href="${pageContext.request.contextPath}${Constants.COMMAND_LOGOUT}">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?sessionLocale=en&${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
-        <img src="${pageContext.request.contextPath}/static/flags/gb.svg" width="16" height="16"/>ENGLISH</a></label>
+            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_ENGLISH}&${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
+        <img src="${pageContext.request.contextPath}/static/flags/gb.png" width="20" height="16"/>ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?sessionLocale=ru&${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
-        <img src="${pageContext.request.contextPath}/static/flags/ru.svg" width="16" height="16"/>РУССКИЙ</a></label>
+            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_RUSSIAN}&${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">
+        <img src="${pageContext.request.contextPath}/static/flags/ru.png" width="20" height="16"/>РУССКИЙ</a></label>
 
 </div>
 <br>
@@ -91,7 +91,8 @@
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                     <th style="display:none;"><fmt:message key="table.kind.column.id"/></th>
                 </tr>
-                <c:forEach var="activity" items="${requestScope.activityList}" varStatus="status">
+                <%--                <c:forEach var="activity" items="${requestScope..activityList}" varStatus="status">--%>
+                <c:forEach var="activity" items="${requestScope.activityReportList}" varStatus="status">
                     <tr class="tblrow">
                         <c:choose>
                             <c:when test="${sessionScope.lang eq 'en'}">

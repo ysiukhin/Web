@@ -1,10 +1,11 @@
-package ua.traning.rd.java.finalproject.servlet.controller.command;
+package ua.traning.rd.java.finalproject.servlet.controller.command.action;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.*;
 
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
@@ -36,7 +37,7 @@ public class UserRequestActionCommand implements Command {
             StringJoiner mes = new StringJoiner(" ");
             request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
 
-            if (new EntityListService<>(Request.class).insertEntity(newRequest) == 1) {
+            if (new EntityListService<>(Request.class).insertEntity(newRequest) > 0) {
                 request.getSession().setAttribute(LAST_ACTION_STATUS, true);
                 mes.add(messages.getString(USER_REQUEST_SUCCESS));
             } else {

@@ -7,6 +7,7 @@ public class LoggedAccount {
     @Override
     public String toString() {
         return new StringJoiner(", ", LoggedAccount.class.getSimpleName() + "[", "]")
+                .add("sessionId='" + sessionId + "'")
                 .add("role=" + role)
                 .add("account=" + account)
                 .toString();
@@ -18,6 +19,16 @@ public class LoggedAccount {
 
     private ROLE role;
     private Account account;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    private String sessionId;
 
     public ROLE getRole() {
         return role;
@@ -34,6 +45,7 @@ public class LoggedAccount {
     public void setAccount(Account account) {
         this.account = account;
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,4 @@
-package ua.traning.rd.java.finalproject.servlet.controller.command;
+package ua.traning.rd.java.finalproject.servlet.controller.command.list;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,6 +6,7 @@ import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Activity;
 
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.RequestActionCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;

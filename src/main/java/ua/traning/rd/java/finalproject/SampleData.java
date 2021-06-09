@@ -31,7 +31,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ua.traning.rd.java.finalproject.Constants.PASSWORD;
+import static ua.traning.rd.java.finalproject.Constants.PASSWORD_MD5;
 
 public class SampleData {
     private static final Logger LOGGER = LogManager.getLogger("MysqlDemo");
@@ -66,7 +66,7 @@ public class SampleData {
         MessageDigest messageDigest;
         byte[] bytesEncoded;
         try {
-            messageDigest = MessageDigest.getInstance(PASSWORD);
+            messageDigest = MessageDigest.getInstance(PASSWORD_MD5);
             messageDigest.update(input.getBytes(StandardCharsets.UTF_8));
             bytesEncoded = messageDigest.digest();
             return new BigInteger(1, bytesEncoded).toString(16);

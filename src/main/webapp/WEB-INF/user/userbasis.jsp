@@ -12,7 +12,7 @@
 <!doctype html>
 <html lang="${sessionScope.lang}">
 <head>
-    <title>USER SECTION</title>
+    <title>USER section</title>
     <style>
         <%@include file="../css/admin.css"%>
         <%@include file="../css/messageform.css"%>
@@ -24,7 +24,7 @@
 </head>
 <body>
 <c:if test="${sessionScope.isMessage}">
-    <c:set scope="session" var="${Constants.IS_MESSAGE_TO_SHOW}" value="false"/>
+    <c:set scope="session" var="isMessage" value="false"/>
     <custom:messageform actionStatus="${sessionScope.actionStatus}"
                         actionCaption="${sessionScope.actionCaption}"
                         actionMessage="${sessionScope.actionMessage}"/>
@@ -34,13 +34,13 @@
     <label><h2>${sessionScope.account.account.email}</h2></label>
     <label><a href="${pageContext.request.contextPath}${Constants.COMMAND_LOGOUT}">Logout</a></label>
     <label><a
-            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?sessionLocale=en&page=usersection"
+            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_ENGLISH}&${Constants.PAGE}=${Constants.COMMAND_USER_SECTION}"
             class="link-secondary">
-        <img src="${pageContext.request.contextPath}/static/flags/gb.svg" width="16" height="16"/>ENGLISH</a></label>
+        <img src="${pageContext.request.contextPath}/static/flags/gb.png" width="20" height="16"/>ENGLISH</a></label>
     <label><a
-            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?sessionLocale=ru&page=usersection"
+            href="${pageContext.request.contextPath}${Constants.COMMAND_CHANGE_LANGUAGE}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_RUSSIAN}&${Constants.PAGE}=${Constants.COMMAND_USER_SECTION}"
             class="link-secondary">
-        <img src="${pageContext.request.contextPath}/static/flags/ru.svg" width="16" height="16"/>РУССКИЙ</a></label>
+        <img src="${pageContext.request.contextPath}/static/flags/ru.png" width="20" height="16"/>РУССКИЙ</a></label>
 </div>
 <br>
 <hr>
@@ -51,6 +51,5 @@
         <fmt:message key="a.user.request.action"/></a>
 </div>
 <hr>
-<%--</main>--%>
 </body>
 </html>

@@ -18,36 +18,19 @@ public class AdminSectionCommand implements Command {
     public String execute(HttpServletRequest req) {
         LOGGER.info("IN AdminSectionCommand");
         LOGGER.info("URI: {}", req.getRequestURI());
-//        String defaultPage = Constants.ADMIN_SECTION;
         LoggedAccount account = (LoggedAccount) req.getSession().getAttribute(LOGGED_ACCOUNT);
-        if (Objects.isNull(account)) {
-            LOGGER.info("AdminSectionCommand: --> account = null -> redirect to login {}", REDIRECT + ":" + Constants.LOGIN_JSP);
-            return REDIRECT + ":" + Constants.LOGIN_JSP;
-        }
-        if (account.getAccount().getStatus()) {
-            LOGGER.info("AdminSectionCommand: --> account = USER -> redirect to userSection {}", REDIRECT + ":" + Constants.USER_SECTION);
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.USER, account);
-//            return /*redirect:*/"/WEB-INF/user/userbasis.jsp";
-        } else {
-            LOGGER.info("AdminSectionCommand: --> account = ADMIN -> redirect to userSection {}", REDIRECT + ":" + Constants.USER_SECTION);
-        }
-
-//        else {
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.UNKNOWN, account);
-//            return "/login.jsp";
+//        if (Objects.isNull(account)) {
+//            LOGGER.info("AdminSectionCommand: --> account = null -> redirect to login {}", REDIRECT + ":" + Constants.LOGIN_JSP);
+//            return REDIRECT + ":" + Constants.LOGIN_JSP;
 //        }
-//        if (!account.getStatus()) {
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.ADMIN, account);
-
+//        if (account.getAccount().getStatus()) {
+//            LOGGER.info("AdminSectionCommand: --> account = USER -> redirect to userSection {}", REDIRECT + ":" + Constants.USER_SECTION);
+//        } else {
+//            LOGGER.info("AdminSectionCommand: --> account = ADMIN -> redirect to userSection {}", REDIRECT + ":" + Constants.ADMIN_SECTION);
+//        }
+//
 
         LOGGER.info("OUT AdminSectionCommand");
         return account.getAccount().getStatus() ? Constants.USER_SECTION : Constants.ADMIN_SECTION;
-//        } else if (account.getStatus()) {
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.USER, account);
-//            return /*redirect:*/"/WEB-INF/user/userbasis.jsp";
-//        } else {
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.UNKNOWN, account);
-//            return "/login.jsp";
-//        }
     }
 }

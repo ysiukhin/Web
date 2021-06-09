@@ -14,21 +14,9 @@ public class UserSectionCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN UserSectionCommand");
-
 //        if (!account.getStatus()) {
 //            CommandUtility.setUserRole(request, LoggedAccount.ROLE.ADMIN, account);
-
         LOGGER.info("OUT UserSectionCommand");
         return USER_SECTION;
-//        return "/WEB-INF/user/userbasis.jsp";
-//        } else if (account.getStatus()) {
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.USER, account);
-//            return /*redirect:*/"/WEB-INF/user/userbasis.jsp";
-//        } else {
-//            CommandUtility.setUserRole(request, LoggedAccount.ROLE.UNKNOWN, account);
-//            return "/login.jsp";
-//        }
-
-
     }
 }
