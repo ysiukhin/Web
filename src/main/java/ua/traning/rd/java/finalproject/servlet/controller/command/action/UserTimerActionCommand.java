@@ -50,9 +50,7 @@ public class UserTimerActionCommand implements Command {
                         messages.getString(TIMER_STOPPED_MESSAGE));
             }
             LOGGER.info("OUT UserTimerActionCommand");
-            ///TODO
             return REDIRECT + ":" + COMMAND_USER_TIMER + "?" + PAGE + "=" + COMMAND_USER_TIMER;
-//            return REDIRECT+":/userTimer?page=userTimer";
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

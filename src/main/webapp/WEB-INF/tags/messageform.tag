@@ -3,7 +3,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="${Constants.MESSAGES_BUNDLE}"/>
 <%@ attribute name="actionStatus" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="actionMessage" required="false" type="java.lang.String" %>
 <%@ attribute name="actionCaption" required="true" type="java.lang.String" %>
@@ -154,6 +153,10 @@
                 </div>
             </c:otherwise>
         </c:choose>
+        <c:remove var="actionStatus" scope="session"/>
+        <c:remove var="actionCaption" scope="session"/>
+        <c:remove var="actionMessage" scope="session"/>
+        <c:remove var="isMessage" scope="session"/>
     </div>
 
 </div>

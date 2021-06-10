@@ -60,7 +60,7 @@
 
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACCOUNT_ACTION}"
+        <form action="http://localhost:8080${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACCOUNT_ACTION}"
               method="POST"
               onSubmit="return check('<fmt:message key="admin.account.alert.message.empty"/>');">
             <table class="table" id="table">

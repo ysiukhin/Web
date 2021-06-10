@@ -48,14 +48,11 @@ public class ActivityActionCommand implements Command {
                 request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
                 request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT,
                         errorMessages.getString(MESSAGE_VALIDATION_ERROR));
-//                request.getSession().setAttribute("actionMessage",
-//                        errorMessages.getString("message.validation.error"));
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
-        request.getSession().setAttribute(LAST_ACTION_STATUS, true);
         request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
         LOGGER.info("OUT ActivityActionCommand");
         return REDIRECT + ":" + COMMAND_ADMIN_ACTIVITY_LIST + "?" + PAGE + "=" + COMMAND_ADMIN_ACTIVITY_LIST;
@@ -71,7 +68,6 @@ public class ActivityActionCommand implements Command {
             mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
         request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
-//        request.getSession().setAttribute("actionMessage", mes.toString());
         return mes.toString();
     }
 
@@ -85,7 +81,7 @@ public class ActivityActionCommand implements Command {
             mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
         request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
-//        request.getSession().setAttribute("actionMessage", mes.toString());
+
         return mes.toString();
     }
 
@@ -98,23 +94,24 @@ public class ActivityActionCommand implements Command {
             mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
         request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
-//        request.getSession().setAttribute("actionMessage", mes.toString());
+
         return mes.toString();
     }
 
     private Optional<Activity> requestIsValid(final HttpServletRequest req) {
-
         String activity_en = req.getParameter(ACTIVITY_ENGLISH);
         String activity_ru = req.getParameter(ACTIVITY_RUSSIAN);
+        String kind_id = req.getParameter("activity_kind");
 
         if (nonNull(activity_en) && nonNull(activity_ru)
-                && activity_en.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50)
-                && activity_ru.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50)) {
+                && activity_en.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_100)
+                && activity_ru.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_100)) {
             return Optional.of(
                     new ActivityBuilder()
                             .addActivityEn(activity_en)
                             .addActivityRu(activity_ru)
-                            .addKindId(Integer.parseInt(req.getParameter(KIND_ID)))
+                            .addKindId(Integer.parseInt(req.getParameter("activity_kind")))
+//                            .addKindId(Integer.parseInt(req.getParameter(KIND_ID)))
                             .build());
         } else {
             return Optional.empty();

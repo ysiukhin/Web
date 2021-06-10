@@ -1,12 +1,13 @@
 package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ua.traning.rd.java.finalproject.Constants;
-import ua.traning.rd.java.finalproject.core.model.Activity;
+
 import ua.traning.rd.java.finalproject.core.model.AdminActivityList;
-import ua.traning.rd.java.finalproject.core.model.Kind;
+
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -43,8 +44,7 @@ public class ActivityListToPageCommand implements Command {
         List<AdminActivityList> activityList;
         try {
             activityList = new EntityListService<>(AdminActivityList.class)
-                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
-                            Constants.SQL_ADMIN_ACTIVITY + SQL_LIMIT_OFFSET_BOUNDS);
+                    .getAllEntitiesSql(SQL_ADMIN_ACTIVITY);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString(EMPTY_RESULT));
@@ -53,8 +53,14 @@ public class ActivityListToPageCommand implements Command {
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
         }
 
-        request.setAttribute(ACTIVITY_LIST, activityList);
-        request.getSession().setAttribute(Constants.PAGE_NUMBER, page);
+        List<?> kinds = activityList.stream().collect(Collectors.groupingBy(AdminActivityList::getKindId))
+                .values().stream().map(list -> list.get(0)).collect(Collectors.toList());
+
+        request.setAttribute(ACTIVITY_LIST, activityList.stream().filter(row -> row.getId() > 0)
+                .skip((long) rowsPerPage * (page - 1)).limit(rowsPerPage).collect(Collectors.toList()));
+
+        request.setAttribute(KIND_LIST, kinds);
+        request.getSession().setAttribute(PAGE_NUMBER, page);
         request.setAttribute(ROWS_PER_PAGE, rowsPerPage);
 
         LOGGER.info("rowsPerPage: {} page: {}", rowsPerPage, page);

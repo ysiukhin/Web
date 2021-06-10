@@ -83,19 +83,12 @@ public class Servlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-//        path = path.replaceAll(".*" + ContextPath + "/", "");
-
         path = path.replaceAll(".*" + ContextPath, "");
-
         LOGGER.info("Before command execute: path -> {}", path);
         Command command = commands.getOrDefault(path, (r) -> COMMAND_LOGOUT);
-
         String page = command.execute(request);
-
         LOGGER.info("Command to path -> {} executed result path: {}", path, page);
-
         if (page.contains(REDIRECT + ":")) {
-//            String redirect = page.replace(REDIRECT + ":", ContextPath);
             response.sendRedirect(page.replace(REDIRECT + ":", ContextPath));
         } else {
             request.getRequestDispatcher(page).forward(request, response);

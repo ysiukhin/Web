@@ -3,7 +3,7 @@
 
 <div style="text-align: center; width:100%; background-color: #bababa">
     <c:if test="${sessionScope.pages.size() > 1}">
-        <c:if test="${sessionScope.pagenumber} > 1}">
+        <c:if test="${sessionScope.pagenumber > 1}">
             <a href="${pageContext.request.contextPath}${sessionScope.pages.get(sessionScope.pagenumber -2)}"
                class="pagination previous round">‹</a>
         </c:if>

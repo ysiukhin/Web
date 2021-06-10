@@ -6,7 +6,6 @@ import ua.traning.rd.java.finalproject.core.model.*;
 
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
-import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +43,7 @@ public class UserRequestActionCommand implements Command {
                 request.getSession().setAttribute(LAST_ACTION_STATUS, false);
                 mes.add(messages.getString(USER_REQUEST_FAILED));
             }
-            request.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL, mes.toString());
+            request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
             LOGGER.info("OUT UserRequestActionCommand");
             return REDIRECT + ":" + COMMAND_USER_REQUEST_LIST + "?" + PAGE + "=" + COMMAND_USER_REQUEST_LIST;
         } catch (Exception e) {

@@ -30,6 +30,13 @@ public class EntityListService<T> {
                 .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 
+    public List<T> getAllEntitiesSql(String sqlQuery) {
+        return new DbServiceImpl<>(new DaoJdbc<>(
+                new SessionManagerJdbc(Servlet.dataSource), entityClass))
+                .getBeansByQuery(sqlQuery, Collections.emptyList())
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
+    }
+
     public List<T> getInRangeByRowNumber(int limit, int offset) {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(Servlet.dataSource), entityClass))
                 .getBeansInRangeByRowNumber(limit, offset)
@@ -76,6 +83,12 @@ public class EntityListService<T> {
     public List<T> getByStoredProc(String storedProc, List<Object> values) {
         return new DbServiceImpl<>(new DaoJdbc<>(
                 new SessionManagerJdbc(Servlet.dataSource), entityClass)).getBeansByCall(storedProc, values)
+                .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
+    }
+
+    public List<T> getBySql(String sqlQuery, List<Object> values) {
+        return new DbServiceImpl<>(new DaoJdbc<>(
+                new SessionManagerJdbc(Servlet.dataSource), entityClass)).getBeansByQuery(sqlQuery, values)
                 .orElseThrow(() -> new ServiceException(EMPTY_RESULT));
     }
 }

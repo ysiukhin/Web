@@ -1,4 +1,4 @@
-INSERT INTO activity (id, activity_en, activity_ru, kind_id)
+INSERT INTO activity (id, activity_ru, activity_en, kind_id)
 VALUES (1, 'общий зал', 'general hall', 1),
        (2, 'настольный теннис', 'table tennis', 1),
        (3, 'боксерский ринг', 'boxing ring', 1),

@@ -1,14 +1,12 @@
 package ua.traning.rd.java.finalproject.core.model;
 
-import ua.traning.rd.java.finalproject.core.annotation.PrimaryKey;
 import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 
 import java.io.Serializable;
 
 public class AdminActivityList implements Serializable {
-    @PrimaryKey
     @TableColumn("id")
-    private int id;
+    private long id;
     @TableColumn("activity_en")
     private String activityEn;
     @TableColumn("activity_ru")
@@ -44,11 +42,11 @@ public class AdminActivityList implements Serializable {
         this.kindEn = kindEn;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

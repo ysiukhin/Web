@@ -84,9 +84,8 @@ public class DaoJdbc<T> extends Dao<T> {
     private List<T> selectQuery(List<Object> values, String sqlQuery) {
         try {
             try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery)) {
-                pst.setObject(1, values.get(0));
-                if (values.size() > 1) {
-                    pst.setObject(2, values.get(1));
+                for (int i = 0; i < values.size(); i++) {
+                    pst.setObject(i + 1, values.get(i));
                 }
                 try (ResultSet resultSet = pst.executeQuery()) {
                     return selectResultSetProcess(resultSet);

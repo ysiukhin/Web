@@ -48,11 +48,11 @@ public class UserRequestListCommand implements Command {
             }
         }
 
-        if (Objects.isNull(request.getSession().getAttribute(Constants.PAGE_NUMBER)) ||
-                Objects.isNull(request.getParameter(Constants.PAGE)) ||
-                !(request.getParameter(Constants.PAGE).equals(request.getRequestURI()
+        if (Objects.isNull(request.getSession().getAttribute(PAGE_NUMBER)) ||
+                Objects.isNull(request.getParameter(PAGE)) ||
+                !(request.getParameter(PAGE).equals(request.getRequestURI()
                         .substring(request.getRequestURI().lastIndexOf('/') + 1)))) {
-            request.getSession().setAttribute(Constants.PAGE_NUMBER, 1);
+            request.getSession().setAttribute(PAGE_NUMBER, 1);
         }
         request.getSession().setAttribute(PAGINATION, pagesLinks);
         request.setAttribute(ROWS_PER_PAGE, rowsPerPage);

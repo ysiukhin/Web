@@ -12,6 +12,8 @@ public interface DbService<T> {
 
     Optional<List<T>> getBeansBy(List<String> columnNames, List<Object> values);
 
+    Optional<List<T>> getBeansByQuery(String procName, List<Object> values);
+
     Optional<List<T>> getBeansByCall(String procName, List<Object> values);
 
     Optional<List<T>> getBeansByCall(String procName, Object value);

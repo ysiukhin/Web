@@ -61,7 +61,7 @@
 </div>
 <div class="container">
     <div class="tab tab-1">
-        <form action="http://localhost:8080/${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACTIVITY_ACTION}"
+        <form action="http://localhost:8080${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACTIVITY_ACTION}"
               method="POST"
               onSubmit="return check('<fmt:message key="admin.activity.alert.message.empty"/>');">
             <table class="table" id="table">
@@ -83,10 +83,11 @@
                                name="activity_ru" id="activity_ru" class="input"></td>
                     <td>
                         <select name="activity_kind" id="activity_kind" class="input" style="width: 100%">
-                            <option><fmt:message key="table.activity.column.activity_kind"/></option>
-                            <c:forEach var="activity" items="${requestScope.activities}">
-                                <option value="${activity.kindEn} | ${activity.kindRu}">${activity.kindEn}
-                                    | ${activity.kindRu}</option>
+                            <%--                            <option><fmt:message key="table.activity.column.activity_kind"/></option>--%>
+                            <c:forEach var="kind" items="${requestScope.kinds}">
+                                <option value="${kind.kindId}">${kind.kindEn} | ${kind.kindRu}</option>
+                                <%--                                <option value="${activity.kindEn} | ${activity.kindRu}">${activity.kindEn}--%>
+                                <%--                                    | ${activity.kindRu}</option>--%>
                             </c:forEach>
                         </select>
                     </td>
@@ -103,8 +104,8 @@
                 <c:forEach var="activity" items="${requestScope.activities}">
                     <tr class="tblrow">
                         <td style="display:none;"><c:out value="${activity.id}"/></td>
-                        <td><c:out value="${activity.activityRu}"/></td>
                         <td><c:out value="${activity.activityEn}"/></td>
+                        <td><c:out value="${activity.activityRu}"/></td>
                         <td><c:out value="${activity.kindEn}"/> | <c:out value="${activity.kindRu}"/>
                         </td>
                         <td style="display:none;"><c:out value="${activity.kindId}"/></td>

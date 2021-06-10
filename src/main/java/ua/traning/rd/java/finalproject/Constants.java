@@ -1,8 +1,9 @@
 package ua.traning.rd.java.finalproject;
 
 public final class Constants {
-    public static final String EN_RU_LETTERS_ONLY_REGX_LEN_2_30 = "[-А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\.]{2,30}";
-    public static final String EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50 = "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\. ]{2,50}";
+    public static final String EN_RU_LETTERS_ONLY_REGX_LEN_2_30 = "[-А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\.\\- ]{2,30}";
+    public static final String EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_50 = "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\.\\- ]{2,50}";
+    public static final String EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_100 = "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z\\d_\\.\\- ]{2,100}";
     public static final String EMAIL_REGX =
             "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z0-9]{1}" +
                     "[А-ЯЁёҐґЄєІіЇїа-яA-Za-z0-9_\\.]*" +
@@ -19,8 +20,8 @@ public final class Constants {
     public static final String SQL_LIMIT_OFFSET_BOUNDS = " LIMIT ? OFFSET ?";
 
     public static final String SQL_ADMIN_ACTIVITY =
-            "SELECT a.id, a.activity_en, a.activity_ru, k.kind_en, k.kind_ru, a.kind_id" +
-                    " FROM activity a INNER JOIN kind k ON k.id = a.kind_id";
+            "SELECT ifnull(a.id, 0) id, a.activity_en, a.activity_ru, k.kind_en, k.kind_ru, k.id kind_id" +
+                    " FROM activity a RIGHT JOIN kind k ON k.id = a.kind_id";
 
     public static final String SQL_ADMIN_REQUEST =
             "SELECT ac.id account_id, ac.first_name, ac.last_name, ac.email, rq.id request_id, rq.request, rq.activity_id, " +
@@ -45,8 +46,6 @@ public final class Constants {
 
     public static final String STOP_TIMER_QUERY = "UPDATE record SET end = NOW() WHERE id = ?";
 
-    public static final int AFFECTED_QUANTITY_ONE = 1;
-
     public static final int DEFAULT_ROWS_PER_PAGE = 10;
 
     public static final String LOCALE_ENGLISH = "en";
@@ -68,7 +67,7 @@ public final class Constants {
     public static final String ADMIN_REQUEST_LIST_JSP = "/WEB-INF/admin/requestlist.jsp";
 
 
-    public static final String SERVER_PORT_AND_PORT = "http://localhost:8080/";
+    public static final String SERVER_ADDRESS_AND_PORT = "http://localhost:8080/";
     public static final String REDIRECT = "redirect";
     public static final String PAGE = "page";
     public static final String PAGINATION = "pages";
@@ -128,6 +127,8 @@ public final class Constants {
     public static final String MESSAGE_APPLICATION_FAILED = "message.application.failed";
     public static final String MESSAGE_ACCOUNT_ALREADY_IN_USE = "message.user.already.logged";
     public static final String MESSAGE_ACCOUNT_ALREADY_IN_USE_FULL = "message.user.already.logged.full";
+    public static final String MESSAGE_UNAUTHORIZED_ACCESS_SHORT = "message.unauthorized.access.short";
+    public static final String MESSAGE_UNAUTHORIZED_ACCESS_FULL = "message.unauthorized.access.long";
 
     public static final String RESULT_MESSAGE_TEXT = "request.result.message.text";
     public static final String TIMER_STARTED_MESSAGE = "user.timer.started.message";

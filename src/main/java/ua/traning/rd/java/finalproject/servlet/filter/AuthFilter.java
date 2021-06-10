@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,6 +20,7 @@ import static ua.traning.rd.java.finalproject.Constants.*;
 public class AuthFilter extends AbstractFilter {
 //    private static final Logger LOGGER = LogManager.getLogger(AuthFilter.class);
 
+    @SuppressWarnings("unchecked")
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         logger.info("AuthFilter URI: {}", req.getRequestURI());
@@ -50,12 +52,20 @@ public class AuthFilter extends AbstractFilter {
             }
             logger.info("OUT AuthFilter URI: {}", req.getRequestURI());
         } else {
-            logger.warn("Unauthorized access to protected area {}; -> REDIRECTING to login.\nsession ID: {}\nIP: {}\nmethod: {}\nParameters: {}"
-                    , req.getRequestURI(), req.getSession().getId(), req.getRemoteAddr(), req.getMethod(), req.getParameterMap());
+            logger.warn("Unauthorized access to protected area {}; -> REDIRECTING to login." +
+                            "\nsession ID: {}\nIP: {}\nmethod: {}\nParameters: {}"
+                    , req.getRequestURI(), req.getSession().getId(), req.getRemoteAddr()
+                    , req.getMethod(), req.getParameterMap());
+
             req.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
             req.getSession().setAttribute(LAST_ACTION_STATUS, false);
-            req.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, errorMessages.getString("message.unauthorized.access.short"));
-            req.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL, errorMessages.getString("message.unauthorized.access.long"));
+            req.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, errorMessages.getString(MESSAGE_UNAUTHORIZED_ACCESS_SHORT));
+            req.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL, errorMessages.getString(MESSAGE_UNAUTHORIZED_ACCESS_FULL));
+            HashMap<String, LoggedAccount> loggedAccounts = (HashMap<String, LoggedAccount>) req.getSession().getServletContext()
+                    .getAttribute(ALL_LOGGED_ACCOUNTS);
+            loggedAccounts.remove(req.getSession().getId(), currentAccount);
+            req.getSession().removeAttribute(LOGGED_ACCOUNT);
+            req.getSession().getServletContext().setAttribute(ALL_LOGGED_ACCOUNTS, loggedAccounts);
             resp.sendRedirect(req.getContextPath() + LOGIN_JSP);
         }
     }
