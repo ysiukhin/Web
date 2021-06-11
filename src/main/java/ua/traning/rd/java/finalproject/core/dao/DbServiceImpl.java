@@ -70,15 +70,15 @@ public class DbServiceImpl<T> implements DbService<T> {
     private <U> U doService(Supplier<U> service) {
         try (SessionManager sessionManager = dao.getSessionManager()) {
             sessionManager.beginSession();
-            try {
-                U result = service.get();
-                sessionManager.commitSession();
-                return result;
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
-                sessionManager.rollbackSession();
-                throw new DbServiceException(e);
-            }
+//            try {
+            U result = service.get();
+            sessionManager.commitSession();
+            return result;
+//            } catch (Exception e) {
+//                LOGGER.error(e.getMessage(), e);
+//                sessionManager.rollbackSession();
+//                throw new DbServiceException(e);
+//            }
         }
     }
 }

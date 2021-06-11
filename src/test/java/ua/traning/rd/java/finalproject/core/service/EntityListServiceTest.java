@@ -2,31 +2,37 @@ package ua.traning.rd.java.finalproject.core.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.traning.rd.java.finalproject.core.dao.DbService;
-import ua.traning.rd.java.finalproject.core.dao.DbServiceException;
 import ua.traning.rd.java.finalproject.core.dao.DbServiceImpl;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.AccountBuilder;
+import ua.traning.rd.java.finalproject.core.service.testmodel.LinkedTable;
+import ua.traning.rd.java.finalproject.core.service.testmodel.PrimaryTable;
 import ua.traning.rd.java.finalproject.h2.DataSourceH2;
 import ua.traning.rd.java.finalproject.jdbc.dao.DaoJdbc;
 import ua.traning.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import ua.traning.rd.java.finalproject.servlet.exception.DaoException;
 
-
 import javax.sql.DataSource;
-
 import java.sql.*;
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static ua.traning.rd.java.finalproject.Constants.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static ua.traning.rd.java.finalproject.Constants.CALL_GET_USER_ACTIVITIES_AND_RECORDS;
+import static ua.traning.rd.java.finalproject.Constants.SQL_LIMIT_OFFSET_BOUNDS;
 
 @ExtendWith(MockitoExtension.class)
 class EntityListServiceTest {
@@ -101,13 +107,13 @@ class EntityListServiceTest {
     }
 
     @Test
-    @DisplayName("totalEntityQuantity(): have to catch DbServiceException exception when throws SQLException")
+    @DisplayName("totalEntityQuantity(): have to catch DaoException exception when throws SQLException")
     void totalEntityQuantityExceptionTest() throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeQuery()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .totalEntityQuantity());
     }
 
@@ -120,13 +126,13 @@ class EntityListServiceTest {
     }
 
     @Test
-    @DisplayName("totalEntityQuantityBySql(): have to catch DbServiceException exception when throws SQLException")
+    @DisplayName("totalEntityQuantityBySql(): have to catch DaoException exception when throws SQLException")
     void totalEntityQuantityBySqlExceptionTest() throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeQuery()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .totalEntityQuantityBySql(SELECT_ALL_FROM_ACCOUNT));
     }
 
@@ -139,13 +145,13 @@ class EntityListServiceTest {
     }
 
     @Test
-    @DisplayName("getInRangeByRowNumber(): have to catch DbServiceException exception when throws SQLException")
+    @DisplayName("getInRangeByRowNumber(): have to catch DaoException exception when throws SQLException")
     void getInRangeByRowNumberExceptionTest() throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeQuery()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .getInRangeByRowNumber(2, 2));
     }
 
@@ -164,14 +170,19 @@ class EntityListServiceTest {
         assertEquals(newAccount.getId(), result);
     }
 
-    @Test
-    @DisplayName("insertEntity(): have to catch DbServiceException exception when throws SQLException")
-    void insertEntityExceptionTest() throws SQLException {
+
+    @DisplayName("insertEntity(): have to catch DaoException exception when throws SQLException")
+    @ParameterizedTest(name = "when rollback() throws SQLException = {0}")
+    @ValueSource(booleans = {false, true})
+    void insertEntityExceptionTest(boolean rollbackSuccessful) throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeUpdate()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        if (rollbackSuccessful) {
+            doThrow(SQLException.class).when(mockConnection).rollback(null);
+        }
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .insertEntity(getNewAccount(6)));
     }
 
@@ -187,14 +198,18 @@ class EntityListServiceTest {
         assertNull(dbService.getBeansById(defaultId).orElseThrow(Exception::new).getMiddleName());
     }
 
-    @Test
-    @DisplayName("updateEntity(): have to catch DbServiceException exception when throws SQLException")
-    void updateEntityExceptionTest() throws SQLException {
+    @DisplayName("updateEntity(): have to catch DaoException exception when throws SQLException")
+    @ParameterizedTest(name = "when rollback() throws SQLException = {0}")
+    @ValueSource(booleans = {false, true})
+    void updateEntityExceptionTest(boolean rollbackSuccessful) throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeUpdate()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        if (rollbackSuccessful) {
+            doThrow(SQLException.class).when(mockConnection).rollback(null);
+        }
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .updateEntity(getNewAccount(6)));
     }
 
@@ -209,14 +224,19 @@ class EntityListServiceTest {
                 .getBeansById(defaultId).orElseThrow(Exception::new).getMiddleName());
     }
 
-    @Test
-    @DisplayName("updateEntityBySql(): have to catch DbServiceException exception when throws SQLException")
-    void updateEntityBySqlExceptionTest() throws SQLException {
+
+    @DisplayName("updateEntityBySql(): have to catch DaoException exception when throws SQLException")
+    @ParameterizedTest(name = "when rollback() throws SQLException = {0}")
+    @ValueSource(booleans = {false, true})
+    void updateEntityBySqlExceptionTest(boolean rollbackSuccessful) throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeUpdate()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        if (rollbackSuccessful) {
+            doThrow(SQLException.class).when(mockConnection).rollback(null);
+        }
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .updateEntity(UPDATE_ACCOUNT_SET_MIDDLE_NAME_NULL_BY_ID, 1));
     }
 
@@ -227,17 +247,24 @@ class EntityListServiceTest {
         assertEquals(4, new EntityListService<>(Account.class, dataSource).totalEntityQuantity());
     }
 
-    @Test
-    @DisplayName("deleteEntity(): have to catch DbServiceException exception when throws SQLException")
-    void deleteEntityExceptionTest() throws SQLException {
+//    @Test
+//    @DisplayName("have to catch DaoException exception when ")
+//    @ParameterizedTest(name = "throws {0} during stored procedure call")
+
+    @DisplayName("deleteEntity(): have to catch DaoException exception when throws SQLException")
+    @ParameterizedTest(name = "when rollback() throws SQLException = {0}")
+    @ValueSource(booleans = {false, true})
+    void deleteEntityExceptionTest(boolean rollbackSuccessful) throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeUpdate()).willThrow(SQLException.class);
-        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+        if (rollbackSuccessful) {
+            doThrow(SQLException.class).when(mockConnection).rollback(null);
+        }
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
                 .deleteEntity(1));
     }
-
 
     @Test
     @DisplayName("have to execute stored procedure")
@@ -256,27 +283,54 @@ class EntityListServiceTest {
 //    @ValueSource(booleans = {false, true})
 //    void shouldCorrectSaveAndLoadUserWithExpectedQueriesCount(boolean userDetachedBeforeGet) {
 
-    static Stream<Class<? extends Throwable>> exceptionProvider() {
-        return Stream.of(InstantiationException.class, IllegalAccessException.class, SQLException.class);
-    }
+//    static Stream<Class<? extends Throwable>> exceptionProvider() {
+//        return Stream.of(InstantiationException.class, IllegalAccessException.class, SQLException.class);
+//    }
 
-    @DisplayName("getByStoredProc(): have to catch DbServiceException exception when throws SQLException")
+    @DisplayName("getByStoredProc(): have to catch DaoException exception when throws SQLException")
     @Test
     void getByStoredProcExceptionTest() throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareCall(CALL_GET_USER_ACTIVITIES_AND_RECORDS)).willReturn(mockCallableStatement);
+        doNothing().when(mockCallableStatement).setObject(anyInt(), any());
+//        doThrow(SQLException.class).when(mockConnection).rollback(null);
+//        given(mockCallableStatement.executeQuery()).willThrow(SQLException.class);
+
         given(mockCallableStatement.executeQuery()).willThrow(SQLException.class);
 //        given(mockResultSet.next()).willReturn(false);
-        assertThrows(DbServiceException.class, () -> {
-            new EntityListService<>(Account.class, mockSource)
-                    .getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_RECORDS, Collections.emptyList());
-        });
+        assertThrows(DaoException.class, () -> new EntityListService<>(Account.class, mockSource)
+                .getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_RECORDS, Collections.singletonList(1)));
+    }
+
+    @DisplayName(value = "Testing @Linked annotation strategy - 'active'")
+    @Test
+    void annotationLinkedStrategyActiveTest() {
+        final int defaultId = 1;
+        sqlQueryCreateTable("create table if not exists linked_table " +
+                "( id int auto_increment primary key, primary_table_id int not null )");
+        EntityListService<LinkedTable> linkedService = new EntityListService<>(LinkedTable.class, dataSource);
+        for (int j = 0; j < TEST_ROWS_QUANTITY; j++) {
+            LinkedTable linked = new LinkedTable();
+            linked.setPrimaryTableId(defaultId);
+            linkedService.insertEntity(linked);
+        }
+
+        sqlQueryCreateTable("create table if not exists primary_table ( id int auto_increment primary key )");
+        EntityListService<PrimaryTable> service = new EntityListService<>(PrimaryTable.class, dataSource);
+        PrimaryTable table = new PrimaryTable();
+        table.setId(defaultId);
+        service.insertEntity(table);
+        PrimaryTable result = service.getById(defaultId);
+
+        assertEquals(TEST_ROWS_QUANTITY, result.getLinkedTableList().size());
+        sqlQueryCreateTable("drop table primary_table");
+        sqlQueryCreateTable("drop table linked_table");
     }
 
 
-//    //throw Exceptions when stored procedure execution call and catch DbServiceException
-//    @DisplayName("have to catch DbServiceException exception when ")
+//    //throw Exceptions when stored procedure execution call and catch DaoException
+//    @DisplayName("have to catch DaoException exception when ")
 //    @ParameterizedTest(name = "throws {0} during stored procedure call")
 //    @MethodSource("exceptionProvider")
 //    void getByStoredProcExceptionTest(Class<? extends Throwable> exception) throws SQLException {
@@ -285,7 +339,7 @@ class EntityListServiceTest {
 //        given(mockConnection.prepareCall(CALL_GET_USER_ACTIVITIES_AND_RECORDS)).willReturn(mockCallableStatement);
 //        given(mockCallableStatement.executeQuery()).willThrow(exception);
 ////        given(mockResultSet.next()).willReturn(false);
-//        assertThrows(DbServiceException.class,() -> { new EntityListService<>(Account.class, mockSource)
+//        assertThrows(DaoException.class,() -> { new EntityListService<>(Account.class, mockSource)
 //                .getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_RECORDS, Collections.emptyList());});
 //
 //    }

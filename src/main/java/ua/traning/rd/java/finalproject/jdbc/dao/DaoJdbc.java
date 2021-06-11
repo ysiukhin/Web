@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static ua.traning.rd.java.finalproject.Constants.ID;
@@ -27,6 +26,7 @@ public class DaoJdbc<T> extends Dao<T> {
     public DaoJdbc(SessionManager sessionManager, Class<T> daoEntity) {
         super(sessionManager, daoEntity);
     }
+
     @Override
     public List<T> selectByRecordNumberInRange(int limit, int offset) {
         return selectByRecordNumberInRange(limit, offset, (buildSelect() + SQL_LIMIT_OFFSET_BOUNDS));
@@ -92,19 +92,6 @@ public class DaoJdbc<T> extends Dao<T> {
             throw new DaoException(e.getMessage(), e);
         }
     }
-
-//    @Override
-//    public List<T> select() {
-//        String sqlQuery = buildSelect();
-//        try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
-//             ResultSet resultSet = pst.executeQuery()) {
-//            return selectResultSetProcess(resultSet);
-//        } catch (InstantiationException | IllegalAccessException |
-//                SQLException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new DaoException(e.getMessage(), e);
-//        }
-//    }
 
     private String buildSelect() {
         StringBuilder sqlQuery = new StringBuilder("SELECT ");
@@ -180,11 +167,12 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public int insert(T entity) {
+        Savepoint savePoint = null;
         try {
             Map<String, List<Object>> insertParameters = buildInsert(entity);
             List<Object> params = new ArrayList<>(insertParameters.values()).get(0);
             String sqlQuery = insertParameters.keySet().toArray(new String[0])[0];
-            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+            savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.size(); i++) {
@@ -200,13 +188,14 @@ public class DaoJdbc<T> extends Dao<T> {
                     primaryKey.setAccessible(false);
                     return generatedKey;
                 }
-            } catch (SQLException ex) {
-                getConnection().rollback(savePoint);
-                LOGGER.error(ex.getMessage(), ex);
-                throw ex;
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.error("INSERT error: {}", e.getMessage(), e);
+            try {
+                getConnection().rollback(savePoint);
+            } catch (SQLException ex) {
+                LOGGER.error("INSERT rollback error: {}", e.getMessage(), e);
+            }
             throw new DaoException(e);
         }
     }
@@ -243,71 +232,53 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public int update(T entity) {
+        Savepoint savePoint = null;
         try {
             Map<String, List<Object>> updateParameters = buildUpdate(entity);
             List<Object> params = new ArrayList<>(updateParameters.values()).get(0);
             String sqlQuery = updateParameters.keySet().toArray(new String[0])[0];
-            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+            savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.size(); i++) {
                     prepStatement.setObject(i + 1, params.get(i));
                 }
                 return prepStatement.executeUpdate();
-            } catch (SQLException ex) {
-                getConnection().rollback(savePoint);
-                LOGGER.error(ex.getMessage(), ex);
-                throw ex;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+            try {
+                getConnection().rollback(savePoint);
+            } catch (SQLException ex) {
+                LOGGER.error(e.getMessage(), e);
+            }
             throw new DaoException(e);
         }
     }
 
     @Override
     public int update(String sqlQuery, List<Object> values) {
-            Savepoint savePoint = null;
+        Savepoint savePoint = null;
+        try {
+            savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
-                savePoint = getConnection().setSavepoint("savePointName");
                 for (int i = 0; i < values.size(); i++) {
                     prepStatement.setObject(i + 1, values.get(i));
                 }
                 return prepStatement.executeUpdate();
-            } catch (SQLException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-                try {
-                    getConnection().rollback(savePoint);
-                    throw new DaoException(ex);
-                } catch (SQLException e) {
-                    LOGGER.error(e.getMessage(), e);
-                    throw new DaoException(e);
-                }
             }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            try {
+                getConnection().rollback(savePoint);
+            } catch (SQLException ex) {
+                LOGGER.error(e.getMessage(), e);
+            }
+            throw new DaoException(e);
+        }
     }
 
-    //    @Override
-//    public int update(String sqlQuery, List<Object> values) {
-//        try {
-//            Savepoint savePoint = getConnection().setSavepoint("savePointName");
-//            try (PreparedStatement prepStatement =
-//                         getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
-//                for (int i = 0; i < values.size(); i++) {
-//                    prepStatement.setObject(i + 1, values.get(i));
-//                }
-//                return prepStatement.executeUpdate();
-//            } catch (SQLException ex) {
-//                getConnection().rollback(savePoint);
-//                LOGGER.error(ex.getMessage(), ex);
-//                throw ex;
-//            }
-//        } catch (Exception e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new DaoException(e);
-//        }
-//    }
-//
     @Override
     public int delete(int id) {
         return delete(Collections.singletonList(ID), Collections.singletonList(id));
@@ -319,21 +290,23 @@ public class DaoJdbc<T> extends Dao<T> {
                 .collect(Collectors.joining(" AND "
                         , "DELETE FROM " + getDaoEntity().getAnnotation(TableName.class).dbTable() + " WHERE "
                         , ""));
+        Savepoint savePoint = null;
         try {
-            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+            savePoint = getConnection().setSavepoint("savePointName");
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < values.size(); i++) {
                     prepStatement.setObject(i + 1, values.get(i));
                 }
                 return prepStatement.executeUpdate();
-            } catch (SQLException ex) {
-                getConnection().rollback(savePoint);
-                LOGGER.error(ex.getMessage(), ex);
-                throw ex;
             }
         } catch (Exception e) {
-            LOGGER.error("SQL: {} and error message:\n{}", sqlQuery, e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
+            try {
+                getConnection().rollback(savePoint);
+            } catch (SQLException ex) {
+                LOGGER.error(e.getMessage(), e);
+            }
             throw new DaoException(e);
         }
     }
