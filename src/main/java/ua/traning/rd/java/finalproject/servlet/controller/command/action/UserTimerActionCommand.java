@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.ActivityActionCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
@@ -36,13 +37,13 @@ public class UserTimerActionCommand implements Command {
                 Record newRecord = new Record();
                 newRecord.setStart(Timestamp.valueOf(LocalDateTime.now()));
                 newRecord.setAccountActivityId(Integer.parseInt(request.getParameter(ACCOUNT_ACTIVITY_ID_VALUE)));
-                new EntityListService<>(Record.class).insertEntity(newRecord);
+                new EntityListService<>(Record.class, Servlet.dataSource).insertEntity(newRecord);
                 request.getSession().setAttribute(LAST_ACTION_STATUS, true);
                 request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
                 request.getSession().setAttribute(LAST_ACTION_MESSAGE_FULL,
                         messages.getString(TIMER_STARTED_MESSAGE));
             } else {
-                new EntityListService<>(Record.class)
+                new EntityListService<>(Record.class, Servlet.dataSource)
                         .updateEntity(Constants.STOP_TIMER_QUERY, Integer.parseInt(record.get()));
                 request.getSession().setAttribute(LAST_ACTION_STATUS, true);
                 request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);

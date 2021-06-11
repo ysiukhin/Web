@@ -6,6 +6,7 @@ import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Request;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.RequestListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
@@ -41,7 +42,7 @@ public class RequestActionCommand implements Command {
             request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
             if (messages.getString(REQUEST_REJECTED)
                     .equalsIgnoreCase(request.getParameter(ACTION))) {
-                if (new EntityListService<>(Request.class)
+                if (new EntityListService<>(Request.class, Servlet.dataSource)
                         .deleteEntity(Integer.parseInt(request.getParameter(ID))) == 1) {
                     request.getSession().setAttribute(LAST_ACTION_STATUS, true);
                     captionMessage.add(messages.getString(DAO_ACTION_RESULT_OK));

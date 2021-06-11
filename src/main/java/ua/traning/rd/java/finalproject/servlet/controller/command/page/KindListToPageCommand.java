@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Kind;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
@@ -40,7 +41,7 @@ public class KindListToPageCommand implements Command {
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
         List<Kind> kinds;
         try {
-            kinds = new EntityListService<>(Kind.class)
+            kinds = new EntityListService<>(Kind.class, Servlet.dataSource)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);

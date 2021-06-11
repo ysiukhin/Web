@@ -4,25 +4,26 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DbService<T> {
-    Optional<List<T>> getAllBeans();
+
+//    List<T> getAllBeans();
 
     Optional<T> getBeansById(int id);
 
-    Optional<List<T>> getBeansBy(String columnName, Object value);
+    List<T> getBeansBy(String columnName, Object value);
 
-    Optional<List<T>> getBeansBy(List<String> columnNames, List<Object> values);
+//    List<T> getBeansBy(List<String> columnNames, List<Object> values);
 
-    Optional<List<T>> getBeansByQuery(String procName, List<Object> values);
+    List<T> getBeansByQuery(String procName, List<Object> values);
 
-    Optional<List<T>> getBeansByCall(String procName, List<Object> values);
+    List<T> getBeansByCall(String procName, List<Object> values);
 
-    Optional<List<T>> getBeansByCall(String procName, Object value);
+//    List<T> getBeansByCall(String procName, Object value);
 
-    Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset);
+    List<T> getBeansInRangeByRowNumber(int limit, int offset);
 
-    Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset, String sqlQuery);
+    List<T> getBeansInRangeByRowNumber(int limit, int offset, String sqlQuery);
 
-    Optional<List<T>> getBeansFromList(String columnName, List<Object> fields);
+//    List<T> getBeansFromList(String columnName, List<Object> fields);
 
     int saveBean(T account);
 

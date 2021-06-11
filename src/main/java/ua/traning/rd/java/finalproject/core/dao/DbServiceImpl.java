@@ -20,48 +20,31 @@ public class DbServiceImpl<T> implements DbService<T> {
         this.dao = dao;
     }
 
-    public Optional<List<T>> getAllBeans() {
-        return Optional.ofNullable(doService(dao::select));
-    }
-
     public Optional<T> getBeansById(int id) {
         return Optional.ofNullable(doService(() -> dao.selectBy(Collections.singletonList(ID),
                 Collections.singletonList(id)).get(0)));
     }
 
-    public Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset) {
-        return Optional.ofNullable(doService(() -> dao.selectByRecordNumberInRange(limit, offset)));
+    public List<T> getBeansInRangeByRowNumber(int limit, int offset) {
+        return doService(() -> dao.selectByRecordNumberInRange(limit, offset));
     }
 
-    public Optional<List<T>> getBeansInRangeByRowNumber(int limit, int offset, String sqlQuery) {
-        return Optional.ofNullable(doService(() -> dao.selectByRecordNumberInRange(limit, offset, sqlQuery)));
+    public List<T> getBeansInRangeByRowNumber(int limit, int offset, String sqlQuery) {
+        return doService(() -> dao.selectByRecordNumberInRange(limit, offset, sqlQuery));
     }
 
-    public Optional<List<T>> getBeansFromList(String columnName, List<Object> fields) {
-        return Optional.ofNullable(doService(() -> dao.selectByFromList(columnName, fields)));
+    public List<T> getBeansByQuery(String sqlQuery, List<Object> values) {
+        return doService(() -> dao.selectBy(sqlQuery, values));
     }
 
-    public Optional<List<T>> getBeansBy(List<String> columnNames, List<Object> values) {
-        return Optional.ofNullable(doService(() -> dao.selectBy(columnNames, values)));
+    public List<T> getBeansByCall(String procName, List<Object> values) {
+        return doService(() -> dao.call(procName, values));
     }
 
-    public Optional<List<T>> getBeansByQuery(String sqlQuery, List<Object> values) {
-        return Optional.ofNullable(doService(() -> dao.selectBy(sqlQuery, values)));
-    }
-
-    public Optional<List<T>> getBeansByCall(String procName, List<Object> values) {
-        return Optional.ofNullable(doService(() -> dao.call(procName, values)));
-    }
-
-    public Optional<List<T>> getBeansByCall(String procName, Object value) {
-        return Optional.ofNullable(doService(() -> dao.call(procName,
-                Collections.singletonList(value))));
-    }
-
-    public Optional<List<T>> getBeansBy(String columnName, Object value) {
-        return Optional.ofNullable(doService(() ->
+    public List<T> getBeansBy(String columnName, Object value) {
+        return doService(() ->
                 dao.selectBy(Collections.singletonList(columnName),
-                        Collections.singletonList(value))));
+                        Collections.singletonList(value)));
     }
 
     public int saveBean(T bean) {
@@ -90,7 +73,6 @@ public class DbServiceImpl<T> implements DbService<T> {
             try {
                 U result = service.get();
                 sessionManager.commitSession();
-//                logger.debug("Account: {}", allAccounts);
                 return result;
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);

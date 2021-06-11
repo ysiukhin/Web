@@ -47,7 +47,7 @@
 <br>
 <hr>
 <div class="vertical-menu">
-    <a href="${pageContext.request.contextPath}/${Constants.COMMAND_USER_TIMER}?${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}"><fmt:message
+    <a href="${pageContext.request.contextPath}${Constants.COMMAND_USER_TIMER}?${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}"><fmt:message
             key="a.user.get_set_activity_timer"/></a>
     <a href="${pageContext.request.contextPath}${Constants.COMMAND_USER_REQUEST_LIST}?${Constants.PAGE}=${Constants.COMMAND_USER_REQUEST_LIST}"><fmt:message
             key="a.user.request.action"/></a>

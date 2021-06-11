@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
@@ -60,7 +61,7 @@ public class ActivityActionCommand implements Command {
 
     private String delete(HttpServletRequest request, ResourceBundle messages) {
         StringJoiner mes = new StringJoiner(" ");
-        if (new EntityListService<>(Activity.class)
+        if (new EntityListService<>(Activity.class, Servlet.dataSource)
                 .deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
@@ -74,7 +75,7 @@ public class ActivityActionCommand implements Command {
     private String update(HttpServletRequest request, ResourceBundle messages, Activity newActivity) {
         StringJoiner mes = new StringJoiner(" ");
         newActivity.setId(Integer.parseInt(request.getParameter(ID)));
-        if (new EntityListService<>(Activity.class).updateEntity(newActivity) == 0) {
+        if (new EntityListService<>(Activity.class, Servlet.dataSource).updateEntity(newActivity) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -87,7 +88,7 @@ public class ActivityActionCommand implements Command {
 
     private String insert(HttpServletRequest request, ResourceBundle messages, Activity newActivity) {
         StringJoiner mes = new StringJoiner(" ");
-        if (new EntityListService<>(Activity.class).insertEntity(newActivity) == 0) {
+        if (new EntityListService<>(Activity.class, Servlet.dataSource).insertEntity(newActivity) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {

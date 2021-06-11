@@ -22,9 +22,9 @@ public abstract class Dao<T> {
         return daoEntity;
     }
 
-    public void setDaoEntity(Class<T> daoEntity) {
-        this.daoEntity = daoEntity;
-    }
+//    public void setDaoEntity(Class<T> daoEntity) {
+//        this.daoEntity = daoEntity;
+//    }
 
     public abstract List<T> selectBy(List<String> column, List<Object> fields);
 
@@ -32,13 +32,13 @@ public abstract class Dao<T> {
 
     public abstract List<T> call(String storedProc, List<Object> values);
 
-    public abstract List<T> selectByFromList(String column, List<Object> values);
+//    public abstract List<T> selectByFromList(String column, List<Object> values);
 
     public abstract List<T> selectByRecordNumberInRange(int limit, int offset);
 
     public abstract List<T> selectByRecordNumberInRange(int limit, int offset, String sqlQuery);
 
-    public abstract List<T> select();
+//    public abstract List<T> select();
 
     public abstract int insert(T data);
 
@@ -59,6 +59,6 @@ public abstract class Dao<T> {
     }
 
     protected Connection getConnection() {
-        return sessionManager.getCurrentSession().getConnection();
+        return sessionManager.getConnection();
     }
 }

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.RequestActionCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -30,7 +31,7 @@ public class UserTimerCommand implements Command {
         Account user = ((LoggedAccount) request.getSession().getAttribute(LOGGED_ACCOUNT)).getAccount();
         List<AccountSignedActivities> resultList;
         try {
-            resultList = new EntityListService<>(AccountSignedActivities.class)
+            resultList = new EntityListService<>(AccountSignedActivities.class, Servlet.dataSource)
                     .getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_RECORDS,
                             Arrays.asList(user.getId(), -1, 0));
             totalRecords = resultList.size();

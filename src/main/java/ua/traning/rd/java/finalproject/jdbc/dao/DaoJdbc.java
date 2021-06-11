@@ -27,27 +27,6 @@ public class DaoJdbc<T> extends Dao<T> {
     public DaoJdbc(SessionManager sessionManager, Class<T> daoEntity) {
         super(sessionManager, daoEntity);
     }
-
-    @Override
-    public List<T> selectByFromList(String column, List<Object> values) {
-        StringBuilder sqlQuery = new StringBuilder(buildSelect()).append(" WHERE ").append(column).append(" in (");
-        sqlQuery.append(values.stream().collect(() -> new StringJoiner(","),
-                (sj, ob) -> sj.add("?"), (sj1, sj2) -> sj1.add(sj2.toString()))).append(")");
-        try {
-            try (PreparedStatement prepStatement = getConnection().prepareStatement(sqlQuery.toString())) {
-                for (int i = 0; i < values.size(); i++) {
-                    prepStatement.setObject(i + 1, values.get(i));
-                }
-                try (ResultSet resultSet = prepStatement.executeQuery()) {
-                    return selectResultSetProcess(resultSet);
-                }
-            }
-        } catch (InstantiationException | IllegalAccessException | SQLException e) {
-            LOGGER.error("sql: {}\n values: {}\n message: {}", sqlQuery, values, e.getMessage(), e);
-            throw new DaoException(e.getMessage(), e);
-        }
-    }
-
     @Override
     public List<T> selectByRecordNumberInRange(int limit, int offset) {
         return selectByRecordNumberInRange(limit, offset, (buildSelect() + SQL_LIMIT_OFFSET_BOUNDS));
@@ -114,18 +93,18 @@ public class DaoJdbc<T> extends Dao<T> {
         }
     }
 
-    @Override
-    public List<T> select() {
-        String sqlQuery = buildSelect();
-        try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
-             ResultSet resultSet = pst.executeQuery()) {
-            return selectResultSetProcess(resultSet);
-        } catch (InstantiationException | IllegalAccessException |
-                SQLException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new DaoException(e.getMessage(), e);
-        }
-    }
+//    @Override
+//    public List<T> select() {
+//        String sqlQuery = buildSelect();
+//        try (PreparedStatement pst = getConnection().prepareStatement(sqlQuery);
+//             ResultSet resultSet = pst.executeQuery()) {
+//            return selectResultSetProcess(resultSet);
+//        } catch (InstantiationException | IllegalAccessException |
+//                SQLException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            throw new DaoException(e.getMessage(), e);
+//        }
+//    }
 
     private String buildSelect() {
         StringBuilder sqlQuery = new StringBuilder("SELECT ");

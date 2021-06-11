@@ -47,7 +47,7 @@ public class MysqlDemo {
 //        List<AccountActivity> list = dbService.getAllBeans().get();
 
 
-        SampleData.insertTestRecords(dataSource);
+//        SampleData.insertTestRecords(dataSource);
 
         LOGGER.info("All done");
     }

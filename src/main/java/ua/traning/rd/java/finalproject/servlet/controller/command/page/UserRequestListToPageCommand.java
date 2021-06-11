@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.page.RequestListToPageCommand;
@@ -37,7 +38,7 @@ public class UserRequestListToPageCommand implements Command {
         Account user = ((LoggedAccount) request.getSession().getAttribute(LOGGED_ACCOUNT)).getAccount();
         List<AccountActivityAndRequest> resultList;
         try {
-            resultList = new EntityListService<>(AccountActivityAndRequest.class)
+            resultList = new EntityListService<>(AccountActivityAndRequest.class, Servlet.dataSource)
                     .getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_REQUEST,
                             Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
         } catch (ServiceException e) {

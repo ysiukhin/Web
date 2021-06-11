@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
@@ -37,8 +38,8 @@ public class ReportActivityListCommand implements Command {
         List<ActivityReport> resultList;
         int totalRecords;
         try {
-            totalRecords = new EntityListService<>(Activity.class).totalEntities();
-            resultList = new EntityListService<>(ActivityReport.class)
+            totalRecords = new EntityListService<>(Activity.class, Servlet.dataSource).totalEntityQuantity();
+            resultList = new EntityListService<>(ActivityReport.class, Servlet.dataSource)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
                             Constants.SQL_ADMIN_REPORT_ACTIVITY + SQL_LIMIT_OFFSET_BOUNDS);
         } catch (ServiceException e) {
