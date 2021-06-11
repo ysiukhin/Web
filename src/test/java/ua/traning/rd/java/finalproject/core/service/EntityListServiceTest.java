@@ -101,21 +101,33 @@ class EntityListServiceTest {
     }
 
     @Test
-    @DisplayName("have to return all entities List object")
-    void getAllEntitiesBySqlTest() {
-        assertEquals(TEST_ROWS_QUANTITY, new EntityListService<>(Account.class, dataSource)
-                .getAllEntitiesSql(SELECT_ALL_FROM_ACCOUNT).size());
-    }
-
-    @Test
-    @DisplayName("getAllEntities(): have to catch DbServiceException exception when throws SQLException")
-    void getAllEntitiesBySqlExceptionTest() throws SQLException {
+    @DisplayName("totalEntityQuantity(): have to catch DbServiceException exception when throws SQLException")
+    void totalEntityQuantityExceptionTest() throws SQLException {
         given(mockSource.getConnection()).willReturn(mockConnection);
         given(mockConnection.isValid(5)).willReturn(true);
         given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
         given(mockPreparedStatement.executeQuery()).willThrow(SQLException.class);
         assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
-                .getAllEntitiesSql(SELECT_ALL_FROM_ACCOUNT));
+                .totalEntityQuantity());
+    }
+
+
+    @Test
+    @DisplayName("have to return all entities List object")
+    void totalEntityQuantityBySqlTest() {
+        assertEquals(TEST_ROWS_QUANTITY, new EntityListService<>(Account.class, dataSource)
+                .totalEntityQuantityBySql(SELECT_ALL_FROM_ACCOUNT).size());
+    }
+
+    @Test
+    @DisplayName("totalEntityQuantityBySql(): have to catch DbServiceException exception when throws SQLException")
+    void totalEntityQuantityBySqlExceptionTest() throws SQLException {
+        given(mockSource.getConnection()).willReturn(mockConnection);
+        given(mockConnection.isValid(5)).willReturn(true);
+        given(mockConnection.prepareStatement(anyString())).willReturn(mockPreparedStatement);
+        given(mockPreparedStatement.executeQuery()).willThrow(SQLException.class);
+        assertThrows(DbServiceException.class, () -> new EntityListService<>(Account.class, mockSource)
+                .totalEntityQuantityBySql(SELECT_ALL_FROM_ACCOUNT));
     }
 
 

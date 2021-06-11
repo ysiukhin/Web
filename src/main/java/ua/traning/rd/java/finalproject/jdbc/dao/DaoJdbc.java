@@ -267,25 +267,47 @@ public class DaoJdbc<T> extends Dao<T> {
 
     @Override
     public int update(String sqlQuery, List<Object> values) {
-        try {
-            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+            Savepoint savePoint = null;
             try (PreparedStatement prepStatement =
                          getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+                savePoint = getConnection().setSavepoint("savePointName");
                 for (int i = 0; i < values.size(); i++) {
                     prepStatement.setObject(i + 1, values.get(i));
                 }
                 return prepStatement.executeUpdate();
             } catch (SQLException ex) {
-                getConnection().rollback(savePoint);
                 LOGGER.error(ex.getMessage(), ex);
-                throw ex;
+                try {
+                    getConnection().rollback(savePoint);
+                    throw new DaoException(ex);
+                } catch (SQLException e) {
+                    LOGGER.error(e.getMessage(), e);
+                    throw new DaoException(e);
+                }
             }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new DaoException(e);
-        }
     }
 
+    //    @Override
+//    public int update(String sqlQuery, List<Object> values) {
+//        try {
+//            Savepoint savePoint = getConnection().setSavepoint("savePointName");
+//            try (PreparedStatement prepStatement =
+//                         getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+//                for (int i = 0; i < values.size(); i++) {
+//                    prepStatement.setObject(i + 1, values.get(i));
+//                }
+//                return prepStatement.executeUpdate();
+//            } catch (SQLException ex) {
+//                getConnection().rollback(savePoint);
+//                LOGGER.error(ex.getMessage(), ex);
+//                throw ex;
+//            }
+//        } catch (Exception e) {
+//            LOGGER.error(e.getMessage(), e);
+//            throw new DaoException(e);
+//        }
+//    }
+//
     @Override
     public int delete(int id) {
         return delete(Collections.singletonList(ID), Collections.singletonList(id));

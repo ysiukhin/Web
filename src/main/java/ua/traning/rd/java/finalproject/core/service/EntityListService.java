@@ -32,7 +32,7 @@ public class EntityListService<T> {
         return new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(dataSource), entityClass)).beanQuantity();
     }
 
-    public List<T> getAllEntitiesSql(String sqlQuery) {
+    public List<T> totalEntityQuantityBySql(String sqlQuery) {
         return new DbServiceImpl<>(new DaoJdbc<>(
                 new SessionManagerJdbc(dataSource), entityClass))
                 .getBeansByQuery(sqlQuery, Collections.emptyList());

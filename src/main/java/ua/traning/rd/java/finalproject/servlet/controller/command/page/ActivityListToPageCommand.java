@@ -45,7 +45,7 @@ public class ActivityListToPageCommand implements Command {
         List<AdminActivityList> activityList;
         try {
             activityList = new EntityListService<>(AdminActivityList.class, Servlet.dataSource)
-                    .getAllEntitiesSql(SQL_ADMIN_ACTIVITY);
+                    .totalEntityQuantityBySql(SQL_ADMIN_ACTIVITY);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString(EMPTY_RESULT));
