@@ -8,7 +8,7 @@ import ua.traning.rd.java.finalproject.Constants;
 
 import ua.traning.rd.java.finalproject.core.model.AdminActivityList;
 
-import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -44,7 +44,7 @@ public class ActivityListToPageCommand implements Command {
 
         List<AdminActivityList> activityList;
         try {
-            activityList = new EntityListService<>(AdminActivityList.class, Servlet.dataSource)
+            activityList = new EntityListServiceImpl<>(AdminActivityList.class, Servlet.dataSource)
                     .totalEntityQuantityBySql(SQL_ADMIN_ACTIVITY);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);

@@ -5,11 +5,12 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static java.util.Objects.nonNull;
@@ -17,6 +18,15 @@ import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class ActivityActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
+    private final EntityListService<Activity> entityListService;
+
+    public ActivityActionCommand(EntityListService<Activity> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public ActivityActionCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(Activity.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -61,8 +71,7 @@ public class ActivityActionCommand implements Command {
 
     private String delete(HttpServletRequest request, ResourceBundle messages) {
         StringJoiner mes = new StringJoiner(" ");
-        if (new EntityListService<>(Activity.class, Servlet.dataSource)
-                .deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
+        if (entityListService.deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -75,7 +84,7 @@ public class ActivityActionCommand implements Command {
     private String update(HttpServletRequest request, ResourceBundle messages, Activity newActivity) {
         StringJoiner mes = new StringJoiner(" ");
         newActivity.setId(Integer.parseInt(request.getParameter(ID)));
-        if (new EntityListService<>(Activity.class, Servlet.dataSource).updateEntity(newActivity) == 0) {
+        if (entityListService.updateEntity(newActivity) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -88,7 +97,7 @@ public class ActivityActionCommand implements Command {
 
     private String insert(HttpServletRequest request, ResourceBundle messages, Activity newActivity) {
         StringJoiner mes = new StringJoiner(" ");
-        if (new EntityListService<>(Activity.class, Servlet.dataSource).insertEntity(newActivity) == 0) {
+        if (entityListService.insertEntity(newActivity) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -102,7 +111,7 @@ public class ActivityActionCommand implements Command {
     private Optional<Activity> requestIsValid(final HttpServletRequest req) {
         String activity_en = req.getParameter(ACTIVITY_ENGLISH);
         String activity_ru = req.getParameter(ACTIVITY_RUSSIAN);
-        String kind_id = req.getParameter("activity_kind");
+//        String kind_id = req.getParameter("activity_kind");
 
         if (nonNull(activity_en) && nonNull(activity_ru)
                 && activity_en.matches(Constants.EN_RU_LETTERS_AND_SPACE_REGX_LEN_2_100)
@@ -111,7 +120,7 @@ public class ActivityActionCommand implements Command {
                     new ActivityBuilder()
                             .addActivityEn(activity_en)
                             .addActivityRu(activity_ru)
-                            .addKindId(Integer.parseInt(req.getParameter("activity_kind")))
+                            .addKindId(Integer.parseInt(req.getParameter(ACTIVITY_KIND)))
 //                            .addKindId(Integer.parseInt(req.getParameter(KIND_ID)))
                             .build());
         } else {

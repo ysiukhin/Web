@@ -6,12 +6,13 @@ import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.AccountBuilder;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 
 import java.util.*;
 
@@ -22,6 +23,15 @@ import static ua.traning.rd.java.finalproject.core.service.ServiceUtils.getMd5;
 
 public class AccountActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(AccountActionCommand.class);
+    private final EntityListService<Account> entityListService;
+
+    public AccountActionCommand(EntityListService<Account> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public AccountActionCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(Account.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -56,8 +66,7 @@ public class AccountActionCommand implements Command {
                         errorMessages.getString(MESSAGE_VALIDATION_ERROR));
             }
             LOGGER.info("OUT AccountActionCommand");
-            return Constants.REDIRECT + ":"
-                    + Constants.COMMAND_ADMIN_ACCOUNT_LIST + "?" + Constants.PAGE + "=" + Constants.COMMAND_ADMIN_ACCOUNT_LIST;
+            return REDIRECT + ":" + COMMAND_ADMIN_ACCOUNT_LIST + "?" + PAGE + "=" + COMMAND_ADMIN_ACCOUNT_LIST;
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
@@ -66,7 +75,7 @@ public class AccountActionCommand implements Command {
 
     private String delete(HttpServletRequest request, ResourceBundle messages) {
         StringJoiner mes = new StringJoiner(SPACE);
-        if (new EntityListService<>(Account.class, Servlet.dataSource)
+        if (entityListService
                 .deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
@@ -80,7 +89,7 @@ public class AccountActionCommand implements Command {
     private String update(HttpServletRequest request, ResourceBundle messages, Account newAccount) {
         StringJoiner mes = new StringJoiner(SPACE);
         newAccount.setId(Integer.parseInt(request.getParameter(ID)));
-        if (new EntityListService<>(Account.class, Servlet.dataSource).updateEntity(newAccount) == 0) {
+        if (entityListService.updateEntity(newAccount) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -92,14 +101,13 @@ public class AccountActionCommand implements Command {
 
     private String insert(HttpServletRequest request, ResourceBundle messages, Account newAccount) {
         StringJoiner mes = new StringJoiner(SPACE);
-        if (new EntityListService<>(Account.class, Servlet.dataSource).insertEntity(newAccount) == 0) {
+        if (entityListService.insertEntity(newAccount) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
             mes.add(messages.getString(DAO_ACTION_RESULT_OK));
         }
         request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, mes.toString());
-//        request.getSession().setAttribute("actionMessage", mes.toString());
         return mes.toString();
     }
 

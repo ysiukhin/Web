@@ -2,7 +2,6 @@ package ua.traning.rd.java.finalproject.jdbc.sessionmanager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-//import ua.traning.rd.java.finalproject.core.sessionmanager.DatabaseSession;
 import ua.traning.rd.java.finalproject.core.sessionmanager.SessionManager;
 import ua.traning.rd.java.finalproject.core.sessionmanager.SessionManagerException;
 
@@ -11,15 +10,16 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static java.util.Objects.isNull;
+
 public class SessionManagerJdbc implements SessionManager {
     private static final Logger LOGGER = LogManager.getLogger(SessionManagerJdbc.class);
     private static final int TIMEOUT_IN_SECONDS = 5;
     private final DataSource dataSource;
     private Connection connection;
-//    private DatabaseSession databaseSession;
 
     public SessionManagerJdbc(DataSource dataSource) {
-        if (dataSource == null) {
+        if (isNull(dataSource)) {
             throw new SessionManagerException("Datasource is null");
         }
         this.dataSource = dataSource;
@@ -29,7 +29,6 @@ public class SessionManagerJdbc implements SessionManager {
     public void beginSession() {
         try {
             connection = dataSource.getConnection();
-//            databaseSession = new DatabaseSessionJdbc(connection);
         } catch (SQLException e) {
             throw new SessionManagerException(e);
         }
@@ -65,12 +64,6 @@ public class SessionManagerJdbc implements SessionManager {
         }
     }
 
-//    @Override
-//    public DatabaseSession getCurrentSession() {
-//        checkConnection();
-//        return databaseSession;
-//    }
-
     private void checkConnection() {
         try {
             if (connection == null || !connection.isValid(TIMEOUT_IN_SECONDS)) {
@@ -85,5 +78,4 @@ public class SessionManagerJdbc implements SessionManager {
     public Connection getConnection() {
         return connection;
     }
-
 }

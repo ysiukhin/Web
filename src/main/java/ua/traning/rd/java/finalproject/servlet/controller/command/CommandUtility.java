@@ -18,10 +18,9 @@ public
 class CommandUtility {
     public static final Logger LOGGER = LogManager.getLogger(CommandUtility.class);
 
-
     public static void setUserRole(HttpServletRequest request, Account account) {
         LOGGER.info("IN CommandUtility: Create new LoggedAccount and add role --> ");
-        HashMap<String, LoggedAccount> loggedAccounts = (HashMap<String, LoggedAccount>) request
+        HashMap<String, LoggedAccount> loggedAccounts = (HashMap<String, LoggedAccount>) request.getSession()
                 .getServletContext().getAttribute(ALL_LOGGED_ACCOUNTS);
         loggedAccounts.computeIfPresent(request.getSession().getId(), (key, value) -> {
                     value.setRole(account.getStatus() ? LoggedAccount.ROLE.USER : LoggedAccount.ROLE.ADMIN);
@@ -36,12 +35,7 @@ class CommandUtility {
                     return newAccount;
                 }
         );
-//        LoggedAccount newAccount = new LoggedAccount();
-//        newAccount.setAccount(account);
-//        newAccount.setRole(account.getStatus() ? LoggedAccount.ROLE.USER : LoggedAccount.ROLE.ADMIN);
-//        newAccount.setSessionId(request.getSession().getId());
-
-        request.getServletContext().setAttribute(ALL_LOGGED_ACCOUNTS, loggedAccounts);
+        request.getSession().getServletContext().setAttribute(ALL_LOGGED_ACCOUNTS, loggedAccounts);
         request.getSession().setAttribute(LOGGED_ACCOUNT, loggedAccounts.get(request.getSession().getId()));
 
         LOGGER.info("OUT  CommandUtility: Create new LoggedAccount and add role --> ");
@@ -52,8 +46,6 @@ class CommandUtility {
         HashMap<String, LoggedAccount> loggedAccounts = (HashMap<String, LoggedAccount>)
                 request.getSession().getServletContext().getAttribute(ALL_LOGGED_ACCOUNTS);
         LOGGER.info("OUT CommandUtility: checkUserIsLogged");
-//        loggedAccounts.values().stream().map(loggedAccount -> loggedAccount.getAccount().getEmail())
-//                .anyMatch(email::equals);
         return loggedAccounts.values().stream().map(loggedAccount -> loggedAccount.getAccount().getEmail())
                 .anyMatch(email::equals);
     }

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Kind;
-import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -28,7 +28,7 @@ public class KindListCommand implements Command {
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords;
 
-        EntityListService<Kind> kindService = new EntityListService<>(Kind.class, Servlet.dataSource);
+        EntityListServiceImpl<Kind> kindService = new EntityListServiceImpl<>(Kind.class, Servlet.dataSource);
         try {
             totalRecords = kindService.totalEntityQuantity();
         } catch (ServiceException e) {

@@ -9,8 +9,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class ServiceUtils {
-
     public final static Logger LOGGER = LogManager.getLogger(ServiceUtils.class);
+
 
     public static String getMd5(String input) {
         MessageDigest messageDigest;

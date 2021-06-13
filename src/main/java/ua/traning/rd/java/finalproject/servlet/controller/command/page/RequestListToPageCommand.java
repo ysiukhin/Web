@@ -6,7 +6,7 @@ import ua.traning.rd.java.finalproject.Constants;
 
 import ua.traning.rd.java.finalproject.core.model.AdminRequestList;
 
-import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
@@ -42,7 +42,7 @@ public class RequestListToPageCommand implements Command {
 
         List<AdminRequestList> requestLists;
         try {
-            requestLists = new EntityListService<>(AdminRequestList.class, Servlet.dataSource)
+            requestLists = new EntityListServiceImpl<>(AdminRequestList.class, Servlet.dataSource)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
                             Constants.SQL_ADMIN_REQUEST + SQL_LIMIT_OFFSET_BOUNDS);
         } catch (ServiceException e) {

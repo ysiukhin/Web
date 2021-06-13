@@ -5,25 +5,17 @@ import java.util.Optional;
 
 public interface DbService<T> {
 
-//    List<T> getAllBeans();
-
     Optional<T> getBeansById(int id);
 
     List<T> getBeansBy(String columnName, Object value);
-
-//    List<T> getBeansBy(List<String> columnNames, List<Object> values);
 
     List<T> getBeansByQuery(String procName, List<Object> values);
 
     List<T> getBeansByCall(String procName, List<Object> values);
 
-//    List<T> getBeansByCall(String procName, Object value);
-
     List<T> getBeansInRangeByRowNumber(int limit, int offset);
 
     List<T> getBeansInRangeByRowNumber(int limit, int offset, String sqlQuery);
-
-//    List<T> getBeansFromList(String columnName, List<Object> fields);
 
     int saveBean(T account);
 

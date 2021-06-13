@@ -2,9 +2,8 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Account;
-import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -40,7 +39,7 @@ public class AccountListToPageCommand implements Command {
 
         List<Account> accounts;
         try {
-            accounts = new EntityListService<>(Account.class, Servlet.dataSource)
+            accounts = new EntityListServiceImpl<>(Account.class, Servlet.dataSource)
                     .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);

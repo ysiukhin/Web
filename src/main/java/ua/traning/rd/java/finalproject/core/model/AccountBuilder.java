@@ -12,7 +12,7 @@ public class AccountBuilder {
     private String md5 = "";
     private boolean status = false;
     private List<AccountActivity> accountActivities = new ArrayList<>();
-//    private List<Activity> requests = new ArrayList<>();
+    private List<Request> accountRequests = new ArrayList<>();
 
     public AccountBuilder addId(int id) {
         this.id = id;
@@ -54,10 +54,10 @@ public class AccountBuilder {
         return this;
     }
 
-//    public AccountBuilder addRequests(List<Activity> requests) {
-//        this.requests = requests;
-//        return this;
-//    }
+    public AccountBuilder addRequests(List<Request> accountRequests) {
+        this.accountRequests = accountRequests;
+        return this;
+    }
 
     public Account build() {
         Account newAccount = new Account();
@@ -69,7 +69,7 @@ public class AccountBuilder {
         newAccount.setMd5(md5);
         newAccount.setStatus(status);
         newAccount.setAccountActivities(accountActivities);
-//        newAccount.setRequests(requests);
+        newAccount.setAccountRequests(accountRequests);
         return newAccount;
     }
 }

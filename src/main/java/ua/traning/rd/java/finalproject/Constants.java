@@ -103,6 +103,7 @@ public final class Constants {
     public static final String ACCOUNT_LIST = "accounts";
     public static final String ACTIVITY_LIST = "activities";
     public static final String KIND_LIST = "kinds";
+    public static final String ACTIVITY_KIND = "activity_kind";
     public static final String RESULT_LIST = "resultList";
     public static final String TIMER_ACTIVITY_LIST = "timerActivityList";
 

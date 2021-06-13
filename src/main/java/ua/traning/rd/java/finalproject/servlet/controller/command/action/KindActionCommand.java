@@ -5,12 +5,13 @@ import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static java.util.Objects.nonNull;
@@ -18,6 +19,15 @@ import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class KindActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
+    private final EntityListService<Kind> entityListService;
+
+    public KindActionCommand(EntityListService<Kind> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public KindActionCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(Kind.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -50,8 +60,6 @@ public class KindActionCommand implements Command {
                 request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
                 request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT,
                         errorMessages.getString(MESSAGE_VALIDATION_ERROR));
-//                request.getSession().setAttribute("actionMessage",
-//                        errorMessages.getString("message.validation.error"));
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -65,8 +73,7 @@ public class KindActionCommand implements Command {
 
     private String delete(HttpServletRequest request, ResourceBundle messages) {
         StringJoiner mes = new StringJoiner(" ");
-        if (new EntityListService<>(Kind.class, Servlet.dataSource)
-                .deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
+        if (entityListService.deleteEntity(Integer.parseInt(request.getParameter(ID))) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -79,7 +86,7 @@ public class KindActionCommand implements Command {
     private String update(HttpServletRequest request, ResourceBundle messages, Kind newKind) {
         StringJoiner mes = new StringJoiner(" ");
         newKind.setId(Integer.parseInt(request.getParameter(ID)));
-        if (new EntityListService<>(Kind.class, Servlet.dataSource).updateEntity(newKind) == 0) {
+        if (entityListService.updateEntity(newKind) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {
@@ -91,7 +98,7 @@ public class KindActionCommand implements Command {
 
     private String insert(HttpServletRequest request, ResourceBundle messages, Kind newKind) {
         StringJoiner mes = new StringJoiner(" ");
-        if (new EntityListService<>(Kind.class, Servlet.dataSource).insertEntity(newKind) == 0) {
+        if (entityListService.insertEntity(newKind) == 0) {
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             mes.add(messages.getString(DAO_ACTION_RESULT_FAIL));
         } else {

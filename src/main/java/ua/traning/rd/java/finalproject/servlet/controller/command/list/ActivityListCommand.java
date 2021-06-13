@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Activity;
-import ua.traning.rd.java.finalproject.core.service.EntityListService;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -28,7 +28,7 @@ public class ActivityListCommand implements Command {
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords;
 
-        EntityListService<Activity> activityService = new EntityListService<>(Activity.class, Servlet.dataSource);
+        EntityListServiceImpl<Activity> activityService = new EntityListServiceImpl<>(Activity.class, Servlet.dataSource);
         try {
             totalRecords = activityService.totalEntityQuantity();
         } catch (ServiceException e) {

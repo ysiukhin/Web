@@ -5,9 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Account;
+import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
-import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
@@ -30,7 +30,7 @@ public class AccountListCommand implements Command {
 
         int totalRecords = 0;
 
-        EntityListService<Account> accountService = new EntityListService<>(Account.class, Servlet.dataSource);
+        EntityListServiceImpl<Account> accountService = new EntityListServiceImpl<>(Account.class, Servlet.dataSource);
 
         try {
             totalRecords = accountService.totalEntityQuantity();

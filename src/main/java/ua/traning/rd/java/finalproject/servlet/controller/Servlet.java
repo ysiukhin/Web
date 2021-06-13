@@ -34,7 +34,7 @@ public class Servlet extends HttpServlet {
         commands.put(COMMAND_ERROR, (r) -> ERROR_JSP);
 
         commands.put(COMMAND_LOGOUT, new LogOutCommand());
-        commands.put(COMMAND_LOGIN, new LoginCommand());
+        commands.put(COMMAND_LOGIN, new LoginCommand(Servlet.dataSource));
 
         commands.put(COMMAND_ADMIN_SECTION, new AdminSectionCommand());
         commands.put(COMMAND_USER_SECTION, new UserSectionCommand());
@@ -46,7 +46,7 @@ public class Servlet extends HttpServlet {
         commands.put(COMMAND_ADMIN_REPORT_REQUEST_LIST, new ReportActivityListCommand());
         commands.put(COMMAND_ADMIN_REPORT_ACCOUNT_LIST, new ReportAccountListCommand());
 
-        commands.put(COMMAND_USER_TIMER, new UserTimerCommand());
+        commands.put(COMMAND_USER_TIMER, new UserTimerCommand(Servlet.dataSource));
         commands.put(COMMAND_USER_REQUEST_LIST, new UserRequestListCommand());
 
 
@@ -58,14 +58,14 @@ public class Servlet extends HttpServlet {
         commands.put(COMMAND_USER_TO_PAGE_TIMER, new UserTimerToPageCommand());
 
 
-        commands.put(COMMAND_ADMIN_ACCOUNT_ACTION, new AccountActionCommand());
-        commands.put(COMMAND_ADMIN_ACTIVITY_ACTION, new ActivityActionCommand());
-        commands.put(COMMAND_ADMIN_KIND_ACTION, new KindActionCommand());
-        commands.put(COMMAND_ADMIN_REQUEST_ACTION, new RequestActionCommand());
+        commands.put(COMMAND_ADMIN_ACCOUNT_ACTION, new AccountActionCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_ACTIVITY_ACTION, new ActivityActionCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_KIND_ACTION, new KindActionCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_REQUEST_ACTION, new RequestActionCommand(Servlet.dataSource));
         commands.put(COMMAND_USER_REQUEST_ACTION, new UserRequestActionCommand());
         commands.put(COMMAND_USER_TIMER_ACTION, new UserTimerActionCommand());
 
-        commands.put(COMMAND_CHANGE_LANGUAGE, new ChangeLanguageCommand());
+//        commands.put(COMMAND_CHANGE_LANGUAGE, new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
     }
 

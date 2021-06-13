@@ -6,10 +6,9 @@ import ua.traning.rd.java.finalproject.core.annotation.TableColumn;
 import ua.traning.rd.java.finalproject.core.annotation.TableName;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 @TableName(dbTable = "account")
-public class Account extends AbstractModel<Integer> implements CurrentAccount {
+public class Account {
     @PrimaryKey
     @TableColumn("id")
     private int id;
@@ -29,6 +28,7 @@ public class Account extends AbstractModel<Integer> implements CurrentAccount {
     private List<AccountActivity> accountActivities;
     @Linked("account_id")
     private List<Request> accountRequests;
+
 
     public List<Request> getAccountRequests() {
         return accountRequests;
@@ -101,19 +101,5 @@ public class Account extends AbstractModel<Integer> implements CurrentAccount {
 
     public void setAccountActivities(List<AccountActivity> accountActivities) {
         this.accountActivities = accountActivities;
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", Account.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("firstName='" + firstName + "'")
-                .add("lastName='" + lastName + "'")
-                .add("middleName='" + middleName + "'")
-                .add("email='" + email + "'")
-                .add("md5='" + md5 + "'")
-                .add("status=" + status)
-                .add("accountActivities=" + accountActivities)
-                .toString();
     }
 }

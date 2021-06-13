@@ -4,18 +4,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.service.LoginService;
+import ua.traning.rd.java.finalproject.core.service.LoginServiceImpl;
+import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static java.util.Objects.isNull;
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class LoginCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(LoginCommand.class);
+    private final LoginService loginService;
+
+    public LoginCommand(LoginService loginService) {
+        this.loginService = loginService;
+    }
+
+    public LoginCommand(DataSource dataSource) {
+        this.loginService = new LoginServiceImpl(Servlet.dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -26,7 +39,7 @@ public class LoginCommand implements Command {
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
 
-        if (email == null || email.equals(EMPTY_STRING) || password == null || password.equals(EMPTY_STRING)) {
+        if (isNull(email) || email.equals(EMPTY_STRING) || isNull(password) || password.equals(EMPTY_STRING)) {
             request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);
             request.getSession().setAttribute(LAST_ACTION_MESSAGE_SHORT, errorMessages.getString(MESSAGE_AUTHORIZATION_ERROR));
@@ -42,7 +55,8 @@ public class LoginCommand implements Command {
         }
         Account account;
         try {
-            account = new LoginService().checkAccount(email, password);
+//            account = new LoginServiceImpl(Servlet.dataSource).checkAccount(email, password);
+            account = loginService.checkAccount(email, password);
 
             CommandUtility.setUserRole(request, account);
             request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT);

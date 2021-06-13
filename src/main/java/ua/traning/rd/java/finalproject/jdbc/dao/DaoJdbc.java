@@ -141,7 +141,7 @@ public class DaoJdbc<T> extends Dao<T> {
         return resultList;
     }
 
-    private Map<String, List<Object>> buildInsert(T entity)
+    public Map<String, List<Object>> buildInsert(T entity)
             throws IllegalAccessException {
         StringBuilder sqlQuery = new StringBuilder("INSERT INTO ");
         sqlQuery.append(getDaoEntity().getAnnotation(TableName.class).dbTable());

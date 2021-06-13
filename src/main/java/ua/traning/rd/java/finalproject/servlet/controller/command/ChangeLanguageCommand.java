@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import static ua.traning.rd.java.finalproject.Constants.PAGE;
 
 
-public class ChangeLanguageCommand implements Command {
+class ChangeLanguageCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
 //        String page = request.getParameter(PAGE);

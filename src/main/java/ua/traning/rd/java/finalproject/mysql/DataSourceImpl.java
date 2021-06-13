@@ -1,8 +1,5 @@
 package ua.traning.rd.java.finalproject.mysql;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -11,9 +8,6 @@ import java.sql.SQLException;
 
 public class DataSourceImpl implements DataSource {
 
-    private static final Logger logger = LogManager.getLogger("DataSourceH2");
-
-    //    private static final String URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private static final String URL = "jdbc:mysql://" +           //db type
             "localhost:" +              //host name
             "3306/" +                   //port
@@ -28,11 +22,6 @@ public class DataSourceImpl implements DataSource {
     public Connection getConnection() throws SQLException {
         Connection connection = DriverManager.getConnection(URL);
         connection.setAutoCommit(false);
-        logger.trace("connection obtain successful");
-        logger.trace("Connected to: {}", connection.getMetaData().getURL());
-        logger.trace("DB name: {}", connection.getMetaData().getDatabaseProductName());
-        logger.trace("DB version: {}", connection.getMetaData().getDatabaseProductVersion());
-        logger.trace("Driver: {}", connection.getMetaData().getDriverName());
         return connection;
     }
 
