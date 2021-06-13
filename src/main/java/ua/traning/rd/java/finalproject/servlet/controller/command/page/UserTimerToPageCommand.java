@@ -6,6 +6,7 @@ import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.AccountSignedActivities;
 import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -14,12 +15,22 @@ import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class UserTimerToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListToPageCommand.class);
+    private final EntityListService<AccountSignedActivities> entityListService;
+
+    public UserTimerToPageCommand(EntityListService<AccountSignedActivities> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public UserTimerToPageCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(AccountSignedActivities.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -36,16 +47,14 @@ public class UserTimerToPageCommand implements Command {
         int page = pagenumber.map(Integer::parseInt)
                 .orElse((Integer) request.getSession().getAttribute(Constants.PAGE_NUMBER));
 
-
         Account user = ((LoggedAccount) request.getSession().getAttribute(LOGGED_ACCOUNT)).getAccount();
         List<AccountSignedActivities> resultList;
         try {
-            resultList = new EntityListServiceImpl<>(AccountSignedActivities.class, Servlet.dataSource)
-                    .getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_RECORDS,
-                            Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
-        } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
+            resultList = entityListService.getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_RECORDS,
+                    Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
+//        } catch (ServiceException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

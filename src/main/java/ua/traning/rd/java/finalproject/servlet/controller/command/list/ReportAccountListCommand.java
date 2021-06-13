@@ -4,20 +4,34 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.*;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class ReportAccountListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ReportAccountListCommand.class);
+    private final EntityListService<Account> entityListService;
+    private final EntityListService<AccountReport> reportEntityListService;
+
+    public ReportAccountListCommand(EntityListService<Account> entityListService,
+                                    EntityListService<AccountReport> reportEntityListService) {
+        this.entityListService = entityListService;
+        this.reportEntityListService = reportEntityListService;
+    }
+
+    public ReportAccountListCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(Account.class, dataSource);
+        this.reportEntityListService = new EntityListServiceImpl<>(AccountReport.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -37,10 +51,9 @@ public class ReportAccountListCommand implements Command {
         List<AccountReport> resultList;
         int totalRecords;
         try {
-            totalRecords = new EntityListServiceImpl<>(Account.class, Servlet.dataSource).totalEntityQuantity();
-            resultList = new EntityListServiceImpl<>(AccountReport.class, Servlet.dataSource)
-                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
-                            Constants.SQL_ADMIN_REPORT_ACCOUNT + SQL_LIMIT_OFFSET_BOUNDS);
+            totalRecords = entityListService.totalEntityQuantity();
+            resultList = reportEntityListService.getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
+                    Constants.SQL_ADMIN_REPORT_ACCOUNT + SQL_LIMIT_OFFSET_BOUNDS);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString(EMPTY_RESULT));

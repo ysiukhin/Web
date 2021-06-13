@@ -4,20 +4,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Kind;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class KindListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(KindListCommand.class);
+    private final EntityListService<Kind> kindService;
+
+    public KindListCommand(EntityListService<Kind> kindService) {
+        this.kindService = kindService;
+    }
+
+    public KindListCommand(DataSource dataSource) {
+        this.kindService = new EntityListServiceImpl<>(Kind.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -28,12 +36,12 @@ public class KindListCommand implements Command {
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords;
 
-        EntityListServiceImpl<Kind> kindService = new EntityListServiceImpl<>(Kind.class, Servlet.dataSource);
+//        EntityListServiceImpl<Kind> kindService = new EntityListServiceImpl<>(Kind.class, Servlet.dataSource);
         try {
             totalRecords = kindService.totalEntityQuantity();
-        } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
+//        } catch (ServiceException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

@@ -6,6 +6,8 @@ import ua.traning.rd.java.finalproject.Constants;
 
 import ua.traning.rd.java.finalproject.core.model.AdminRequestList;
 
+import ua.traning.rd.java.finalproject.core.model.Kind;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
@@ -15,12 +17,22 @@ import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class RequestListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListToPageCommand.class);
+    private final EntityListService<AdminRequestList> entityListService;
+
+    public RequestListToPageCommand(EntityListService<AdminRequestList> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public RequestListToPageCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(AdminRequestList.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -42,9 +54,8 @@ public class RequestListToPageCommand implements Command {
 
         List<AdminRequestList> requestLists;
         try {
-            requestLists = new EntityListServiceImpl<>(AdminRequestList.class, Servlet.dataSource)
-                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
-                            Constants.SQL_ADMIN_REQUEST + SQL_LIMIT_OFFSET_BOUNDS);
+            requestLists = entityListService.getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1),
+                    Constants.SQL_ADMIN_REQUEST + SQL_LIMIT_OFFSET_BOUNDS);
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString(EMPTY_RESULT));

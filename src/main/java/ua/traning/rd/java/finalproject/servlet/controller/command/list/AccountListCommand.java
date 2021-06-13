@@ -2,41 +2,45 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.list;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Account;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class AccountListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(AccountListCommand.class);
+    private final EntityListService<Account> accountService;
+
+    public AccountListCommand(EntityListService<Account> accountService) {
+        this.accountService = accountService;
+    }
+
+    public AccountListCommand(DataSource dataSource) {
+        this.accountService = new EntityListServiceImpl<>(Account.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
         LOGGER.info("IN AccountListCommand");
         ResourceBundle errorMessages = ResourceBundle.getBundle(ERROR_MESSAGES_BUNDLE,
                 new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
-
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
-
         int totalRecords = 0;
-
-        EntityListServiceImpl<Account> accountService = new EntityListServiceImpl<>(Account.class, Servlet.dataSource);
+//        EntityListServiceImpl<Account> accountService = new EntityListServiceImpl<>(Account.class, Servlet.dataSource);
 
         try {
             totalRecords = accountService.totalEntityQuantity();
-        } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
+//        } catch (ServiceException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-
-import static ua.traning.rd.java.finalproject.Constants.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class Servlet extends HttpServlet {
     public final static Logger LOGGER = LogManager.getLogger(Servlet.class);
@@ -39,33 +39,30 @@ public class Servlet extends HttpServlet {
         commands.put(COMMAND_ADMIN_SECTION, new AdminSectionCommand());
         commands.put(COMMAND_USER_SECTION, new UserSectionCommand());
 
-        commands.put(COMMAND_ADMIN_ACCOUNT_LIST, new AccountListCommand());
-        commands.put(COMMAND_ADMIN_ACTIVITY_LIST, new ActivityListCommand());
-        commands.put(COMMAND_ADMIN_KIND_LIST, new KindListCommand());
-        commands.put(COMMAND_ADMIN_REQUEST_LIST, new RequestListCommand());
-        commands.put(COMMAND_ADMIN_REPORT_REQUEST_LIST, new ReportActivityListCommand());
-        commands.put(COMMAND_ADMIN_REPORT_ACCOUNT_LIST, new ReportAccountListCommand());
+        commands.put(COMMAND_ADMIN_ACCOUNT_LIST, new AccountListCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_ACTIVITY_LIST, new ActivityListCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_KIND_LIST, new KindListCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_REQUEST_LIST, new RequestListCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_REPORT_REQUEST_LIST, new ReportActivityListCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_REPORT_ACCOUNT_LIST, new ReportAccountListCommand(Servlet.dataSource));
 
         commands.put(COMMAND_USER_TIMER, new UserTimerCommand(Servlet.dataSource));
-        commands.put(COMMAND_USER_REQUEST_LIST, new UserRequestListCommand());
+        commands.put(COMMAND_USER_REQUEST_LIST, new UserRequestListCommand(Servlet.dataSource));
 
-
-        commands.put(COMMAND_ADMIN_TO_PAGE_ACCOUNT, new AccountListToPageCommand());
-        commands.put(COMMAND_ADMIN_TO_PAGE_ACTIVITY, new ActivityListToPageCommand());
-        commands.put(COMMAND_ADMIN_TO_PAGE_KIND, new KindListToPageCommand());
-        commands.put(COMMAND_ADMIN_TO_PAGE_REQUEST, new RequestListToPageCommand());
-        commands.put(COMMAND_USER_TO_PAGE_REQUEST, new UserRequestListToPageCommand());
-        commands.put(COMMAND_USER_TO_PAGE_TIMER, new UserTimerToPageCommand());
-
+        commands.put(COMMAND_ADMIN_TO_PAGE_ACCOUNT, new AccountListToPageCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_TO_PAGE_ACTIVITY, new ActivityListToPageCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_TO_PAGE_KIND, new KindListToPageCommand(Servlet.dataSource));
+        commands.put(COMMAND_ADMIN_TO_PAGE_REQUEST, new RequestListToPageCommand(Servlet.dataSource));
+        commands.put(COMMAND_USER_TO_PAGE_REQUEST, new UserRequestListToPageCommand(Servlet.dataSource));
+        commands.put(COMMAND_USER_TO_PAGE_TIMER, new UserTimerToPageCommand(Servlet.dataSource));
 
         commands.put(COMMAND_ADMIN_ACCOUNT_ACTION, new AccountActionCommand(Servlet.dataSource));
         commands.put(COMMAND_ADMIN_ACTIVITY_ACTION, new ActivityActionCommand(Servlet.dataSource));
         commands.put(COMMAND_ADMIN_KIND_ACTION, new KindActionCommand(Servlet.dataSource));
         commands.put(COMMAND_ADMIN_REQUEST_ACTION, new RequestActionCommand(Servlet.dataSource));
-        commands.put(COMMAND_USER_REQUEST_ACTION, new UserRequestActionCommand());
-        commands.put(COMMAND_USER_TIMER_ACTION, new UserTimerActionCommand());
+        commands.put(COMMAND_USER_REQUEST_ACTION, new UserRequestActionCommand(Servlet.dataSource));
+        commands.put(COMMAND_USER_TIMER_ACTION, new UserTimerActionCommand(Servlet.dataSource));
 
-//        commands.put(COMMAND_CHANGE_LANGUAGE, new ChangeLanguageCommand());
         ContextPath = config.getServletContext().getContextPath();
     }
 

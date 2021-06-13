@@ -4,18 +4,30 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.*;
 
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class UserRequestActionCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(ActivityActionCommand.class);
+
+    private final EntityListService<Request> entityListService;
+
+    public UserRequestActionCommand(EntityListService<Request> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public UserRequestActionCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(Request.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -37,7 +49,7 @@ public class UserRequestActionCommand implements Command {
             StringJoiner mes = new StringJoiner(" ");
             request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
 
-            if (new EntityListServiceImpl<>(Request.class, Servlet.dataSource).insertEntity(newRequest) > 0) {
+            if (entityListService.insertEntity(newRequest) > 0) {
                 request.getSession().setAttribute(LAST_ACTION_STATUS, true);
                 mes.add(messages.getString(USER_REQUEST_SUCCESS));
             } else {

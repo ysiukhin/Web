@@ -4,20 +4,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Request;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class RequestListCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListCommand.class);
+    private final EntityListService<Request> requestService;
+
+    public RequestListCommand(EntityListService<Request> requestService) {
+        this.requestService = requestService;
+    }
+
+    public RequestListCommand(DataSource dataSource) {
+        this.requestService = new EntityListServiceImpl<>(Request.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -27,14 +35,12 @@ public class RequestListCommand implements Command {
 
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords = 0;
-
-        EntityListServiceImpl<Request> requestService = new EntityListServiceImpl<>(Request.class, Servlet.dataSource);
-
+//        EntityListServiceImpl<Request> requestService = new EntityListServiceImpl<>(Request.class, Servlet.dataSource);
         try {
             totalRecords = requestService.totalEntityQuantity();
-        } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
+//        } catch (ServiceException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

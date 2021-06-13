@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
 import ua.traning.rd.java.finalproject.core.model.Kind;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
@@ -12,6 +13,7 @@ import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -21,6 +23,15 @@ import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class KindListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(KindListToPageCommand.class);
+    private final EntityListService<Kind> entityListService;
+
+    public KindListToPageCommand(EntityListService<Kind> entityListService) {
+        this.entityListService = entityListService;
+    }
+
+    public KindListToPageCommand(DataSource dataSource) {
+        this.entityListService = new EntityListServiceImpl<>(Kind.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -41,8 +52,7 @@ public class KindListToPageCommand implements Command {
         LOGGER.info("rowsPerPage: {} pagenumber: {}", rowsPerPage, page);
         List<Kind> kinds;
         try {
-            kinds = new EntityListServiceImpl<>(Kind.class, Servlet.dataSource)
-                    .getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
+            kinds = entityListService.getInRangeByRowNumber(rowsPerPage, rowsPerPage * (page - 1));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString(EMPTY_RESULT));

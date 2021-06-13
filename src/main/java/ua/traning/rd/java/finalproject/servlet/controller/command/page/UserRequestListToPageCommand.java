@@ -3,6 +3,7 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.core.model.*;
+import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
@@ -11,12 +12,22 @@ import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
 import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.*;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
 
 public class UserRequestListToPageCommand implements Command {
     public final static Logger LOGGER = LogManager.getLogger(RequestListToPageCommand.class);
+    private final EntityListService<AccountActivityAndRequest> activityService;
+
+    public UserRequestListToPageCommand(EntityListService<AccountActivityAndRequest> activityService) {
+        this.activityService = activityService;
+    }
+
+    public UserRequestListToPageCommand(DataSource dataSource) {
+        this.activityService = new EntityListServiceImpl<>(AccountActivityAndRequest.class, dataSource);
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -36,9 +47,8 @@ public class UserRequestListToPageCommand implements Command {
         Account user = ((LoggedAccount) request.getSession().getAttribute(LOGGED_ACCOUNT)).getAccount();
         List<AccountActivityAndRequest> resultList;
         try {
-            resultList = new EntityListServiceImpl<>(AccountActivityAndRequest.class, Servlet.dataSource)
-                    .getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_REQUEST,
-                            Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
+            resultList = activityService.getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_REQUEST,
+                    Arrays.asList(user.getId(), rowsPerPage, rowsPerPage * (page - 1)));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new CommandException(errorMessages.getString(EMPTY_RESULT));
