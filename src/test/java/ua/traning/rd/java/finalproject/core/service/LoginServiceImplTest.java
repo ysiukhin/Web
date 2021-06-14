@@ -5,11 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import ua.traning.rd.java.finalproject.core.dao.DbServiceImpl;
 import ua.traning.rd.java.finalproject.core.model.Account;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
-
+import ua.traning.rd.java.finalproject.servlet.exception.ValidateException;
 
 import java.util.List;
 
@@ -48,6 +46,6 @@ class LoginServiceImplTest {
         when(dbServiceImplMock.getBeansBy(anyString(), anyString())).thenReturn(accountListMock);
         when(accountListMock.get(anyInt())).thenReturn(accountMock);
         when(accountMock.getMd5()).thenReturn("password");
-        assertThrows(ServiceException.class, () -> loginServiceImplMock.checkAccount("email", "password"));
+        assertThrows(ValidateException.class, () -> loginServiceImplMock.checkAccount("email", "password"));
     }
 }

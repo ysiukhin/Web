@@ -11,8 +11,6 @@ public interface EntityListService<T> {
 
     List<T> getInRangeByRowNumber(int limit, int offset, String sqlQuery);
 
-    T getById(int id);
-
     int insertEntity(T entity);
 
     int updateEntity(T entity);

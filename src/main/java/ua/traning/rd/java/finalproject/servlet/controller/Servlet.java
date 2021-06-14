@@ -62,7 +62,6 @@ public class Servlet extends HttpServlet {
         commands.put(COMMAND_ADMIN_REQUEST_ACTION, new RequestActionCommand(Servlet.dataSource));
         commands.put(COMMAND_USER_REQUEST_ACTION, new UserRequestActionCommand(Servlet.dataSource));
         commands.put(COMMAND_USER_TIMER_ACTION, new UserTimerActionCommand(Servlet.dataSource));
-
         ContextPath = config.getServletContext().getContextPath();
     }
 

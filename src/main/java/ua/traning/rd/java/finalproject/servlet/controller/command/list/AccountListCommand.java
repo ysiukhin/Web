@@ -34,13 +34,8 @@ public class AccountListCommand implements Command {
                 new Locale(String.valueOf(request.getSession().getAttribute(LANGUAGE))));
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords = 0;
-//        EntityListServiceImpl<Account> accountService = new EntityListServiceImpl<>(Account.class, Servlet.dataSource);
-
         try {
             totalRecords = accountService.totalEntityQuantity();
-//        } catch (ServiceException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

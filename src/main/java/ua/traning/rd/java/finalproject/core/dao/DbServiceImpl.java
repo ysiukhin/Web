@@ -6,10 +6,7 @@ import ua.traning.rd.java.finalproject.core.sessionmanager.SessionManager;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
-
-import static ua.traning.rd.java.finalproject.Constants.ID;
 
 public class DbServiceImpl<T> implements DbService<T> {
     private final static Logger LOGGER = LogManager.getLogger(DbServiceImpl.class);
@@ -18,11 +15,6 @@ public class DbServiceImpl<T> implements DbService<T> {
 
     public DbServiceImpl(Dao<T> dao) {
         this.dao = dao;
-    }
-
-    public Optional<T> getBeansById(int id) {
-        return Optional.ofNullable(doService(() -> dao.selectBy(Collections.singletonList(ID),
-                Collections.singletonList(id)).get(0)));
     }
 
     public List<T> getBeansInRangeByRowNumber(int limit, int offset) {
@@ -70,15 +62,9 @@ public class DbServiceImpl<T> implements DbService<T> {
     private <U> U doService(Supplier<U> service) {
         try (SessionManager sessionManager = dao.getSessionManager()) {
             sessionManager.beginSession();
-//            try {
             U result = service.get();
             sessionManager.commitSession();
             return result;
-//            } catch (Exception e) {
-//                LOGGER.error(e.getMessage(), e);
-//                sessionManager.rollbackSession();
-//                throw new DbServiceException(e);
-//            }
         }
     }
 }

@@ -8,7 +8,7 @@ import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.jdbc.dao.DaoJdbc;
 import ua.traning.rd.java.finalproject.jdbc.sessionmanager.SessionManagerJdbc;
 import ua.traning.rd.java.finalproject.servlet.controller.command.LoginCommand;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
+import ua.traning.rd.java.finalproject.servlet.exception.ValidateException;
 
 import javax.sql.DataSource;
 
@@ -17,9 +17,9 @@ import static ua.traning.rd.java.finalproject.Constants.EMAIL;
 
 public class LoginServiceImpl implements LoginService {
     public final static Logger LOGGER = LogManager.getLogger(LoginCommand.class);
-    private DbService<Account> dbService;
+    private final DbService<Account> dbService;
 
-    public LoginServiceImpl(DbServiceImpl<Account> dbService) {
+    public LoginServiceImpl(DbService<Account> dbService) {
         this.dbService = dbService;
     }
 
@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
         String savedPassword = account.getMd5();
         String providedPassword = ServiceUtils.getMd5(password);
         if (!savedPassword.equalsIgnoreCase(providedPassword)) {
-            throw new ServiceException(String
+            throw new ValidateException(String
                     .format("Wrong password -> saved: [%s] and provided: [%s]", savedPassword, providedPassword));
         }
         LOGGER.info("OUT LoginService");

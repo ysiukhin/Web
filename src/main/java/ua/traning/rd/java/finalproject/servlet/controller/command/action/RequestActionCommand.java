@@ -57,7 +57,6 @@ public class RequestActionCommand implements Command {
                 captionMessage.add(messages.getString(DAO_ACTION_RESULT_FAIL));
             }
         } else {
-//            try (RequestListServiceImpl requestListService = new RequestListServiceImpl(Servlet.dataSource)) {
             try {
                 requestListService.processRequestTransaction(messages.getString(SIGN_IN)
                                 .equalsIgnoreCase(request.getParameter(REQUEST))

@@ -35,12 +35,8 @@ public class RequestListCommand implements Command {
 
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords = 0;
-//        EntityListServiceImpl<Request> requestService = new EntityListServiceImpl<>(Request.class, Servlet.dataSource);
         try {
             totalRecords = requestService.totalEntityQuantity();
-//        } catch (ServiceException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

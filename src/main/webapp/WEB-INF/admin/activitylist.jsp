@@ -33,7 +33,7 @@
                         actionMessage="${sessionScope.actionMessage}"/>
 </c:if>
 <div class="header-panel">
-    <label><h1>${sessionScope.account.account.firstName}&nbsp;${sessionScope.account.account.lastName}</h1></label>
+    <h1>${sessionScope.account.account.firstName}&nbsp;${sessionScope.account.account.lastName}</h1>
     <label><a href="${pageContext.request.contextPath}${Constants.COMMAND_LOGOUT}">Logout</a></label>
     <label><a
             href="${pageContext.request.contextPath}${Constants.COMMAND_ADMIN_ACTIVITY_LIST}?${Constants.SESSION_LOCALE}=${Constants.LOCALE_ENGLISH}&${Constants.PAGE}=${Constants.COMMAND_ADMIN_ACTIVITY_LIST}&${Constants.PAGE_NUMBER}=${sessionScope.pagenumber}&${Constants.ROWS_PER_PAGE}=${requestScope.rowsPerPage}">

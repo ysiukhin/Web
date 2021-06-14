@@ -35,13 +35,8 @@ public class ActivityListCommand implements Command {
 
         int rowsPerPage = Constants.DEFAULT_ROWS_PER_PAGE;
         int totalRecords;
-
-//        EntityListServiceImpl<Activity> activityService = new EntityListServiceImpl<>(Activity.class, Servlet.dataSource);
         try {
             totalRecords = activityService.totalEntityQuantity();
-//        } catch (ServiceException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

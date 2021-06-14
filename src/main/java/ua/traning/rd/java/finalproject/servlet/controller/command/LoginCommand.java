@@ -6,9 +6,9 @@ import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.service.LoginService;
 import ua.traning.rd.java.finalproject.core.service.LoginServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
+import ua.traning.rd.java.finalproject.servlet.exception.ValidateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
@@ -55,14 +55,12 @@ public class LoginCommand implements Command {
         }
         Account account;
         try {
-//            account = new LoginServiceImpl(Servlet.dataSource).checkAccount(email, password);
             account = loginService.checkAccount(email, password);
-
             CommandUtility.setUserRole(request, account);
             request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT);
             LOGGER.info("Logging  account: {}\n session: {}", account.toString(), request.getSession(false).getId());
             return REDIRECT + ":" + (account.getStatus() ? COMMAND_USER_SECTION : COMMAND_ADMIN_SECTION);
-        } catch (ServiceException e) {
+        } catch (ValidateException e) {
             LOGGER.error(e.getMessage(), e);
             request.getSession().setAttribute(IS_MESSAGE_TO_SHOW, true);
             request.getSession().setAttribute(LAST_ACTION_STATUS, false);

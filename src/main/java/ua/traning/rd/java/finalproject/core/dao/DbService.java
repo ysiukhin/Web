@@ -1,11 +1,8 @@
 package ua.traning.rd.java.finalproject.core.dao;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DbService<T> {
-
-    Optional<T> getBeansById(int id);
 
     List<T> getBeansBy(String columnName, Object value);
 

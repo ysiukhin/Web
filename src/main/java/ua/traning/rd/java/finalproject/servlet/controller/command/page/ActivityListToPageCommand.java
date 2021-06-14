@@ -3,23 +3,19 @@ package ua.traning.rd.java.finalproject.servlet.controller.command.page;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import ua.traning.rd.java.finalproject.Constants;
-
 import ua.traning.rd.java.finalproject.core.model.AdminActivityList;
-
-import ua.traning.rd.java.finalproject.core.model.Kind;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
-import ua.traning.rd.java.finalproject.servlet.controller.Servlet;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 import ua.traning.rd.java.finalproject.servlet.controller.command.Command;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static ua.traning.rd.java.finalproject.Constants.*;
@@ -57,9 +53,6 @@ public class ActivityListToPageCommand implements Command {
         List<AdminActivityList> activityList;
         try {
             activityList = entityListService.totalEntityQuantityBySql(SQL_ADMIN_ACTIVITY);
-        } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));

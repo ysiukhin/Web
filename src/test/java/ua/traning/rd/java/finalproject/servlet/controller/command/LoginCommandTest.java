@@ -11,7 +11,7 @@ import ua.traning.rd.java.finalproject.core.model.Account;
 import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
 import ua.traning.rd.java.finalproject.core.service.LoginService;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
+import ua.traning.rd.java.finalproject.servlet.exception.ValidateException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -83,7 +82,7 @@ class LoginCommandTest {
     void executeThrowServiceExceptionTest() {
         when(requestMock.getParameter(EMAIL)).thenReturn("email");
         when(requestMock.getParameter(PASSWORD)).thenReturn("password");
-        when(loginServiceMock.checkAccount("email", "password")).thenThrow(ServiceException.class);
+        when(loginServiceMock.checkAccount("email", "password")).thenThrow(ValidateException.class);
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getServletContext()).thenReturn(servletContextMock);
         when(servletContextMock.getAttribute(ALL_LOGGED_ACCOUNTS)).thenReturn(loggedAccountsMock);

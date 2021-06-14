@@ -189,13 +189,13 @@ class EntityListServiceImplTest {
 
     @Test
     @DisplayName("have to update DB stored data with provided entity values")
-    void updateEntityTest() throws Exception {
+    void updateEntityTest() {
         int defaultId = 1;
         DbService<Account> dbService = new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(dataSource), Account.class));
-        Account account = dbService.getBeansById(defaultId).orElseThrow(Exception::new);
+        Account account = dbService.getBeansBy("id", defaultId).get(0);
         account.setMiddleName(null);
         assertEquals(1, new EntityListServiceImpl<>(Account.class, dataSource).updateEntity(account));
-        assertNull(dbService.getBeansById(defaultId).orElseThrow(Exception::new).getMiddleName());
+        assertNull(dbService.getBeansBy("id", defaultId).get(0).getMiddleName());
     }
 
     @DisplayName("updateEntity(): have to catch DaoException exception when throws SQLException")
@@ -216,12 +216,12 @@ class EntityListServiceImplTest {
 
     @Test
     @DisplayName("have to update DB stored data by given SQL query action")
-    void updateEntityBySqlTest() throws Exception {
+    void updateEntityBySqlTest() {
         int defaultId = 1;
         assertEquals(1, new EntityListServiceImpl<>(Account.class, dataSource)
                 .updateEntity(UPDATE_ACCOUNT_SET_MIDDLE_NAME_NULL_BY_ID, defaultId));
         assertNull(new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(dataSource), Account.class))
-                .getBeansById(defaultId).orElseThrow(Exception::new).getMiddleName());
+                .getBeansBy("id", defaultId).get(0).getMiddleName());
     }
 
 
@@ -293,44 +293,23 @@ class EntityListServiceImplTest {
         final int defaultId = 1;
         sqlQueryCreateTable("create table if not exists linked_table " +
                 "( id int auto_increment primary key, primary_table_id int not null )");
-        EntityListServiceImpl<LinkedTable> linkedService = new EntityListServiceImpl<>(LinkedTable.class, dataSource);
+        DbService<LinkedTable> linkedService = new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(dataSource),
+                LinkedTable.class));
         for (int j = 0; j < TEST_ROWS_QUANTITY; j++) {
             LinkedTable linked = new LinkedTable();
             linked.setPrimaryTableId(defaultId);
-            linkedService.insertEntity(linked);
+            linkedService.saveBean(linked);
         }
 
         sqlQueryCreateTable("create table if not exists primary_table ( id int auto_increment primary key )");
-        EntityListServiceImpl<PrimaryTable> service = new EntityListServiceImpl<>(PrimaryTable.class, dataSource);
+        DbService<PrimaryTable> service = new DbServiceImpl<>(new DaoJdbc<>(new SessionManagerJdbc(dataSource),
+                PrimaryTable.class));
         PrimaryTable table = new PrimaryTable();
         table.setId(defaultId);
-        service.insertEntity(table);
-        PrimaryTable result = service.getById(defaultId);
-
+        service.saveBean(table);
+        PrimaryTable result = service.getBeansBy("id", defaultId).get(0);
         assertEquals(TEST_ROWS_QUANTITY, result.getLinkedTableList().size());
         sqlQueryCreateTable("drop table primary_table");
         sqlQueryCreateTable("drop table linked_table");
     }
-
-
-//    static Stream<Class<? extends Throwable>> exceptionProvider() {
-//        return Stream.of(InstantiationException.class, IllegalAccessException.class, SQLException.class);
-//    }
-
-
-//    //throw Exceptions when stored procedure execution call and catch DaoException
-//    @DisplayName("have to catch DaoException exception when ")
-//    @ParameterizedTest(name = "throws {0} during stored procedure call")
-//    @MethodSource("exceptionProvider")
-//    void getByStoredProcExceptionTest(Class<? extends Throwable> exception) throws SQLException {
-//        given(mockSource.getConnection()).willReturn(mockConnection);
-//        given(mockConnection.isValid(5)).willReturn(true);
-//        given(mockConnection.prepareCall(CALL_GET_USER_ACTIVITIES_AND_RECORDS)).willReturn(mockCallableStatement);
-//        given(mockCallableStatement.executeQuery()).willThrow(exception);
-////        given(mockResultSet.next()).willReturn(false);
-//        assertThrows(DaoException.class,() -> { new EntityListService<>(Account.class, mockSource)
-//                .getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_RECORDS, Collections.emptyList());});
-//
-//    }
-
 }

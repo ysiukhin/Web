@@ -3,13 +3,13 @@ package ua.traning.rd.java.finalproject.servlet.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.traning.rd.java.finalproject.Constants;
-import ua.traning.rd.java.finalproject.core.model.*;
+import ua.traning.rd.java.finalproject.core.model.Account;
+import ua.traning.rd.java.finalproject.core.model.AccountSignedActivities;
+import ua.traning.rd.java.finalproject.core.model.LoggedAccount;
 import ua.traning.rd.java.finalproject.core.service.EntityListService;
 import ua.traning.rd.java.finalproject.core.service.EntityListServiceImpl;
 import ua.traning.rd.java.finalproject.servlet.controller.command.action.RequestActionCommand;
 import ua.traning.rd.java.finalproject.servlet.exception.ApplicationException;
-import ua.traning.rd.java.finalproject.servlet.exception.CommandException;
-import ua.traning.rd.java.finalproject.servlet.exception.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
@@ -44,13 +44,7 @@ public class UserTimerCommand implements Command {
         try {
             resultList = entityListService.getByStoredProc(CALL_GET_USER_ACTIVITIES_AND_RECORDS,
                     Arrays.asList(user.getId(), -1, 0));
-//            resultList = new EntityListServiceImpl<>(AccountSignedActivities.class, Servlet.dataSource)
-//                    .getByStoredProc(Constants.CALL_GET_USER_ACTIVITIES_AND_RECORDS,
-//                            Arrays.asList(user.getId(), -1, 0));
             totalRecords = resultList.size();
-//        } catch (ServiceException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new CommandException(errorMessages.getString(EMPTY_RESULT));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new ApplicationException(errorMessages.getString(MESSAGE_APPLICATION_FAILED));
